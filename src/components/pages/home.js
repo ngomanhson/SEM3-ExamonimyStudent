@@ -1,7 +1,6 @@
 import About from "../layouts/home/about";
 import Blog from "../layouts/home/blog";
 import Course from "../layouts/home/course";
-import CTA from "../layouts/home/cta";
 import Event from "../layouts/home/event";
 import FAQ from "../layouts/home/faq";
 import Subscribe from "../layouts/home/subscribe";
@@ -49,7 +48,6 @@ function Home() {
             <Course />
             <Team />
             <Event />
-            <CTA />
             <Testimonial />
             <Blog />
             <FAQ />
