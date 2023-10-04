@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function Navbar() {
     return (
         <div className="navbar-area-edupie">
@@ -10,9 +12,10 @@ function Navbar() {
                         </button>
                     </div>
                     <div className="logo">
-                        <a href="home.html">
+                        <Link to="/">
+                            {" "}
                             <img src="assets/img/logo.webp" alt="img" />
-                        </a>
+                        </Link>
                     </div>
                     <div className="nav-left-part">
                         <div className="menu-category-menu-container">
@@ -46,26 +49,10 @@ function Navbar() {
                     <div className="collapse navbar-collapse" id="edupie_main_menu">
                         <ul className="navbar-nav menu-open text-end">
                             <li className="menu-item-has-children current-menu-item">
-                                <a href="#!">Home</a>
-                                <ul className="sub-menu">
-                                    <li>
-                                        <a href="home.html">Home 01</a>
-                                    </li>
-                                    <li>
-                                        <a href="index-2.html">Home 02</a>
-                                    </li>
-                                </ul>
+                                <Link to="/">Home</Link>
                             </li>
                             <li className="menu-item-has-children">
-                                <a href="#!">Course</a>
-                                <ul className="sub-menu">
-                                    <li>
-                                        <a href="course.html">Course</a>
-                                    </li>
-                                    <li>
-                                        <a href="course-details.html">Course Single</a>
-                                    </li>
-                                </ul>
+                                <Link to="/course">Course</Link>
                             </li>
                             <li className="menu-item-has-children">
                                 <a href="#!">Pages</a>
