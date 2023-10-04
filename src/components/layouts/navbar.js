@@ -95,9 +95,9 @@ function Navbar() {
                         </ul>
                     </div>
                     <div className="nav-right-part nav-right-part-desktop">
-                        <a className="btn btn-base-2" href="signin.html">
+                        <Link to="/login" className="btn btn-base-2">
                             Sign In
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </nav>
