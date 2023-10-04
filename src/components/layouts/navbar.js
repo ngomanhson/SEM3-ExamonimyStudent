@@ -87,15 +87,7 @@ function Navbar() {
                                 </ul>
                             </li>
                             <li className="menu-item-has-children">
-                                <a href="#!">Blog</a>
-                                <ul className="sub-menu">
-                                    <li>
-                                        <a href="blog.html">Blog</a>
-                                    </li>
-                                    <li>
-                                        <a href="blog-details.html">Blog Details</a>
-                                    </li>
-                                </ul>
+                                <Link to="/blog">Blog</Link>
                             </li>
                             <li>
                                 <Link to="/contact">Contact Us</Link>

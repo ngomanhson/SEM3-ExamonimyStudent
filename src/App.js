@@ -6,6 +6,8 @@ import BackToTop from "./components/layouts/back-top";
 import Course from "./components/pages/course";
 import CourseDetail from "./components/pages/course-details";
 import Contact from "./components/pages/contact";
+import Blog from "./components/pages/blog";
+import BlogDetail from "./components/pages/blog-details";
 
 function App() {
     return (
@@ -17,6 +19,9 @@ function App() {
                 <Route path="/course" element={<Course />} />
                 <Route path="/course/detail" element={<CourseDetail />} />
                 <Route path="/contact" element={<Contact />} />
+
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/detail" element={<BlogDetail />} />
             </Routes>
 
             <Footer />
