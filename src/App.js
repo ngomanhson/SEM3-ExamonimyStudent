@@ -5,6 +5,7 @@ import Footer from "./components/layouts/footer";
 import BackToTop from "./components/layouts/back-top";
 import Course from "./components/pages/course";
 import CourseDetail from "./components/pages/course-details";
+import Contact from "./components/pages/contact";
 
 function App() {
     return (
@@ -15,6 +16,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/course" element={<Course />} />
                 <Route path="/course/detail" element={<CourseDetail />} />
+                <Route path="/contact" element={<Contact />} />
             </Routes>
 
             <Footer />
