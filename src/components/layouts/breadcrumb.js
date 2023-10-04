@@ -7,9 +7,9 @@ function Breadcrumb({ title }) {
                         <h2 className="page-title">{title}</h2>
                         <ul className="page-list">
                             <li>
-                                <a href="/">Home</a>
+                                <a href="/">Home </a>
                             </li>
-                            <li>{title}</li>
+                            <li> {title}</li>
                         </ul>
                     </div>
                 </div>
