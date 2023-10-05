@@ -10,8 +10,9 @@ import Blog from "./components/pages/blog";
 import BlogDetail from "./components/pages/blog-details";
 import Login from "./components/pages/login";
 import Signup from "./components/pages/signup";
-import MyExam from "./components/pages/myexam";
+import MultipleChoice from "./components/pages/multiple-choice";
 import ExamList from "./components/pages/exam-list";
+import ConstructedResponse from "./components/pages/practical-exam";
 
 function App() {
     return (
@@ -23,7 +24,8 @@ function App() {
                 <Route path="/course" element={<Course />} />
 
                 <Route path="/exam-list" element={<ExamList />} />
-                <Route path="/my-exam" element={<MyExam />} />
+                <Route path="/multiple-choice" element={<MultipleChoice />} />
+                <Route path="/practical-exam" element={<ConstructedResponse />} />
 
                 <Route path="/course/detail" element={<CourseDetail />} />
                 <Route path="/contact" element={<Contact />} />
