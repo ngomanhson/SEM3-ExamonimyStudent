@@ -10,6 +10,8 @@ import Blog from "./components/pages/blog";
 import BlogDetail from "./components/pages/blog-details";
 import Login from "./components/pages/login";
 import Signup from "./components/pages/signup";
+import MyExam from "./components/pages/myexam";
+import ExamList from "./components/pages/exam-list";
 
 function App() {
     return (
@@ -19,6 +21,10 @@ function App() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/course" element={<Course />} />
+
+                <Route path="/exam-list" element={<ExamList />} />
+                <Route path="/my-exam" element={<MyExam />} />
+
                 <Route path="/course/detail" element={<CourseDetail />} />
                 <Route path="/contact" element={<Contact />} />
 
