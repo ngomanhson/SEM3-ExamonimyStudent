@@ -6,7 +6,9 @@ function MultipleChoice() {
     const [agreedToTerms, setAgreedToTerms] = useState(false);
     const [inExam, setInExam] = useState(false);
     const [timeRemaining, setTimeRemaining] = useState(800);
+    const [countdownActive, setCountdownActive] = useState(true);
     const [selectedAnswers, setSelectedAnswers] = useState({});
+    const [hasSubmitted, setHasSubmitted] = useState(false);
 
     useEffect(() => {
         if (timeRemaining === 0) {
@@ -16,6 +18,7 @@ function MultipleChoice() {
 
         const timer =
             inExam &&
+            countdownActive &&
             timeRemaining > 0 &&
             setInterval(() => {
                 setTimeRemaining((prevTime) => prevTime - 1);
@@ -24,7 +27,7 @@ function MultipleChoice() {
         return () => {
             clearInterval(timer);
         };
-    }, [inExam, timeRemaining]);
+    }, [inExam, timeRemaining, countdownActive]);
 
     const formatTime = (seconds) => {
         const minutes = Math.floor(seconds / 60);
@@ -50,13 +53,17 @@ function MultipleChoice() {
 
     const handleFinishExam = () => {
         setInExam(false);
+        setCountdownActive(false);
+        setHasSubmitted(true);
     };
 
     const handleAnswerSelect = (questionNumber, selectedAnswer) => {
-        setSelectedAnswers({
-            ...selectedAnswers,
-            [questionNumber]: selectedAnswer,
-        });
+        if (!hasSubmitted) {
+            setSelectedAnswers({
+                ...selectedAnswers,
+                [questionNumber]: selectedAnswer,
+            });
+        }
     };
 
     return (
@@ -327,9 +334,13 @@ function MultipleChoice() {
                                                         </div>
                                                     </div>
                                                     <div className="text-end">
-                                                        <button type="submit" className="btn btn-base-2">
-                                                            Submit
-                                                        </button>
+                                                        {hasSubmitted ? (
+                                                            <p>You have already submitted the exam.</p>
+                                                        ) : (
+                                                            <button type="submit" className="btn btn-base-2" onClick={handleFinishExam}>
+                                                                Submit
+                                                            </button>
+                                                        )}
                                                     </div>
                                                 </form>
                                             </div>

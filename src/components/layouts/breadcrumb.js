@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function Breadcrumb({ title }) {
     return (
         <div className="breadcrumb-area bg-overlay-black-2" style={{ backgroundImage: "url('assets/img/bg/5.webp')" }}>
@@ -7,7 +9,7 @@ function Breadcrumb({ title }) {
                         <h2 className="page-title">{title}</h2>
                         <ul className="page-list">
                             <li>
-                                <a href="/">Home </a>
+                                <Link to="/">Home</Link>
                             </li>
                             <li> {title}</li>
                         </ul>
