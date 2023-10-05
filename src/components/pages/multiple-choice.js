@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Breadcrumb from "../layouts/breadcrumb";
 import { Link as ScrollLink } from "react-scroll";
 
-function MyExam() {
+function MultipleChoice() {
     const [agreedToTerms, setAgreedToTerms] = useState(false);
     const [inExam, setInExam] = useState(false);
     const [timeRemaining, setTimeRemaining] = useState(800);
@@ -382,4 +382,4 @@ function MyExam() {
     );
 }
 
-export default MyExam;
+export default MultipleChoice;

@@ -4745,3 +4745,70 @@ ul {
 .answers-btn:hover {
     color: #fff;
 }
+
+.border-left {
+    border-left: 5px solid #030d47;
+}
+
+.line-clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: var(--line-clamp, 1);
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+/* ===== Modal ===== */
+.modal {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.modal.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    background-color: white;
+    max-width: 400px;
+    width: 100%;
+    padding: 20px;
+    border-radius: 5px;
+    position: relative;
+}
+
+.modal-content input {
+    width: 100%;
+    border: 1px solid #e5e5e5 !important;
+    height: 45px;
+    border-radius: 4px;
+    padding: 0 18px;
+}
+
+.modal-btn {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.modal-btn button {
+    height: 45px;
+    line-height: 45px;
+    padding: 0 20px;
+}
+
+.modal-note {
+    font-weight: 500;
+    font-size: 14px;
+}
