@@ -4812,3 +4812,70 @@ ul {
     font-weight: 500;
     font-size: 14px;
 }
+
+/* ===== Dashboard ===== */
+.widget-dashboard {
+    border: 1px solid #f1f1f1;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+    background: #030d47;
+}
+
+.btn-link {
+    text-align: left;
+    background: #f1f1f1;
+    color: #030d47;
+}
+
+.btn-link > i {
+    margin-right: 8px;
+}
+
+.btn-link:hover {
+    color: #fff;
+}
+
+.table-bordered {
+    text-align: center;
+    border: 1px solid #dee2e6;
+}
+
+.thead-background {
+    background: #f1f1f1;
+}
+
+.btn-user > i {
+    color: #fff;
+}
+
+@media screen and (max-width: 991px) {
+    .btn-user > i {
+        color: #000;
+    }
+
+    .btn-user > i::before {
+        content: "Account";
+        font-family: var(--heading-font);
+    }
+}
+
+.student-avatar {
+    max-width: 200px;
+    max-height: 200px;
+    margin: 0 auto;
+}
+
+.student-avatar > img {
+    display: block;
+
+    width: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.student-content {
+    margin-top: 10px;
+    text-align: center;
+}
