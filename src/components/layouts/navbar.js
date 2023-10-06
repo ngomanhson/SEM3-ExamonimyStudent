@@ -14,7 +14,7 @@ function Navbar() {
                     <div className="logo">
                         <Link to="/">
                             {" "}
-                            <img src="assets/img/logo.webp" alt="img" />
+                            <img src="assets/img/logo.png" alt="img" />
                         </Link>
                     </div>
 
