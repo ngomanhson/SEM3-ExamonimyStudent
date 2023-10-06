@@ -27,7 +27,7 @@ function Home() {
                         <div className="col-lg-7 col-md-8 order-md-1 align-self-center">
                             <div className="banner-inner text-center text-md-start">
                                 <h1 className="b-animate-2 title text-white">
-                                    <span className="text-base-2">Edupie</span> Provided
+                                    <span className="text-base-2">Examonimy</span> Provided
                                     <span className="txt-rotate" data-period="2000" data-rotate='[ "Modern School.", "Online Course.", "", "Multiple Services.", "A Better Future." ]'></span>
                                 </h1>
                                 <p className="content b-animate-3 text-white">We Believe Everyone Should have the Opportunity to Create Progress through Technology and Develope</p>

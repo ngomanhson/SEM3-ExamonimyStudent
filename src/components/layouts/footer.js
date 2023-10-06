@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function Footer() {
     return (
         <footer className="footer-area bg-overlay-black-2" style={{ backgroundImage: " url('assets/img/bg/4.webp')" }}>
@@ -16,30 +18,30 @@ function Footer() {
                     <div className="col-lg-4 col-md-6">
                         <div className="widget widget_about pr-xl-4">
                             <div className="thumb">
-                                <img src="assets/img/logo.webp" alt="img" />
+                                <img src="assets/img/logo.png" alt="img" />
                             </div>
                             <div className="details">
-                                <p>Edupie to bring significant changes in online based learning by doing extensive resed cased learning by cosin extensive of arch for course curriculum. </p>
+                                <p>Examonimy to bring significant changes in online based learning by doing extensive resed cased learning by cosin extensive of arch for course curriculum. </p>
                                 <ul className="social-media">
                                     <li>
-                                        <a className="btn-base-m" href="#!">
+                                        <Link className="btn-base-m" to="#!">
                                             <i className="fa fa-facebook"></i>
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li>
-                                        <a className="btn-base-m" href="#!">
+                                        <Link className="btn-base-m" to="#!">
                                             <i className="fa fa-twitter"></i>
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li>
-                                        <a className="btn-base-m" href="#!">
+                                        <Link className="btn-base-m" to="#!">
                                             <i className="fa fa-instagram"></i>
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li>
-                                        <a className="btn-base-m" href="#!">
+                                        <Link className="btn-base-m" to="#!">
                                             <i className="fa fa-linkedin"></i>
-                                        </a>
+                                        </Link>
                                     </li>
                                 </ul>
                             </div>
@@ -50,19 +52,16 @@ function Footer() {
                             <h4 className="widget-title">Usefull Link</h4>
                             <ul>
                                 <li>
-                                    <a href="home.html">Home</a>
+                                    <Link to="/">Home</Link>
                                 </li>
                                 <li>
-                                    <a href="about.html">About</a>
+                                    <Link to="/blog">Blog</Link>
                                 </li>
                                 <li>
-                                    <a href="blog.html">Blog</a>
+                                    <Link to="/course">Course</Link>
                                 </li>
                                 <li>
-                                    <a href="course.html">Course</a>
-                                </li>
-                                <li>
-                                    <a href="signup.html">Sign Up</a>
+                                    <Link to="/dashboard">Account</Link>
                                 </li>
                             </ul>
                         </div>
@@ -72,19 +71,19 @@ function Footer() {
                             <h4 className="widget-title">Category</h4>
                             <ul>
                                 <li>
-                                    <a href="course.html">Business</a>
+                                    <Link to="#!">Business</Link>
                                 </li>
                                 <li>
-                                    <a href="course.html">Development</a>
+                                    <Link to="#!">Development</Link>
                                 </li>
                                 <li>
-                                    <a href="course.html">Photography</a>
+                                    <Link to="#!">PhotogrLinkphy</Link>
                                 </li>
                                 <li>
-                                    <a href="course.html">Desing</a>
+                                    <Link to="#!">Desing</Link>
                                 </li>
                                 <li>
-                                    <a href="course.html">Animation</a>
+                                    <Link to="#!">Animation</Link>
                                 </li>
                             </ul>
                         </div>
@@ -94,13 +93,15 @@ function Footer() {
                             <h4 className="widget-title">Contact Us</h4>
                             <ul className="details">
                                 <li>
-                                    <i className="fa fa-map-marker"></i> 66 Edupie broklyant, New York City <br /> By 3269 road.
+                                    <i className="fa fa-map-marker"></i> 8 Ton That Thuyet, My Dinh,
+                                    <br />
+                                    Nam Tu Liem, Ha Noi.
                                 </li>
                                 <li>
-                                    <i className="fa fa-envelope"></i> info.contact@gmail.com
+                                    <i className="fa fa-envelope"></i> examonimy@website.com
                                 </li>
                                 <li>
-                                    <i className="fa fa-phone"></i> 012 345 678 9101
+                                    <i className="fa fa-phone"></i> 0123 456 789
                                 </li>
                             </ul>
                         </div>
@@ -112,16 +113,16 @@ function Footer() {
                     <div className="row">
                         <div className="col-sm-6 align-self-center">
                             <p>
-                                @ Copyright 2022 powered by <a href="#!">Edupie</a>
+                                @ Copyright 2023 powered by <Link to="#!">Examonimy</Link>
                             </p>
                         </div>
                         <div className="col-sm-6 text-sm-end align-self-center mt-sm-0 mt-3">
                             <ul>
                                 <li>
-                                    <a href="#!">Privacy Policy</a>
+                                    <Link to="#!">Privacy Policy</Link>
                                 </li>
                                 <li>
-                                    <a href="#!">Terms & Conditions</a>
+                                    <Link to="#!">Terms & Conditions</Link>
                                 </li>
                             </ul>
                         </div>
