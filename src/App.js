@@ -13,6 +13,7 @@ import Signup from "./components/pages/signup";
 import MultipleChoice from "./components/pages/multiple-choice";
 import ExamList from "./components/pages/exam-list";
 import ConstructedResponse from "./components/pages/practical-exam";
+import Dashboard from "./components/pages/dashboard";
 
 function App() {
     return (
@@ -35,6 +36,7 @@ function App() {
 
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
+                <Route path="/dashboard" element={<Dashboard />} />
             </Routes>
 
             <Footer />
