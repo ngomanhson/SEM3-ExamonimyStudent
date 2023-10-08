@@ -1,55 +1,72 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
 
 function Login() {
+    const [showPassword, setShowPassword] = useState(false);
+    const [password, setPassword] = useState("");
+
+    const handleTogglePassword = () => {
+        setShowPassword(!showPassword);
+    };
     return (
         <>
-            <section className="signin-page-area pd-top-120 pd-bottom-120">
+            <main className="d-flex align-items-center min-vh-100 py-3 py-md-0">
                 <div className="container">
-                    <div className="row justify-content-center">
-                        <div className="col-lg-5 col-md-8 align-self-center">
-                            <div className="thumb me-lg-4 me-0 mb-5 mb-lg-0">
-                                <img src="assets/img/other/sign.webp" alt="img" />
+                    <div className="card login-card">
+                        <div className="row no-gutters">
+                            <div className="col-lg-7 col-md-5">
+                                <img src="assets/img/bg/5.webp" alt="login" className="login-card-img" />
                             </div>
-                        </div>
-                        <div className="col-xl-6 col-lg-7">
-                            <form className="signin-inner">
-                                <div className="row">
-                                    <div className="col-12">
-                                        <div className="single-input-inner style-bg-border">
-                                            <input type="text" placeholder="Name" name="name" required />
+                            <div className="col-lg-5 col-md-7">
+                                <div className="card-body">
+                                    <div className="brand-wrapper">
+                                        <img src="assets/img/logo-2.png" alt="logo" className="logo" />
+                                    </div>
+                                    <p className="login-card-description">Login to your account</p>
+                                    <form action="#!">
+                                        <div className="form-group">
+                                            <label for="email" className="sr-only">
+                                                Email
+                                            </label>
+                                            <input type="email" name="email" id="email" className="form-control" placeholder="Enter email address" required />
                                         </div>
-                                    </div>
-                                    <div className="col-12">
-                                        <div className="single-input-inner style-bg-border">
-                                            <input type="email" placeholder="Email Address" name="email" required />
+                                        <div className="form-group mb-4">
+                                            <label for="password" className="sr-only">
+                                                Password
+                                            </label>
+                                            <input
+                                                type={showPassword ? "text" : "password"}
+                                                name="password"
+                                                id="password"
+                                                className="form-control"
+                                                placeholder="***********"
+                                                required
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                            />
                                         </div>
-                                    </div>
-                                    <div className="col-12">
-                                        <div className="single-input-inner style-bg-border">
-                                            <input type="text" placeholder="Password" name="password" required />
-                                        </div>
-                                    </div>
-                                    <div className="col-12 mb-4">
-                                        <button className="btn btn-base w-100">Sign In</button>
-                                    </div>
-                                    <div className="col-12 mb-2">
-                                        <span className="me-1">Forgotten Your Password?</span>
-                                        <a href="#!">
-                                            <strong>Reset Password</strong>
-                                        </a>
-                                    </div>
-                                    <div className="col-12">
-                                        <span className="me-1">Create New Course!</span>
-                                        <Link to="/signup">
-                                            <strong>Sign Up</strong>
-                                        </Link>
-                                    </div>
+                                        <label className="input-check">
+                                            Show Password
+                                            <input type="checkbox" onClick={handleTogglePassword} />
+                                            <span className="checkmark"></span>
+                                        </label>
+                                        <button type="submit" className=" btn login-btn btn-base mb-4">
+                                            Sign In
+                                        </button>
+                                    </form>
+                                    <a href="#!" className="forgot-password-link">
+                                        Forgot password?
+                                    </a>
+
+                                    <nav className="login-card-footer-nav mt-5">
+                                        <a href="#!">Terms of use</a>
+                                        <a href="#!">Privacy policy</a>
+                                    </nav>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </section>
+            </main>
         </>
     );
 }
