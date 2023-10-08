@@ -1,11 +1,11 @@
-import About from "../layouts/home/about";
-import Blog from "../layouts/home/blog";
-import Course from "../layouts/home/course";
-import Event from "../layouts/home/event";
-import FAQ from "../layouts/home/faq";
-import Subscribe from "../layouts/home/subscribe";
-import Team from "../layouts/home/team";
-import Testimonial from "../layouts/home/testimonial";
+import About from "../views/home/about";
+import Blog from "../views/home/blog";
+import Course from "../views/home/course";
+import Event from "../views/home/event";
+import FAQ from "../views/home/faq";
+import Subscribe from "../views/home/subscribe";
+import Team from "../views/home/team";
+import Testimonial from "../views/home/testimonial";
 import Layout from "../layouts/layouts";
 
 function Home() {
