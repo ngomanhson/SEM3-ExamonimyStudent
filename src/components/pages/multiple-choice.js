@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Breadcrumb from "../layouts/breadcrumb";
 import { Link as ScrollLink } from "react-scroll";
+import Layout from "../layouts/layouts";
 
 function MultipleChoice() {
     const [agreedToTerms, setAgreedToTerms] = useState(false);
@@ -110,76 +111,78 @@ function MultipleChoice() {
 
     return (
         <>
-            <Breadcrumb title="My Exam" />
-            <section className="pd-top-110 pd-bottom-120">
-                <div className="container">
-                    <div className="row">
-                        <div className="col">
-                            {inExam ? (
-                                <div>
-                                    <h3 className="exam__inner-heading text-center">Exam ASP .NET</h3>
-                                    <div className="exam__inner pd-top-100">
-                                        <div className="row">
-                                            <div className="col-lg-8 col-12 order-lg-0 order-2">
-                                                <form action="#">
-                                                    <div className="td-sidebar">
-                                                        {questions.map((item, questionIndex) => (
-                                                            <div className="widget">
-                                                                <div key={item.id}>
-                                                                    <h6 className="exam__inner-desc">
-                                                                        Question: {questionIndex + 1} {item.title}
-                                                                    </h6>
-                                                                    <div className="answers__group">
-                                                                        {item.options.map((option, optionIndex) => (
-                                                                            <label className="answers__group-label" key={optionIndex}>
-                                                                                <input
-                                                                                    type="radio"
-                                                                                    value={option}
-                                                                                    name={`question_id${item.id}`}
-                                                                                    className="answers__group-input"
-                                                                                    onChange={() => handleAnswerSelect(item.id, option)}
-                                                                                    checked={selectedAnswers[item.id] === option}
-                                                                                />
-                                                                                {option}
-                                                                            </label>
-                                                                        ))}
+            <Layout>
+                <Breadcrumb title="My Exam" />
+                <section className="pd-top-110 pd-bottom-120">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col">
+                                {inExam ? (
+                                    <div>
+                                        <h3 className="exam__inner-heading text-center">Exam ASP .NET</h3>
+                                        <div className="exam__inner pd-top-100">
+                                            <div className="row">
+                                                <div className="col-lg-8 col-12 order-lg-0 order-2">
+                                                    <form action="#">
+                                                        <div className="td-sidebar">
+                                                            {questions.map((item, questionIndex) => (
+                                                                <div className="widget">
+                                                                    <div key={item.id}>
+                                                                        <h6 className="exam__inner-desc">
+                                                                            Question: {questionIndex + 1} {item.title}
+                                                                        </h6>
+                                                                        <div className="answers__group">
+                                                                            {item.options.map((option, optionIndex) => (
+                                                                                <label className="answers__group-label" key={optionIndex}>
+                                                                                    <input
+                                                                                        type="radio"
+                                                                                        value={option}
+                                                                                        name={`question_id${item.id}`}
+                                                                                        className="answers__group-input"
+                                                                                        onChange={() => handleAnswerSelect(item.id, option)}
+                                                                                        checked={selectedAnswers[item.id] === option}
+                                                                                    />
+                                                                                    {option}
+                                                                                </label>
+                                                                            ))}
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        ))}
-                                                    </div>
+                                                            ))}
+                                                        </div>
 
-                                                    <div className="text-end">
-                                                        {hasSubmitted ? (
-                                                            <p>You have already submitted the exam.</p>
-                                                        ) : (
-                                                            <button type="submit" className="btn btn-base-2" onClick={handleFinishExam}>
-                                                                Submit
-                                                            </button>
-                                                        )}
-                                                    </div>
-                                                </form>
-                                            </div>
+                                                        <div className="text-end">
+                                                            {hasSubmitted ? (
+                                                                <p>You have already submitted the exam.</p>
+                                                            ) : (
+                                                                <button type="submit" className="btn btn-base-2" onClick={handleFinishExam}>
+                                                                    Submit
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    </form>
+                                                </div>
 
-                                            <div className="col-lg-4 col-12 order-1">
-                                                <div className="answers__inner">
-                                                    <div className="td-sidebar">
-                                                        <div className="widget">
-                                                            <h5 className="text-center">Time remaining: {formatTime(timeRemaining)}</h5>
-                                                            <div className="answers_number">
-                                                                {questions.map((question, index) => (
-                                                                    <ScrollLink
-                                                                        to={`question_id${question.id}`}
-                                                                        spy={true}
-                                                                        smooth={true}
-                                                                        offset={-200}
-                                                                        duration={200}
-                                                                        className={`btn answers-btn ${selectedAnswers[question.id] ? "answers-btn-active" : ""}`}
-                                                                        key={question.id}
-                                                                    >
-                                                                        {String(index + 1).padStart(2, "0")}
-                                                                    </ScrollLink>
-                                                                ))}
+                                                <div className="col-lg-4 col-12 order-1">
+                                                    <div className="answers__inner">
+                                                        <div className="td-sidebar">
+                                                            <div className="widget">
+                                                                <h5 className="text-center">Time remaining: {formatTime(timeRemaining)}</h5>
+                                                                <div className="answers_number">
+                                                                    {questions.map((question, index) => (
+                                                                        <ScrollLink
+                                                                            to={`question_id${question.id}`}
+                                                                            spy={true}
+                                                                            smooth={true}
+                                                                            offset={-200}
+                                                                            duration={200}
+                                                                            className={`btn answers-btn ${selectedAnswers[question.id] ? "answers-btn-active" : ""}`}
+                                                                            key={question.id}
+                                                                        >
+                                                                            {String(index + 1).padStart(2, "0")}
+                                                                        </ScrollLink>
+                                                                    ))}
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -187,23 +190,23 @@ function MultipleChoice() {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            ) : (
-                                <div className="terms__content text-center pt-5 pb-5">
-                                    <h3 className="terms__content-heading">Some notes before taking the exam</h3>
-                                    <p className="terms__content-desc">Note: The exam has 16 questions and 30 minutes to complete.</p>
-                                    <label style={{ display: "block" }}>
-                                        <input type="checkbox" checked={agreedToTerms} onChange={handleAgreeClick} /> I have read and agree.
-                                    </label>
-                                    <button onClick={handleStartExamClick} className="btn btn-base-2 mt-3">
-                                        Start
-                                    </button>
-                                </div>
-                            )}
+                                ) : (
+                                    <div className="terms__content text-center pt-5 pb-5">
+                                        <h3 className="terms__content-heading">Some notes before taking the exam</h3>
+                                        <p className="terms__content-desc">Note: The exam has 16 questions and 30 minutes to complete.</p>
+                                        <label style={{ display: "block" }}>
+                                            <input type="checkbox" checked={agreedToTerms} onChange={handleAgreeClick} /> I have read and agree.
+                                        </label>
+                                        <button onClick={handleStartExamClick} className="btn btn-base-2 mt-3">
+                                            Start
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </Layout>
         </>
     );
 }

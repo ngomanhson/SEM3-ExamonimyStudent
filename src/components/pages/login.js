@@ -1,10 +1,8 @@
 import { Link } from "react-router-dom";
-import Breadcrumb from "../layouts/breadcrumb";
 
 function Login() {
     return (
         <>
-            <Breadcrumb title="Sign In" />
             <section className="signin-page-area pd-top-120 pd-bottom-120">
                 <div className="container">
                     <div className="row justify-content-center">
