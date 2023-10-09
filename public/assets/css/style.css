@@ -4711,10 +4711,19 @@ ul {
 
 .answers__group-label {
     display: block;
+    border: 1px solid #f1f1f1;
+    border-radius: 8px;
+    padding: 15px 20px;
+
+    cursor: pointer;
+}
+
+.label-active {
+    background: #f1f1f1;
 }
 
 .answers__group-input {
-    margin-right: 10px;
+    display: none;
 }
 
 .answers_number {
@@ -4848,17 +4857,6 @@ ul {
 
 .btn-user > i {
     color: #fff;
-}
-
-@media screen and (max-width: 991px) {
-    .btn-user > i {
-        color: #000;
-    }
-
-    .btn-user > i::before {
-        content: "Account";
-        font-family: var(--heading-font);
-    }
 }
 
 .student-avatar {
@@ -5000,4 +4998,22 @@ ul {
     font-size: 15px;
     background: transparent;
     color: #030d47;
+}
+
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    background: #fff;
+    border: 1px solid #030d47;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.btn-circle:nth-child(2) {
+    margin-left: 15px;
+}
+
+.btn-circle:hover {
+    background: #030d47;
+    color: #fff;
 }
