@@ -5021,3 +5021,24 @@ ul {
 .answers-disabled {
     cursor: not-allowed;
 }
+
+.icon-course {
+    margin-right: 10px;
+}
+
+.notfound-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.btn-notfound {
+    border-radius: 99px;
+    border: 1px solid #030d47;
+}
+
+.btn-notfound:hover {
+    color: #fff;
+    border-color: transparent;
+}
