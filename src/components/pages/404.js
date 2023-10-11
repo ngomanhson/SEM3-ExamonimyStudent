@@ -1,26 +1,24 @@
-import Breadcrumb from "../layouts/breadcrumb";
-import Layout from "../layouts/layouts";
+import { Link } from "react-router-dom";
 
 function NotFound() {
     return (
-        <>
-            <Layout>
-                <Breadcrumb title="Not Found" />
-
-                <section className="pd-top-120 pd-bottom-120">
-                    <div className="container">
-                        <div className="row">
-                            <div className="col">
-                                <div className="notfound">
-                                    <img src="./assets/img/404.png" alt="Not Found" width={"30%"} className="d-block mx-auto" />
-                                    <h1 className="text-center">Page Not Found</h1>
-                                </div>
+        <section>
+            <div className="container">
+                <div className="row">
+                    <div className="col">
+                        <div className="notfound-wrapper">
+                            <div className="d-flex flex-column align-items-center">
+                                <img src="./assets/img/404.png" alt="Not Found" width={"30%"} className="d-block mx-auto" />
+                                <h2 className="text-center">Page Not Found</h2>
+                                <Link to="/" className="btn btn-notfound mt-3">
+                                    <i class="fa fa-long-arrow-left"></i> Back to Home
+                                </Link>
                             </div>
                         </div>
                     </div>
-                </section>
-            </Layout>
-        </>
+                </div>
+            </div>
+        </section>
     );
 }
 export default NotFound;
