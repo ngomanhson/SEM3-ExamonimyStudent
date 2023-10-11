@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Breadcrumb from "../layouts/breadcrumb";
 import Layout from "../layouts/layouts";
+import Result from "../views/exam/result";
+import Question from "../views/exam/questions";
 
 function MultipleChoice() {
     const [inExam, setInExam] = useState(false);
@@ -11,6 +13,12 @@ function MultipleChoice() {
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const optionsPrefix = ["A", "B", "C", "D"];
+
+    const handleFinishExam = useCallback(() => {
+        setInExam(false);
+        setCountdownActive(false);
+        setHasSubmitted(true);
+    }, []);
 
     useEffect(() => {
         if (timeRemaining === 0) {
@@ -29,7 +37,7 @@ function MultipleChoice() {
         return () => {
             clearInterval(timer);
         };
-    }, [inExam, timeRemaining, countdownActive]);
+    }, [inExam, timeRemaining, countdownActive, handleFinishExam]);
 
     const formatTime = (seconds) => {
         const minutes = Math.floor(seconds / 60);
@@ -43,12 +51,6 @@ function MultipleChoice() {
 
     const handleStartExam = () => {
         setInExam(true);
-    };
-
-    const handleFinishExam = () => {
-        setInExam(false);
-        setCountdownActive(false);
-        setHasSubmitted(true);
     };
 
     const handleAnswerSelect = (questionNumber, selectedAnswer) => {
@@ -113,6 +115,13 @@ function MultipleChoice() {
         }
     };
 
+    const handleSubmitExam = () => {
+        const confirmSubmit = window.confirm("Are you sure you want to submit the exam?");
+        if (confirmSubmit) {
+            handleFinishExam();
+        }
+    };
+
     return (
         <>
             <Layout>
@@ -121,7 +130,18 @@ function MultipleChoice() {
                     <div className="container">
                         <div className="row">
                             <div className="col">
-                                {inExam ? (
+                                {hasSubmitted ? (
+                                    <div>
+                                        <h3 className="exam__inner-heading text-center">Exam ASP .NET - Results</h3>
+                                        <div className="row">
+                                            <div className="col-lg-8 col-12 order-lg-0">
+                                                <div className="td-sidebar">
+                                                    <Result questions={questions} selectedAnswers={selectedAnswers} optionsPrefix={optionsPrefix} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : inExam ? (
                                     <div>
                                         <h3 className="exam__inner-heading text-center">Exam ASP .NET</h3>
                                         <div className="exam__inner pd-top-60 pd-bottom-70">
@@ -130,46 +150,15 @@ function MultipleChoice() {
                                                     <form action="#">
                                                         <div className="td-sidebar">
                                                             <div className="widget">
-                                                                <div key={questions[currentQuestionIndex].id}>
-                                                                    <h6 className="exam__inner-desc">
-                                                                        Question: {currentQuestionIndex + 1} {questions[currentQuestionIndex].title}
-                                                                    </h6>
-                                                                    <p>Select one:</p>
-                                                                    <div className="answers__group">
-                                                                        {questions[currentQuestionIndex].options.map((option, optionIndex) => (
-                                                                            <label
-                                                                                className={`answers__group-label mt-3 ${
-                                                                                    selectedAnswers[questions[currentQuestionIndex].id] === option ? "label-active" : ""
-                                                                                }`}
-                                                                                key={optionIndex}
-                                                                            >
-                                                                                <input
-                                                                                    type="radio"
-                                                                                    value={option}
-                                                                                    name={`question_id${questions[currentQuestionIndex].id}`}
-                                                                                    className="answers__group-input"
-                                                                                    onChange={() => handleAnswerSelect(questions[currentQuestionIndex].id, option)}
-                                                                                    checked={selectedAnswers[questions[currentQuestionIndex].id] === option}
-                                                                                />
-                                                                                {optionsPrefix[optionIndex]}. {option}
-                                                                            </label>
-                                                                        ))}
-                                                                    </div>
-                                                                </div>
-                                                                <div className="d-flex justify-content-end align-items-center mt-3">
-                                                                    <button
-                                                                        type="button"
-                                                                        className="btn-circle"
-                                                                        onClick={handlePreviousQuestion}
-                                                                        style={{ visibility: currentQuestionIndex === 0 ? "hidden" : "visible" }}
-                                                                    >
-                                                                        <i class="fa fa-angle-left"></i>
-                                                                    </button>
-
-                                                                    <button type="button" className="btn-circle ml-3" onClick={handleNextQuestion}>
-                                                                        <i class="fa fa-angle-right"></i>
-                                                                    </button>
-                                                                </div>
+                                                                <Question
+                                                                    currentQuestionIndex={currentQuestionIndex}
+                                                                    questions={questions}
+                                                                    selectedAnswers={selectedAnswers}
+                                                                    optionsPrefix={optionsPrefix}
+                                                                    handleAnswerSelect={handleAnswerSelect}
+                                                                    handlePreviousQuestion={handlePreviousQuestion}
+                                                                    handleNextQuestion={handleNextQuestion}
+                                                                />
                                                             </div>
                                                         </div>
                                                     </form>
@@ -177,39 +166,21 @@ function MultipleChoice() {
 
                                                 <div className="col-lg-4 col-12">
                                                     <div className="answers__inner">
-                                                        <div className="td-sidebar">
-                                                            <div className="widget">
-                                                                <h5 className="text-center">Time remaining: {formatTime(timeRemaining)}</h5>
-                                                                <div className="answers_number">
-                                                                    {questions.map((question, index) => (
-                                                                        <button
-                                                                            type="button"
-                                                                            className={`btn answers-btn ${selectedAnswers[question.id] ? "answers-btn-active" : ""}`}
-                                                                            key={question.id}
-                                                                        >
-                                                                            {String(index + 1).padStart(2, "0")}
-                                                                        </button>
-                                                                    ))}
-                                                                </div>
-                                                                {inExam && (
-                                                                    <div className="d-flex justify-content-end">
-                                                                        <button
-                                                                            type="button"
-                                                                            className="btn btn-base-2 d-block mt-3"
-                                                                            onClick={() => {
-                                                                                const confirmSubmit = window.confirm("Are you sure you want to submit the exam?");
-                                                                                if (confirmSubmit) {
-                                                                                    handleFinishExam();
-                                                                                }
-                                                                            }}
-                                                                            style={{ width: "100%" }}
-                                                                        >
-                                                                            <i class="fa fa-stop-circle"></i> Finish Exam
-                                                                        </button>
-                                                                    </div>
-                                                                )}
-                                                            </div>
+                                                        <h5 className="text-center">Time remaining: {formatTime(timeRemaining)}</h5>
+                                                        <div className="answers_number">
+                                                            {questions.map((question, index) => (
+                                                                <button type="button" className={`btn answers-btn ${selectedAnswers[question.id] ? "answers-btn-active" : ""}`} key={question.id}>
+                                                                    {String(index + 1).padStart(2, "0")}
+                                                                </button>
+                                                            ))}
                                                         </div>
+                                                        {inExam && (
+                                                            <div className="d-flex justify-content-end">
+                                                                <button type="button" className="btn btn-base-2 d-block mt-3" onClick={handleSubmitExam} style={{ width: "100%" }}>
+                                                                    <i className="fa fa-stop-circle"></i> Finish Exam
+                                                                </button>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
                                             </div>
