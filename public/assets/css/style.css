@@ -5017,3 +5017,7 @@ ul {
     background: #030d47;
     color: #fff;
 }
+
+.answers-disabled {
+    cursor: not-allowed;
+}
