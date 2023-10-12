@@ -1,10 +1,11 @@
-import { Route, Routes } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import Home from "./components/pages/home";
-import Course from "./components/pages/course";
-import CourseDetail from "./components/pages/course-details";
+import Course from "./components/pages/courses/course";
+import CourseDetail from "./components/pages/courses/course-details";
 import Contact from "./components/pages/contact";
-import Blog from "./components/pages/blog";
-import BlogDetail from "./components/pages/blog-details";
+import Blog from "./components/pages/blog/blog";
+import BlogDetail from "./components/pages/blog/blog-details";
 import Login from "./components/pages/login";
 import MultipleChoice from "./components/pages/multiple-choice";
 import ExamList from "./components/pages/exam-list";
@@ -13,6 +14,15 @@ import Dashboard from "./components/pages/dashboard";
 import NotFound from "./components/pages/404";
 
 function App() {
+    const navigate = useNavigate();
+    const [token, setToken] = useState(sessionStorage.getItem("token"));
+
+    // Check token and redirect if user is not logged in.
+    useEffect(() => {
+        if (!token) {
+            navigate("/login");
+        }
+    }, [token, navigate]);
     return (
         <div className="App">
             <Routes>
@@ -30,7 +40,7 @@ function App() {
                 <Route path="/contact" element={<Contact />} />
 
                 <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/login" element={<Login />} />
+                <Route path="/login" element={<Login setToken={setToken} />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </div>
