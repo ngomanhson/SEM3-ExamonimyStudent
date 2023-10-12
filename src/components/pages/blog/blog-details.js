@@ -1,5 +1,5 @@
-import Breadcrumb from "../layouts/breadcrumb";
-import Layout from "../layouts/layouts";
+import Breadcrumb from "../../layouts/breadcrumb";
+import Layout from "../../layouts/layouts";
 
 function BlogDetail() {
     return (
