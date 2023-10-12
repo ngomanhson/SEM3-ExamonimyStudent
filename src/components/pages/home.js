@@ -7,6 +7,7 @@ import Subscribe from "../views/home/subscribe";
 import Team from "../views/home/team";
 import Testimonial from "../views/home/testimonial";
 import Layout from "../layouts/layouts";
+import { Link } from "react-router-dom";
 
 function Home() {
     return (
@@ -30,16 +31,13 @@ function Home() {
                                 <div className="banner-inner text-center text-md-start">
                                     <h1 className="b-animate-2 title text-white">
                                         <span className="text-base-2">Examonimy</span> Provided
-                                        <span className="txt-rotate" data-period="2000" data-rotate='[ "Modern School.", "Online Course.", "", "Multiple Services.", "A Better Future." ]'></span>
+                                        <span className="txt-rotate" data-period="2000" data-rotate='[ "Modern School.", "Multiple Services.", "A Better Future." ]'></span>
                                     </h1>
-                                    <p className="content b-animate-3 text-white">We Believe Everyone Should have the Opportunity to Create Progress through Technology and Develope</p>
+                                    <p className="content b-animate-3 text-white">We Believe Everyone Should Have The Opportunity To Make Progress Through Technology And Development</p>
                                     <div className="btn-wrap">
-                                        <a className="btn btn-white b-animate-4 me-3" href="signin.html">
-                                            Join For Free
-                                        </a>
-                                        <a className="btn btn-border-white b-animate-5" href="contact.html">
-                                            Get A Quote
-                                        </a>
+                                        <Link to="/courses" className="btn btn-white b-animate-4 me-3">
+                                            Join Courses
+                                        </Link>
                                     </div>
                                 </div>
                             </div>

@@ -13,7 +13,6 @@ function Navbar() {
                     </div>
                     <div className="logo">
                         <Link to="/">
-                            {" "}
                             <img src="assets/img/logo.png" alt="img" />
                         </Link>
                     </div>
@@ -25,7 +24,7 @@ function Navbar() {
                                 <Link to="/">Home</Link>
                             </li>
                             <li className="menu-item-has-children">
-                                <Link to="/course">Course</Link>
+                                <Link to="/courses">Courses</Link>
                             </li>
 
                             <li className="menu-item-has-children">
