@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import Breadcrumb from "../layouts/breadcrumb";
-import Layout from "../layouts/layouts";
+import Breadcrumb from "../../layouts/breadcrumb";
+import Layout from "../../layouts/layouts";
 import { useEffect, useState } from "react";
-import api from "../../services/api";
-import url from "../../services/url";
+import api from "../../../services/api";
+import url from "../../../services/url";
 
 function Course() {
     const [courses, setCourses] = useState([]);

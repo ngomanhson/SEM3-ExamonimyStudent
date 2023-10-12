@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import Breadcrumb from "../layouts/breadcrumb";
-import Layout from "../layouts/layouts";
+import Breadcrumb from "../../layouts/breadcrumb";
+import Layout from "../../layouts/layouts";
 
 function Blog() {
     return (
