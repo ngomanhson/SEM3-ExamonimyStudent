@@ -12,6 +12,10 @@ const url = {
     STAFF: {
         LIST: "/STAFF",
     },
+
+    STUDENT: {
+        LIST: "/student",
+    },
 };
 
 export default url;
