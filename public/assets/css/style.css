@@ -5050,3 +5050,10 @@ ul {
     font-size: 16px;
     border-radius: 0.25rem;
 }
+
+.line-clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: var(--line-clamp, 1);
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}

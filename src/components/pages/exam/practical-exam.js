@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
-import Breadcrumb from "../layouts/breadcrumb";
+import Breadcrumb from "../../layouts/breadcrumb";
 import { Link } from "react-router-dom";
-import Layout from "../layouts/layouts";
+import Layout from "../../layouts/layouts";
 
 function PracticalExam() {
     const [showModal, setShowModal] = useState(false);
