@@ -68,7 +68,9 @@ function Course() {
                                                                 </div>
                                                             </div>
                                                             <h5>
-                                                                <Link to="/course/detail">{item.name}</Link>
+                                                                <Link to="/course/detail" className="line-clamp">
+                                                                    {item.name}
+                                                                </Link>
                                                             </h5>
 
                                                             <p className="d-flex align-items-center">

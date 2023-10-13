@@ -7,9 +7,9 @@ import Contact from "./components/pages/contact";
 import Blog from "./components/pages/blog/blog";
 import BlogDetail from "./components/pages/blog/blog-details";
 import Login from "./components/pages/login";
-import MultipleChoice from "./components/pages/multiple-choice";
-import ExamList from "./components/pages/exam-list";
-import ConstructedResponse from "./components/pages/practical-exam";
+import MultipleChoice from "./components/pages/exam/multiple-choice";
+import ExamList from "./components/pages/exam/exam-list";
+import ConstructedResponse from "./components/pages/exam/practical-exam";
 import Dashboard from "./components/pages/dashboard";
 import NotFound from "./components/pages/404";
 
@@ -31,7 +31,8 @@ function App() {
                 <Route path="/course/detail" element={<CourseDetail />} />
 
                 <Route path="/exam-list" element={<ExamList />} />
-                <Route path="/multiple-choice" element={<MultipleChoice />} />
+                <Route path="/multiple-choice/:slug" element={<MultipleChoice />} />
+
                 <Route path="/practical-exam" element={<ConstructedResponse />} />
 
                 <Route path="/blog" element={<Blog />} />
