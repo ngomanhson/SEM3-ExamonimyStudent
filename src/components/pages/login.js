@@ -1,12 +1,57 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import api from "../../services/api";
+import url from "../../services/url";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+    const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [students, setStudents] = useState([]);
+    const [emailValid, setEmailValid] = useState(true);
+    const [passwordValid, setPasswordValid] = useState(true);
+    const [error, setError] = useState("");
 
     const handleTogglePassword = () => {
         setShowPassword(!showPassword);
     };
+
+    useEffect(() => {
+        loadStudents();
+    }, []);
+
+    const loadStudents = async () => {
+        try {
+            const response = await api.get(url.STUDENT.LIST);
+            setStudents(response.data);
+        } catch (error) {}
+    };
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+
+        const student = students.find((student) => student.email === email);
+
+        setEmailValid(!!email);
+        setPasswordValid(!!password);
+
+        if (student) {
+            if (student.password === password) {
+                const token = Math.random().toString(36).substring(2) + Date.now();
+                sessionStorage.setItem("token", token);
+
+                console.log("Token: " + token);
+
+                console.log("Logged in successfully.");
+
+                navigate("/");
+            } else {
+                setError("Email or password is incorrect.");
+            }
+        }
+    };
+
     return (
         <>
             <main className="d-flex align-items-center min-vh-100 py-3 py-md-0">
@@ -22,37 +67,46 @@ function Login() {
                                         <img src="assets/img/logo-2.png" alt="logo" className="logo" />
                                     </div>
                                     <p className="login-card-description">Login to your account</p>
-                                    <form action="#!">
-                                        <div className="form-group">
-                                            <label for="email" className="sr-only">
+                                    <form onSubmit={handleLogin}>
+                                        <div className={`form-group ${!emailValid ? "is-invalid" : ""}`}>
+                                            <label htmlFor="email" className="sr-only">
                                                 Email
                                             </label>
-                                            <input type="email" name="email" id="email" className="form-control" placeholder="Enter email address" required />
+                                            <input
+                                                type="email"
+                                                name="email"
+                                                id="email"
+                                                className={`form-control  ${!emailValid ? "is-invalid" : ""}`}
+                                                placeholder="Enter email address"
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                            />
                                         </div>
-                                        <div className="form-group mb-4">
-                                            <label for="password" className="sr-only">
+                                        <div className={`form-group mb-4 ${!passwordValid ? "is-invalid" : ""}`}>
+                                            <label htmlFor="password" className="sr-only">
                                                 Password
                                             </label>
                                             <input
                                                 type={showPassword ? "text" : "password"}
                                                 name="password"
                                                 id="password"
-                                                className="form-control"
+                                                className={`form-control ${!passwordValid ? "is-invalid" : ""}`}
                                                 placeholder="***********"
-                                                required
                                                 value={password}
                                                 onChange={(e) => setPassword(e.target.value)}
                                             />
                                         </div>
+                                        <p className={`messages-login ${error ? "" : "d-none"}`}>{error}</p>
                                         <label className="input-check">
                                             Show Password
                                             <input type="checkbox" onClick={handleTogglePassword} />
                                             <span className="checkmark"></span>
                                         </label>
-                                        <button type="submit" className=" btn login-btn btn-base mb-4">
+                                        <button type="submit" className="btn login-btn btn-base mb-4">
                                             Sign In
                                         </button>
                                     </form>
+
                                     <a href="#!" className="forgot-password-link">
                                         Forgot password?
                                     </a>
@@ -70,4 +124,5 @@ function Login() {
         </>
     );
 }
+
 export default Login;

@@ -1,9 +1,16 @@
+import { useNavigate } from "react-router-dom";
 import Breadcrumb from "../layouts/breadcrumb";
 import Layout from "../layouts/layouts";
 import MyCourses from "../views/dashboard/my-courses";
 import Profile from "../views/dashboard/profile";
 
 function Dashboard() {
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        sessionStorage.removeItem("token");
+
+        navigate("/login");
+    };
     return (
         <>
             <Layout>
@@ -77,7 +84,7 @@ function Dashboard() {
                                             >
                                                 <i className="fa fa-cog"></i>Settings
                                             </button>
-                                            <button className="nav-link btn btn-link " type="button">
+                                            <button className="nav-link btn btn-link" type="button" onClick={handleLogout}>
                                                 <i className="fa fa-sign-out"></i>Logout
                                             </button>
                                         </div>
