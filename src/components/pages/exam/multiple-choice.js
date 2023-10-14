@@ -6,9 +6,11 @@ import Breadcrumb from "../../layouts/breadcrumb";
 import Layout from "../../layouts/layouts";
 // import Result from "../../views/exam/result";
 import Question from "../../views/exam/questions";
+import Loading from "../../layouts/loading";
 
 function MultipleChoice() {
     const { slug } = useParams();
+    const [loading, setLoading] = useState(false);
 
     const [inExam, setInExam] = useState(false);
     const [timeRemaining, setTimeRemaining] = useState(1800);
@@ -40,16 +42,20 @@ function MultipleChoice() {
             setQuestions(questions);
             setAnswers(answers);
 
-            console.log("Questions");
-            console.log(questions);
+            // console.log("Questions");
+            // console.log(questions);
 
-            console.log("Answers");
-            console.log(answers);
+            // console.log("Answers");
+            // console.log(answers);
         } catch (error) {}
     }, [slug]);
 
     useEffect(() => {
         loadQuestion();
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+        }, 2000);
     }, [slug, loadQuestion]);
 
     const handleFinishExam = useCallback(() => {
@@ -120,81 +126,84 @@ function MultipleChoice() {
     };
 
     return (
-        <Layout>
-            <Breadcrumb title="My Exam" />
-            <section className="pd-top-60 pd-bottom-70">
-                <div className="container">
-                    <div className="row">
-                        <div className="col">
-                            {hasSubmitted ? (
-                                <div>
-                                    <h3 className="exam__inner-heading text-center">Exam ASP .NET - Results</h3>
-                                    <div className="row">
-                                        <div className="col-lg-8 col-12 order-lg-0">
-                                            <div className="td-sidebar">{/* <Result questions={questions} selectedAnswers={selectedAnswers} optionsPrefix={optionsPrefix} /> */}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : inExam ? (
-                                <div>
-                                    <h3 className="exam__inner-heading text-center">Exam ASP .NET</h3>
-                                    <div className="exam__inner pd-top-60 pd-bottom-70">
+        <>
+            {loading ? <Loading /> : ""}
+            <Layout>
+                <Breadcrumb title="My Exam" />
+                <section className="pd-top-60 pd-bottom-70">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col">
+                                {hasSubmitted ? (
+                                    <div>
+                                        <h3 className="exam__inner-heading text-center">Exam ASP .NET - Results</h3>
                                         <div className="row">
                                             <div className="col-lg-8 col-12 order-lg-0">
-                                                <form action="#">
-                                                    <div className="td-sidebar">
-                                                        <div className="widget">
-                                                            <Question
-                                                                currentQuestionIndex={currentQuestionIndex}
-                                                                questions={questions}
-                                                                selectedAnswers={selectedAnswers}
-                                                                optionsPrefix={optionsPrefix}
-                                                                handleAnswerSelect={handleAnswerSelect}
-                                                                handlePreviousQuestion={handlePreviousQuestion}
-                                                                handleNextQuestion={handleNextQuestion}
-                                                                answers={answers}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </form>
+                                                <div className="td-sidebar">{/* <Result questions={questions} selectedAnswers={selectedAnswers} optionsPrefix={optionsPrefix} /> */}</div>
                                             </div>
-
-                                            <div className="col-lg-4 col-12">
-                                                <div className="answers__inner">
-                                                    <h5 className="text-center">Time remaining: {formatTime(timeRemaining)}</h5>
-                                                    <div className="answers_number">
-                                                        {questions.map((question, index) => (
-                                                            <button type="button" className={`btn answers-btn ${selectedAnswers[question.id] ? "answers-btn-active" : ""}`} key={question.id}>
-                                                                {String(index + 1).padStart(2, "0")}
-                                                            </button>
-                                                        ))}
-                                                    </div>
-                                                    {inExam && (
-                                                        <div className="d-flex justify-content-end">
-                                                            <button type="button" className="btn btn-base-2 d-block mt-3" onClick={handleSubmitExam} style={{ width: "100%" }}>
-                                                                <i className="fa fa-stop-circle"></i> Finish Exam
-                                                            </button>
+                                        </div>
+                                    </div>
+                                ) : inExam ? (
+                                    <div>
+                                        <h3 className="exam__inner-heading text-center">Exam ASP .NET</h3>
+                                        <div className="exam__inner pd-top-60 pd-bottom-70">
+                                            <div className="row">
+                                                <div className="col-lg-8 col-12 order-lg-0">
+                                                    <form action="#">
+                                                        <div className="td-sidebar">
+                                                            <div className="widget">
+                                                                <Question
+                                                                    currentQuestionIndex={currentQuestionIndex}
+                                                                    questions={questions}
+                                                                    selectedAnswers={selectedAnswers}
+                                                                    optionsPrefix={optionsPrefix}
+                                                                    handleAnswerSelect={handleAnswerSelect}
+                                                                    handlePreviousQuestion={handlePreviousQuestion}
+                                                                    handleNextQuestion={handleNextQuestion}
+                                                                    answers={answers}
+                                                                />
+                                                            </div>
                                                         </div>
-                                                    )}
+                                                    </form>
+                                                </div>
+
+                                                <div className="col-lg-4 col-12">
+                                                    <div className="answers__inner">
+                                                        <h5 className="text-center">Time remaining: {formatTime(timeRemaining)}</h5>
+                                                        <div className="answers_number">
+                                                            {questions.map((question, index) => (
+                                                                <button type="button" className={`btn answers-btn ${selectedAnswers[question.id] ? "answers-btn-active" : ""}`} key={question.id}>
+                                                                    {String(index + 1).padStart(2, "0")}
+                                                                </button>
+                                                            ))}
+                                                        </div>
+                                                        {inExam && (
+                                                            <div className="d-flex justify-content-end">
+                                                                <button type="button" className="btn btn-base-2 d-block mt-3" onClick={handleSubmitExam} style={{ width: "100%" }}>
+                                                                    <i className="fa fa-stop-circle"></i> Finish Exam
+                                                                </button>
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            ) : (
-                                <div className="terms__content text-center pt-5 pb-5">
-                                    <h3 className="terms__content-heading">Some notes before taking the exam</h3>
-                                    <p className="terms__content-desc">Note: The exam has 16 questions and 30 minutes to complete.</p>
-                                    <button onClick={handleStartExam} className="btn btn-base-2 mt-3">
-                                        Start
-                                    </button>
-                                </div>
-                            )}
+                                ) : (
+                                    <div className="terms__content text-center pt-5 pb-5">
+                                        <h3 className="terms__content-heading">Some notes before taking the exam</h3>
+                                        <p className="terms__content-desc">Note: The exam has 16 questions and 30 minutes to complete.</p>
+                                        <button onClick={handleStartExam} className="btn btn-base-2 mt-3">
+                                            Start
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
-        </Layout>
+                </section>
+            </Layout>
+        </>
     );
 }
 

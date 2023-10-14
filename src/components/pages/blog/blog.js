@@ -1,10 +1,20 @@
 import { Link } from "react-router-dom";
 import Breadcrumb from "../../layouts/breadcrumb";
 import Layout from "../../layouts/layouts";
+import Loading from "../../layouts/loading";
+import { useEffect, useState } from "react";
 
 function Blog() {
+    const [loading, setLoading] = useState(false);
+    useEffect(() => {
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+        }, 2000);
+    }, []);
     return (
         <>
+            {loading ? <Loading /> : ""}
             <Layout>
                 <Breadcrumb title="Blog" />
                 <section className="blog-area pd-top-120 pd-bottom-120">
