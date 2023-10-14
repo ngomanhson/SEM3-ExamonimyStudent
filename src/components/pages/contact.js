@@ -1,9 +1,19 @@
+import { useEffect, useState } from "react";
 import Breadcrumb from "../layouts/breadcrumb";
 import Layout from "../layouts/layouts";
+import Loading from "../layouts/loading";
 
 function Contact() {
+    const [loading, setLoading] = useState(false);
+    useEffect(() => {
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+        }, 2000);
+    }, []);
     return (
         <>
+            {loading ? <Loading /> : ""}
             <Layout>
                 <Breadcrumb title="Contact" />
                 <section className="contact-area pd-top-110 pd-bottom-120">

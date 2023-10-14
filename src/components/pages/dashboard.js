@@ -3,16 +3,28 @@ import Breadcrumb from "../layouts/breadcrumb";
 import Layout from "../layouts/layouts";
 import MyCourses from "../views/dashboard/my-courses";
 import Profile from "../views/dashboard/profile";
+import { useEffect, useState } from "react";
+import Loading from "../layouts/loading";
 
 function Dashboard() {
+    const [loading, setLoading] = useState(false);
+    useEffect(() => {
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+        }, 2000);
+    }, []);
+
     const navigate = useNavigate();
     const handleLogout = () => {
         sessionStorage.removeItem("token");
 
         navigate("/login");
     };
+
     return (
         <>
+            {loading ? <Loading /> : ""}
             <Layout>
                 <Breadcrumb title="Dashboard" />
                 <section className="pd-top-110 pd-bottom-120">

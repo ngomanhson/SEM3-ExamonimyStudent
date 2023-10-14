@@ -4,11 +4,13 @@ import Layout from "../../layouts/layouts";
 import { useEffect, useState } from "react";
 import api from "../../../services/api";
 import url from "../../../services/url";
+import Loading from "../../layouts/loading";
 
 function Course() {
     const [courses, setCourses] = useState([]);
     const [staffs, setStaffs] = useState([]);
     const [classes, setClasses] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const loadCourses = async () => {
         try {
@@ -38,10 +40,15 @@ function Course() {
 
     useEffect(() => {
         loadCourses();
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+        }, 2000);
     }, []);
 
     return (
         <>
+            {loading ? <Loading /> : ""}
             <Layout>
                 <Breadcrumb title="Courses" />
                 <section className="course-area pd-top-120 pd-bottom-120">

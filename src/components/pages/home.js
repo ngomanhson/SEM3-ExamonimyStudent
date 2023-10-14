@@ -8,10 +8,19 @@ import Team from "../views/home/team";
 import Testimonial from "../views/home/testimonial";
 import Layout from "../layouts/layouts";
 import { Link } from "react-router-dom";
-
+import { useEffect, useState } from "react";
+import Loading from "../layouts/loading";
 function Home() {
+    const [loading, setLoading] = useState(false);
+    useEffect(() => {
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+        }, 2000);
+    }, []);
     return (
         <>
+            {loading ? <Loading /> : ""}
             <Layout>
                 <div
                     className="banner-area banner-area-2"
