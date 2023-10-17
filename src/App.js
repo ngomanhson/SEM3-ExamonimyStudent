@@ -12,6 +12,7 @@ import ExamList from "./components/pages/exam/exam-list";
 import ConstructedResponse from "./components/pages/exam/practical-exam";
 import Dashboard from "./components/pages/dashboard";
 import NotFound from "./components/pages/404";
+import Result from "./components/views/exam/result";
 
 function App() {
     const navigate = useNavigate();
@@ -32,6 +33,7 @@ function App() {
 
                 <Route path="/exam-list" element={<ExamList />} />
                 <Route path="/multiple-choice/:slug" element={<MultipleChoice />} />
+                <Route path="/exam/result" element={<Result />} />
 
                 <Route path="/practical-exam" element={<ConstructedResponse />} />
 

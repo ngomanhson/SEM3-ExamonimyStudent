@@ -18,6 +18,7 @@ const url = {
     },
 
     TEST: {
+        LIST: "/test",
         SLUG: "/test/get-by-slug",
     },
 
@@ -32,6 +33,10 @@ const url = {
     ANSWER: {
         LIST: "/answer",
         QUESTION_ID: "/answer/get-by-questionId",
+    },
+
+    ANSWER_STUDENT: {
+        SUBMIT: "/answersForStudent/submit-exam/",
     },
 };
 
