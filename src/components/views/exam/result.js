@@ -1,23 +1,44 @@
-function Result({ questions, selectedAnswers, optionsPrefix }) {
+import React, { useEffect, useState } from "react";
+import { Base64 } from "js-base64";
+import { Link } from "react-router-dom";
+
+function Result() {
+    const [gradeData, setGradeData] = useState(null);
+    const [statusText, setStatusText] = useState("");
+
+    useEffect(() => {
+        const storedData = sessionStorage.getItem("simplifiedGradeData");
+        if (storedData) {
+            const decodedData = Base64.decode(storedData);
+
+            const parsedData = JSON.parse(decodedData);
+            setGradeData(parsedData);
+
+            if (parsedData.status === 0) {
+                setStatusText("Not Pass");
+            } else if (parsedData.status === 1) {
+                setStatusText("Passed");
+            }
+        }
+    }, []);
+
     return (
-        <div className="exam__inner pd-top-60 pd-bottom-70">
-            {questions.map((question, index) => (
-                <div className="widget" key={question.id}>
-                    <h6 className="exam__inner-desc">
-                        Question {index + 1}: {question.title}
-                    </h6>
-                    <p>Your Answer: {selectedAnswers[question.id]}</p>
-                    <div className="answers__group">
-                        {question.options.map((option, optionIndex) => (
-                            <label className={`answers__group-label answers-disabled mt-3 ${selectedAnswers[question.id] === option ? "label-active" : ""}`} key={optionIndex}>
-                                <input type="radio" value={option} name={`question_id${question.id}`} className="answers__group-input" disabled />
-                                {optionsPrefix[optionIndex]}. {option}
-                            </label>
-                        ))}
+        <>
+            <h3 className="exam__inner-heading text-center">{gradeData?.testName} - Results</h3>
+            <div className="row">
+                <div className="col-12">
+                    <div className="td-sidebar">
+                        <h2>Test name: {gradeData?.testName}</h2>
+                        <h2>Your Grade: {gradeData?.score}</h2>
+                        <h2>Status: {statusText}</h2>
                     </div>
                 </div>
-            ))}
-        </div>
+            </div>
+            <Link to="/" className="btn btn-notfound mt-3">
+                <i class="fa fa-long-arrow-left"></i> Back to Home
+            </Link>
+        </>
     );
 }
+
 export default Result;
