@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../services/api";
-import url from "../../../services/url";
 import Breadcrumb from "../../layouts/breadcrumb";
 import Layout from "../../layouts/layouts";
 import Question from "../../views/exam/questions";
 import Loading from "../../layouts/loading";
 import { Base64 } from "js-base64";
+import url from "../../../services/url";
 
 function MultipleChoice() {
-    const { slug } = useParams();
-
+    const { testId, studentId } = useParams();
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(true);
@@ -20,43 +19,41 @@ function MultipleChoice() {
     const [selectedAnswers, setSelectedAnswers] = useState({});
     const [hasSubmitted, setHasSubmitted] = useState(false);
     const [questions, setQuestions] = useState([]);
-    const [answers, setAnswers] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [level, setLevel] = useState([]);
+    const [score, setScore] = useState([]);
+    const [error, setError] = useState(null);
     const optionsPrefix = ["A", "B", "C", "D"];
 
-    const [examName, setExamName] = useState([]);
-
     // Function to load questions and answers from the API
-    const loadQuestion = useCallback(async () => {
+    const loadQuestions = useCallback(async () => {
         try {
-            const examResponse = await api.get(url.EXAM.SLUG + `?slug=${slug}`);
-            const examId = examResponse.data.id;
+            const questionResponse = await api.get(url.TEST.DETAIL + `/${testId}/details?studentId=${studentId}`);
+            const question = await api.get(url.QUESTION.DETAIL + `?id=${testId}`);
 
-            const examName = examResponse.data.name;
+            const questionLevel = question.data.level;
+            const questionScore = question.data.score;
 
-            const questionResponse = await api.get(url.QUESTION.TEST_ID + `?testId=${examId}`);
-            const questions = questionResponse.data;
-
-            if (questions.length > 0) {
-                const answersPromises = questions.map(async (question) => {
-                    const answerResponse = await api.get(url.ANSWER.QUESTION_ID + `?questionId=${question.id}`);
-                    return answerResponse.data;
-                });
-
-                const answers = await Promise.all(answersPromises);
-
-                setExamName(examName);
-                setQuestions(questions);
-                setAnswers(answers);
+            setQuestions(questionResponse.data);
+            setLevel(questionLevel);
+            setScore(questionScore);
+        } catch (error) {
+            if (error.response && error.response.status === 400) {
+                // Handling when status code is 400 (Bad Request)
+                setError("The test has ended or has not started yet.");
+            } else {
+                // Other error handling
+                setError("An error occurred");
             }
-
-            setLoading(false);
-        } catch (error) {}
-    }, [slug]);
+        }
+    }, [testId, studentId]);
 
     useEffect(() => {
-        loadQuestion();
-    }, [slug, loadQuestion]);
+        loadQuestions();
+        setTimeout(() => {
+            setLoading(false);
+        }, 2000);
+    }, [testId, studentId, loadQuestions]);
 
     // Function to handle finishing the exam
     const handleFinishExam = useCallback(() => {
@@ -127,20 +124,16 @@ function MultipleChoice() {
     // Function to submit answers to the API
     const submitAnswers = async () => {
         try {
-            const studentId = 1;
-            const testId = questions[0].test_id;
-
             const answersData = questions.map((question, index) => {
                 const answerData = {
                     question_id: question.id,
-                    content: selectedAnswers[question.id] || "sdfggssdfgsdfsdfkl",
-                    student_id: studentId,
+                    content: selectedAnswers[question.id] || "",
+                    student_id: 1,
                 };
                 return answerData;
             });
 
             const response = await api.post(url.ANSWER_STUDENT.SUBMIT + `?test_id=${testId}`, answersData);
-
             if (response.status === 200) {
                 const grade = response.data;
 
@@ -169,7 +162,7 @@ function MultipleChoice() {
         const confirmSubmit = window.confirm("Are you sure you want to submit your exam?");
         if (confirmSubmit) {
             handleFinishExam();
-            submitAnswers();
+            submitAnswers(testId, studentId);
         }
     };
 
@@ -182,9 +175,14 @@ function MultipleChoice() {
                     <div className="container">
                         <div className="row">
                             <div className="col">
-                                {inExam ? (
+                                {error ? (
+                                    <div className="d-flex flex-column justify-content-center align-items-center">
+                                        <img src="./assets/img/completed.svg" alt="Completed" width={"20%"} />
+                                        <p className="mt-3">{error}</p>
+                                    </div>
+                                ) : inExam ? (
                                     <>
-                                        <h3 className="exam__inner-heading text-center">{examName}</h3>
+                                        {/* <h3 className="exam__inner-heading text-center">{testName}</h3> */}
                                         <div className="exam__inner pd-top-60 pd-bottom-70">
                                             <div className="row">
                                                 <div className="col-lg-8 col-12 order-lg-0">
@@ -199,9 +197,8 @@ function MultipleChoice() {
                                                                     handleAnswerSelect={handleAnswerSelect}
                                                                     handlePreviousQuestion={handlePreviousQuestion}
                                                                     handleNextQuestion={handleNextQuestion}
-                                                                    answers={answers}
-                                                                    level={questions[currentQuestionIndex].level}
-                                                                    score={questions[currentQuestionIndex].score}
+                                                                    level={level}
+                                                                    score={score}
                                                                 />
                                                             </div>
                                                         </div>
@@ -241,7 +238,9 @@ function MultipleChoice() {
                                 ) : (
                                     <div className="terms__content text-center pt-5 pb-5">
                                         <h3 className="terms__content-heading">Some notes before taking the exam</h3>
-                                        <p className="terms__content-desc">Note: The exam has 16 questions and 30 minutes to complete.</p>
+                                        <p className="terms__content-desc mx-auto" style={{ maxWidth: "450px" }}>
+                                            Note:The test has {questions.length} question. The test takes 30 minutes and must score 40/100 score to complete the test.
+                                        </p>
                                         <button onClick={handleStartExam} className="btn btn-base-2 mt-3">
                                             Start
                                         </button>

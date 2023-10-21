@@ -1,17 +1,31 @@
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { format } from "date-fns";
 import Breadcrumb from "../../layouts/breadcrumb";
 import Layout from "../../layouts/layouts";
 import Loading from "../../layouts/loading";
-import { useEffect, useState } from "react";
+import api from "../../../services/api";
+import url from "../../../services/url";
 
 function ExamList() {
-    const [loading, setLoading] = useState(false);
-    useEffect(() => {
-        setLoading(true);
-        setTimeout(() => {
+    const [loading, setLoading] = useState(true);
+    const [tests, setTests] = useState([]);
+    const currentTime = new Date();
+
+    const loadTests = async () => {
+        try {
+            const response = await api.get(url.TEST.LIST);
+            setTests(response.data);
             setLoading(false);
-        }, 2000);
+        } catch (error) {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        loadTests();
     }, []);
+
     return (
         <>
             {loading ? <Loading /> : ""}
@@ -21,20 +35,30 @@ function ExamList() {
                     <div className="container">
                         <div className="row">
                             <div className="col-8 mx-auto">
-                                <section className="section-title">
-                                    <h6 class="sub-title right-line">Exam List</h6>
-                                    <h2 class="title">Here is the test for you.</h2>
+                                {tests.some((test) => currentTime >= new Date(test.startDate) && currentTime <= new Date(test.endDate)) ? (
+                                    <section className="section-title">
+                                        <h6 className="sub-title right-line">Exam List</h6>
+                                        <h2 className="title">Here is the test for you.</h2>
 
-                                    <Link to="/multiple-choice" className="btn btn-base-2 d-flex justify-content-between " style={{ width: "100%" }}>
-                                        Web Development with ASP.NET MVC and CORE
-                                        <p className="text-white">DUE DATE: 2023-10-04 16:00:00 (GMT+07)</p>
-                                    </Link>
+                                        {tests.map((test) => {
+                                            const isTestActive = currentTime >= new Date(test.startDate) && currentTime <= new Date(test.endDate);
 
-                                    <Link to="/practical-exam" className="btn btn-base-2 d-flex justify-content-between " style={{ width: "100%" }}>
-                                        Web Development with ASP.NET MVC and CORE
-                                        <p className="text-white">DUE DATE: 2023-10-04 16:00:00 (GMT+07)</p>
-                                    </Link>
-                                </section>
+                                            return (
+                                                isTestActive && (
+                                                    <Link to={`/multiple-choice/${test.id}/1`} key={test.id} className="btn btn-base-2 d-flex justify-content-between" style={{ width: "100%" }}>
+                                                        {test.name}
+                                                        <p className="text-white">Due date: {format(new Date(test.endDate), "HH:mm:ss dd/MM/yyyy")} (GMT+07)</p>
+                                                    </Link>
+                                                )
+                                            );
+                                        })}
+                                    </section>
+                                ) : (
+                                    <div className="d-flex flex-column justify-content-center align-items-center">
+                                        <img src="./assets/img/no-data.svg" alt="No data" width={"40%"} />
+                                        <p>You currently have no tests.</p>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -43,4 +67,5 @@ function ExamList() {
         </>
     );
 }
+
 export default ExamList;
