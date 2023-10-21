@@ -20,6 +20,7 @@ const url = {
     TEST: {
         LIST: "/test",
         SLUG: "/test/get-by-slug",
+        DETAIL: "/test",
     },
 
     EXAM: {
@@ -27,6 +28,7 @@ const url = {
     },
 
     QUESTION: {
+        DETAIL: "question/get-by-id",
         TEST_ID: "question/get-by-testId",
     },
 

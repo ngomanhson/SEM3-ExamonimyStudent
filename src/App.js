@@ -32,7 +32,7 @@ function App() {
                 <Route path="/course/detail" element={<CourseDetail />} />
 
                 <Route path="/exam-list" element={<ExamList />} />
-                <Route path="/multiple-choice/:slug" element={<MultipleChoice />} />
+                <Route path="/multiple-choice/:testId/:studentId" element={<MultipleChoice />} />
                 <Route path="/exam/result" element={<Result />} />
 
                 <Route path="/practical-exam" element={<ConstructedResponse />} />

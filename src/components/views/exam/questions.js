@@ -11,28 +11,28 @@ function getDifficultyText(level) {
     }
 }
 
-function Question({ currentQuestionIndex, questions, answers, selectedAnswers, optionsPrefix, handleAnswerSelect, handlePreviousQuestion, handleNextQuestion, level, score }) {
-    const correctAnswers = answers[currentQuestionIndex];
+function Question({ currentQuestionIndex, questions, selectedAnswers, optionsPrefix, handleAnswerSelect, handlePreviousQuestion, handleNextQuestion, level, score }) {
+    const currentQuestion = questions[currentQuestionIndex];
+
     return (
         <div>
             <h6 className="exam__inner-desc">
-                Question {currentQuestionIndex + 1}: {questions[currentQuestionIndex].title}
+                Question {currentQuestionIndex + 1}: {currentQuestion.title}
             </h6>
             <p>
                 Level: {getDifficultyText(level)} / Score: {score}
             </p>
-
             <p>Choose one correct answer:</p>
             <div className="answers__group">
-                {correctAnswers.map((answer, answerIndex) => (
-                    <label className={`answers__group-label mt-3 ${selectedAnswers[questions[currentQuestionIndex].id] === answer.content ? "label-active" : ""}`} key={answerIndex}>
+                {currentQuestion.answers.map((answer, answerIndex) => (
+                    <label className={`answers__group-label mt-3 ${selectedAnswers[currentQuestion.id] === answer.content ? "label-active" : ""}`} key={answer.id}>
                         <input
                             type="radio"
                             value={answer.content}
-                            name={`question_id${questions[currentQuestionIndex].id}`}
+                            name={`question_id${currentQuestion.id}`}
                             className="answers__group-input"
-                            onChange={() => handleAnswerSelect(questions[currentQuestionIndex].id, answer.content)}
-                            checked={selectedAnswers[questions[currentQuestionIndex].id] === answer.content}
+                            onChange={() => handleAnswerSelect(currentQuestion.id, answer.content)}
+                            checked={selectedAnswers[currentQuestion.id] === answer.content}
                         />
                         {optionsPrefix[answerIndex]}. {answer.content}
                     </label>
