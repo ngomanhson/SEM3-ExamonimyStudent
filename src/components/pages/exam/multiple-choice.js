@@ -7,6 +7,7 @@ import Question from "../../views/exam/questions";
 import Loading from "../../layouts/loading";
 import { Base64 } from "js-base64";
 import url from "../../../services/url";
+import { toast } from "react-toastify";
 
 function MultipleChoice() {
     const { testId, studentId } = useParams();
@@ -41,6 +42,11 @@ function MultipleChoice() {
             if (error.response && error.response.status === 400) {
                 // Handling when status code is 400 (Bad Request)
                 setError("The test has ended or has not started yet.");
+
+                toast.error("The test has ended or has not started yet.", {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 3000,
+                });
             } else {
                 // Other error handling
                 setError("An error occurred");
@@ -64,7 +70,10 @@ function MultipleChoice() {
 
     useEffect(() => {
         if (timeRemaining === 0) {
-            alert("Exam time is over. Your exam has been submitted.");
+            toast.info("Exam time is over. Your exam has been submitted.", {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 5000,
+            });
             handleFinishExam();
         }
 
@@ -150,17 +159,23 @@ function MultipleChoice() {
                 sessionStorage.setItem("simplifiedGradeData", encodedData);
 
                 navigate("/exam/result");
-                alert("Answers submitted successfully!");
+                toast.success("Answers submitted successfully!", {
+                    position: toast.POSITION.TOP_CENTER,
+                    autoClose: 5000,
+                });
             } else {
-                alert("Failed to submit answers.");
+                toast.error("Failed to submit answers", {
+                    position: toast.POSITION.RIGHT,
+                    autoClose: 3000,
+                });
             }
         } catch (error) {}
     };
 
     // Function to handle exam submission
     const handleSubmitExam = () => {
-        const confirmSubmit = window.confirm("Are you sure you want to submit your exam?");
-        if (confirmSubmit) {
+        const isConfirmed = window.confirm("Are you sure you want to submit your exam?");
+        if (isConfirmed) {
             handleFinishExam();
             submitAnswers(testId, studentId);
         }
