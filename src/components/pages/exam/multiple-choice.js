@@ -30,28 +30,29 @@ function MultipleChoice() {
     const loadQuestions = useCallback(async () => {
         try {
             const questionResponse = await api.get(url.TEST.DETAIL + `/${testId}/details?studentId=${studentId}`);
-            // const question = await api.get(url.QUESTION.DETAIL + `?id=2005`);
-            // const question = await api.get(`https://localhost:7218/api/question/get-by-id?id=2005`);
-
-            // console.log(question.data);
-            // const questionLevel = question.data.level;
-            // const questionScore = question.data.score;
 
             setQuestions(questionResponse.data);
-            // setLevel(questionLevel);
-            // setScore(questionScore);
         } catch (error) {
             if (error.response && error.response.status === 400) {
                 // Handling when status code is 400 (Bad Request)
-                setError("The test has ended or has not started yet.");
+                setTimeout(() => {
+                    setError("The test has ended or has not started yet.");
 
-                toast.error("The test has ended or has not started yet.", {
-                    position: toast.POSITION.TOP_RIGHT,
-                    autoClose: 3000,
-                });
+                    toast.error("The test has ended or has not started yet.", {
+                        position: toast.POSITION.TOP_RIGHT,
+                        autoClose: 3000,
+                    });
+                }, 2000);
             } else {
                 // Other error handling
-                setError("An error occurred");
+                setTimeout(() => {
+                    toast.error("An error occurred.", {
+                        position: toast.POSITION.TOP_RIGHT,
+                        autoClose: 3000,
+                    });
+
+                    setError("An error occurred.");
+                }, 2000);
             }
         }
     }, [testId, studentId]);
@@ -72,10 +73,12 @@ function MultipleChoice() {
 
     useEffect(() => {
         if (timeRemaining === 0) {
+            // Automatically submit the exam when the time is over
             toast.info("Exam time is over. Your exam has been submitted.", {
-                position: toast.POSITION.TOP_CENTER,
+                position: toast.POSITION.TOP_RIGHT,
                 autoClose: 5000,
             });
+            submitAnswers();
             handleFinishExam();
         }
 
@@ -90,6 +93,7 @@ function MultipleChoice() {
         return () => {
             clearInterval(timer);
         };
+        // eslint-disable-next-line
     }, [inExam, timeRemaining, countdownActive, handleFinishExam]);
 
     // Function to format time as a string
@@ -103,7 +107,9 @@ function MultipleChoice() {
 
     // Function to start the exam
     const handleStartExam = () => {
+        setLoading(true);
         setTimeout(() => {
+            setLoading(false);
             setInExam(true);
         }, 2000);
     };
@@ -133,12 +139,12 @@ function MultipleChoice() {
     };
 
     // Function to submit answers to the API
-    const submitAnswers = async () => {
+    const submitAnswers = useCallback(async () => {
         try {
             const answersData = questions.map((question, index) => {
                 const answerData = {
                     question_id: question.id,
-                    content: selectedAnswers[question.id] || "",
+                    content: selectedAnswers[question.id] || "Not done",
                     student_id: 1,
                 };
                 return answerData;
@@ -162,17 +168,17 @@ function MultipleChoice() {
 
                 navigate("/exam/result");
                 toast.success("Answers submitted successfully!", {
-                    position: toast.POSITION.TOP_CENTER,
+                    position: toast.POSITION.TOP_RIGHT,
                     autoClose: 5000,
                 });
             } else {
                 toast.error("Failed to submit answers", {
-                    position: toast.POSITION.RIGHT,
+                    position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000,
                 });
             }
         } catch (error) {}
-    };
+    }, [questions, selectedAnswers, testId, navigate]);
 
     // Function to handle exam submission
     const handleSubmitExam = () => {
@@ -256,10 +262,16 @@ function MultipleChoice() {
                                     <div className="terms__content text-center pt-5 pb-5">
                                         <h3 className="terms__content-heading">Some notes before taking the exam</h3>
                                         <p className="terms__content-desc mx-auto" style={{ maxWidth: "450px" }}>
-                                            Note:The test has {questions.length} question. The test takes 30 minutes and must score 40/100 score to complete the test.
+                                            Note: The test has {questions.length} questions. The test takes 30 minutes to complete and can only be taken once.
                                         </p>
-                                        <button onClick={handleStartExam} className="btn btn-base-2 mt-3">
-                                            Start
+                                        <button onClick={handleStartExam} className={`btn btn-base-2 mt-3 d-flex align-items-center mx-auto ${loading ? "disabled" : ""}`}>
+                                            {loading ? (
+                                                <i className="fa fa-spinner fa-spin"></i>
+                                            ) : (
+                                                <>
+                                                    Start <i className="fa fa-play-circle" style={{ marginLeft: "5px" }}></i>
+                                                </>
+                                            )}
                                         </button>
                                     </div>
                                 )}

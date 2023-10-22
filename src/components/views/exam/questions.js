@@ -1,17 +1,17 @@
-// function getDifficultyText(level) {
-//     switch (level) {
-//         case 1:
-//             return "Easy";
-//         case 2:
-//             return "Medium";
-//         case 3:
-//             return "Difficult";
-//         default:
-//             return null;
-//     }
-// }
+function getDifficultyText(level) {
+    switch (level) {
+        case 1:
+            return "Easy";
+        case 2:
+            return "Medium";
+        case 3:
+            return "Difficult";
+        default:
+            return null;
+    }
+}
 
-function Question({ currentQuestionIndex, questions, selectedAnswers, optionsPrefix, handleAnswerSelect, handlePreviousQuestion, handleNextQuestion }) {
+function Question({ currentQuestionIndex, questions, selectedAnswers, optionsPrefix, handleAnswerSelect, handlePreviousQuestion, handleNextQuestion, level, score }) {
     const currentQuestion = questions[currentQuestionIndex];
 
     return (
@@ -19,7 +19,9 @@ function Question({ currentQuestionIndex, questions, selectedAnswers, optionsPre
             <h6 className="exam__inner-desc">
                 Question {currentQuestionIndex + 1}: {currentQuestion.title}
             </h6>
-            {/* <p>Level: {getDifficultyText(level)} / Score: {score}</p> */}
+            <p>
+                Level: {getDifficultyText(level)} / Score: {score}
+            </p>
             <p>Choose one correct answer:</p>
             <div className="answers__group">
                 {currentQuestion.answers.map((answer, answerIndex) => (
