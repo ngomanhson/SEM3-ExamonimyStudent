@@ -21,8 +21,8 @@ function MultipleChoice() {
     const [hasSubmitted, setHasSubmitted] = useState(false);
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [level, setLevel] = useState([]);
-    const [score, setScore] = useState([]);
+    // const [level, setLevel] = useState([]);
+    // const [score, setScore] = useState([]);
     const [error, setError] = useState(null);
     const optionsPrefix = ["A", "B", "C", "D"];
 
@@ -30,14 +30,16 @@ function MultipleChoice() {
     const loadQuestions = useCallback(async () => {
         try {
             const questionResponse = await api.get(url.TEST.DETAIL + `/${testId}/details?studentId=${studentId}`);
-            const question = await api.get(url.QUESTION.DETAIL + `?id=${testId}`);
+            // const question = await api.get(url.QUESTION.DETAIL + `?id=2005`);
+            // const question = await api.get(`https://localhost:7218/api/question/get-by-id?id=2005`);
 
-            const questionLevel = question.data.level;
-            const questionScore = question.data.score;
+            // console.log(question.data);
+            // const questionLevel = question.data.level;
+            // const questionScore = question.data.score;
 
             setQuestions(questionResponse.data);
-            setLevel(questionLevel);
-            setScore(questionScore);
+            // setLevel(questionLevel);
+            // setScore(questionScore);
         } catch (error) {
             if (error.response && error.response.status === 400) {
                 // Handling when status code is 400 (Bad Request)
@@ -212,8 +214,8 @@ function MultipleChoice() {
                                                                     handleAnswerSelect={handleAnswerSelect}
                                                                     handlePreviousQuestion={handlePreviousQuestion}
                                                                     handleNextQuestion={handleNextQuestion}
-                                                                    level={level}
-                                                                    score={score}
+                                                                    // level={level}
+                                                                    // score={score}
                                                                 />
                                                             </div>
                                                         </div>
