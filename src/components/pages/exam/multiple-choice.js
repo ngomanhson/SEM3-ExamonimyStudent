@@ -21,24 +21,37 @@ function MultipleChoice() {
     const [hasSubmitted, setHasSubmitted] = useState(false);
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    // const [level, setLevel] = useState([]);
-    // const [score, setScore] = useState([]);
     const [error, setError] = useState(null);
     const optionsPrefix = ["A", "B", "C", "D"];
 
-    // Function to load questions and answers from the API
     const loadQuestions = useCallback(async () => {
         try {
             const questionResponse = await api.get(url.TEST.DETAIL + `/${testId}/details?studentId=${studentId}`);
+            const questionIds = questionResponse.data.map((question) => question.id);
 
-            setQuestions(questionResponse.data);
+            // Fetch level and score for each question
+            const questionDetails = await Promise.all(
+                questionIds.map(async (questionId) => {
+                    const questionDetailResponse = await api.get(url.QUESTION.DETAIL + `?id=${questionId}`);
+                    return questionDetailResponse.data;
+                })
+            );
+
+            // Merge question details with original questions
+            const questionsWithDetails = questionResponse.data.map((question, index) => ({
+                ...question,
+                level: questionDetails[index].level,
+                score: questionDetails[index].score,
+            }));
+
+            setQuestions(questionsWithDetails);
         } catch (error) {
             if (error.response && error.response.status === 400) {
                 // Handling when status code is 400 (Bad Request)
                 setTimeout(() => {
-                    setError("The test has ended or has not started yet.");
+                    setError("The test has ended or has not started yet");
 
-                    toast.error("The test has ended or has not started yet.", {
+                    toast.error("The test has ended or has not started yet", {
                         position: toast.POSITION.TOP_RIGHT,
                         autoClose: 3000,
                     });
@@ -46,12 +59,12 @@ function MultipleChoice() {
             } else {
                 // Other error handling
                 setTimeout(() => {
-                    toast.error("An error occurred.", {
+                    toast.error("An error occurred", {
                         position: toast.POSITION.TOP_RIGHT,
                         autoClose: 3000,
                     });
 
-                    setError("An error occurred.");
+                    setError("An error occurred");
                 }, 2000);
             }
         }
@@ -220,8 +233,8 @@ function MultipleChoice() {
                                                                     handleAnswerSelect={handleAnswerSelect}
                                                                     handlePreviousQuestion={handlePreviousQuestion}
                                                                     handleNextQuestion={handleNextQuestion}
-                                                                    // level={level}
-                                                                    // score={score}
+                                                                    level={questions[currentQuestionIndex].level}
+                                                                    score={questions[currentQuestionIndex].score}
                                                                 />
                                                             </div>
                                                         </div>
