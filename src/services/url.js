@@ -28,6 +28,7 @@ const url = {
     },
 
     QUESTION: {
+        LIST: "/question",
         DETAIL: "question/get-by-id",
         TEST_ID: "question/get-by-testId",
     },
@@ -38,7 +39,7 @@ const url = {
     },
 
     ANSWER_STUDENT: {
-        SUBMIT: "/answersForStudent/submit-exam/",
+        SUBMIT: "/answersForStudent/submit-exam",
     },
 };
 
