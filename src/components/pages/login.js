@@ -1,55 +1,20 @@
-import { useEffect, useState } from "react";
-import api from "../../services/api";
-import url from "../../services/url";
-import { useNavigate } from "react-router-dom";
-
+import { useState } from "react";
 function Login() {
-    const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [students, setStudents] = useState([]);
     const [emailValid, setEmailValid] = useState(true);
     const [passwordValid, setPasswordValid] = useState(true);
-    const [error, setError] = useState("");
 
     const handleTogglePassword = () => {
         setShowPassword(!showPassword);
     };
 
-    useEffect(() => {
-        loadStudents();
-    }, []);
-
-    const loadStudents = async () => {
-        try {
-            const response = await api.get(url.STUDENT.LIST);
-            setStudents(response.data);
-        } catch (error) {}
-    };
-
     const handleLogin = async (e) => {
         e.preventDefault();
 
-        const student = students.find((student) => student.email === email);
-
         setEmailValid(!!email);
         setPasswordValid(!!password);
-
-        if (student) {
-            if (student.password === password) {
-                const token = Math.random().toString(36).substring(2) + Date.now();
-                sessionStorage.setItem("token", token);
-
-                console.log("Token: " + token);
-
-                console.log("Logged in successfully.");
-
-                navigate("/");
-            } else {
-                setError("Email or password is incorrect.");
-            }
-        }
     };
 
     return (
@@ -96,7 +61,7 @@ function Login() {
                                                 onChange={(e) => setPassword(e.target.value)}
                                             />
                                         </div>
-                                        <p className={`messages-login ${error ? "" : "d-none"}`}>{error}</p>
+
                                         <label className="input-check">
                                             Show Password
                                             <input type="checkbox" onClick={handleTogglePassword} />
