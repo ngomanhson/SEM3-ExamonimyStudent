@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Home from "./components/pages/home";
 import Course from "./components/pages/courses/course";
 import CourseDetail from "./components/pages/courses/course-details";
@@ -15,15 +14,6 @@ import NotFound from "./components/pages/404";
 import Result from "./components/views/exam/result";
 
 function App() {
-    const navigate = useNavigate();
-    const [token, setToken] = useState(sessionStorage.getItem("token"));
-
-    // Check token and redirect if user is not logged in.
-    useEffect(() => {
-        if (!token) {
-            navigate("/login");
-        }
-    }, [token, navigate]);
     return (
         <div className="App">
             <Routes>
@@ -43,7 +33,7 @@ function App() {
                 <Route path="/contact" element={<Contact />} />
 
                 <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/login" element={<Login setToken={setToken} />} />
+                <Route path="/login" element={<Login />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </div>
