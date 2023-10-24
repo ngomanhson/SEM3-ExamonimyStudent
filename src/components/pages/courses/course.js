@@ -10,7 +10,7 @@ function Course() {
     const [courses, setCourses] = useState([]);
     const [staffs, setStaffs] = useState([]);
     const [classes, setClasses] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const loadCourses = async () => {
         try {
@@ -25,6 +25,7 @@ function Course() {
             setCourses(courseData);
             setStaffs(staffData);
             setClasses(classData);
+            setLoading(false);
         } catch (error) {}
     };
 
@@ -40,10 +41,6 @@ function Course() {
 
     useEffect(() => {
         loadCourses();
-        setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
-        }, 2000);
     }, []);
 
     return (
@@ -96,7 +93,7 @@ function Course() {
                                                             <div className="row">
                                                                 <div className="col-6">
                                                                     <Link to="/course/detail" className="d-flex align-items-center">
-                                                                        Go to course <i class="fa fa-long-arrow-right"></i>
+                                                                        Go to course <i class="fa fa-long-arrow-right" style={{ marginLeft: "5px" }}></i>
                                                                     </Link>
                                                                 </div>
                                                                 <div className="col-6 align-self-center text-end">
