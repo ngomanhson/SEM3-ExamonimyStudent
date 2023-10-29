@@ -20,7 +20,7 @@ function Question({ currentQuestionIndex, questions, selectedAnswers, optionsPre
                 Question {currentQuestionIndex + 1}: {currentQuestion.title}
             </h6>
             <p>
-                Level: {getDifficultyText(level)} / Score: {score}
+                <i class="fa fa-bar-chart"></i> Level: {getDifficultyText(level)} / {score} point
             </p>
             <p>Choose one correct answer:</p>
             <div className="answers__group">
