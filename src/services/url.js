@@ -20,7 +20,10 @@ const url = {
     TEST: {
         LIST: "/test",
         SLUG: "/test/get-by-slug",
-        DETAIL: "/test",
+    },
+
+    TEST_QUESTION: {
+        LIST: "/TestQuestion",
     },
 
     EXAM: {

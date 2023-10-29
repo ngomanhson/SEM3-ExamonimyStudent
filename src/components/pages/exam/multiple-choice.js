@@ -26,7 +26,8 @@ function MultipleChoice() {
 
     const loadQuestions = useCallback(async () => {
         try {
-            const questionResponse = await api.get(url.TEST.DETAIL + `/${testId}/details?studentId=${studentId}`);
+            const questionResponse = await api.get(url.TEST_QUESTION.LIST + `/${testId}/details?studentId=${studentId}`);
+            // const questionResponse = await api.get(`https://localhost:7218/api/TestQuestion/4/details?studentId=1`);
             const questionIds = questionResponse.data.map((question) => question.id);
 
             // Fetch level and score for each question
@@ -49,9 +50,9 @@ function MultipleChoice() {
             if (error.response && error.response.status === 400) {
                 // Handling when status code is 400 (Bad Request)
                 setTimeout(() => {
-                    setError("The test has ended or has not started yet");
+                    setError("The test has ended or has not started yet.");
 
-                    toast.error("The test has ended or has not started yet", {
+                    toast.error("The test has ended or has not started yet.", {
                         position: toast.POSITION.TOP_RIGHT,
                         autoClose: 3000,
                     });
