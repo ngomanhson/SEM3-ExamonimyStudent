@@ -24,6 +24,7 @@ const url = {
 
     TEST_QUESTION: {
         LIST: "/TestQuestion",
+        TAKE_TEST: "/TestQuestion/take-test",
     },
 
     EXAM: {

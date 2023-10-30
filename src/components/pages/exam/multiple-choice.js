@@ -26,8 +26,7 @@ function MultipleChoice() {
 
     const loadQuestions = useCallback(async () => {
         try {
-            const questionResponse = await api.get(url.TEST_QUESTION.LIST + `/${testId}/details?studentId=${studentId}`);
-            // const questionResponse = await api.get(`https://localhost:7218/api/TestQuestion/4/details?studentId=1`);
+            const questionResponse = await api.get(url.TEST_QUESTION.TAKE_TEST + `/${testId}/details/${studentId}`);
             const questionIds = questionResponse.data.map((question) => question.id);
 
             // Fetch level and score for each question
@@ -178,7 +177,7 @@ function MultipleChoice() {
 
                 const encodedData = Base64.encode(jsonSimplifiedGrade);
 
-                sessionStorage.setItem("simplifiedGradeData", encodedData);
+                localStorage.setItem("simplifiedGradeData", encodedData);
 
                 navigate("/exam/result");
                 toast.success("Answers submitted successfully!", {
