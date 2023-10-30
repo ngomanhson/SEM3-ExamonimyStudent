@@ -17,7 +17,8 @@ function Dashboard() {
 
     const navigate = useNavigate();
     const handleLogout = () => {
-        sessionStorage.removeItem("token");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("simplifiedGradeData");
 
         navigate("/login");
     };

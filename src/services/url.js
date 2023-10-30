@@ -15,6 +15,7 @@ const url = {
 
     STUDENT: {
         LIST: "/student",
+        LOGIN: "/Auth/student-login",
     },
 
     TEST: {
