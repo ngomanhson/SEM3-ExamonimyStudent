@@ -116,7 +116,7 @@ function Result() {
     const [noTestData, setNoTestData] = useState(false);
 
     useEffect(() => {
-        const storedData = sessionStorage.getItem("simplifiedGradeData");
+        const storedData = localStorage.getItem("simplifiedGradeData");
         if (storedData) {
             const decodedData = Base64.decode(storedData);
             const parsedData = JSON.parse(decodedData);
