@@ -1,7 +1,11 @@
 import React, { useState } from "react";
+import api from "../../../services/api";
+import { useNavigate } from "react-router-dom";
+import url from "../../../services/url";
 
 function Login() {
     const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         email: "",
@@ -47,10 +51,30 @@ function Login() {
         return valid;
     };
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
 
         if (validateForm()) {
+            try {
+                const config = {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                };
+
+                const loginResponse = await api.post(url.STUDENT.LOGIN, formData, config);
+                if (loginResponse.data.success) {
+                    const token = loginResponse.data.data;
+                    localStorage.setItem("accessToken", token);
+
+                    navigate("/");
+                } else {
+                    setFormErrors({
+                        email: "Invalid email or password.",
+                        password: "Invalid email or password.",
+                    });
+                }
+            } catch (error) {}
         }
     };
 
