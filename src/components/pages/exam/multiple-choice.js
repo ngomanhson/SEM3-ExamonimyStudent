@@ -158,7 +158,7 @@ function MultipleChoice() {
                 const answerData = {
                     question_id: question.id,
                     content: selectedAnswers[question.id] || "Not done",
-                    student_id: 1,
+                    student_id: studentId,
                 };
                 return answerData;
             });
@@ -191,7 +191,7 @@ function MultipleChoice() {
                 });
             }
         } catch (error) {}
-    }, [questions, selectedAnswers, testId, navigate]);
+    }, [questions, selectedAnswers, testId, navigate, studentId]);
 
     // Function to handle exam submission
     const handleSubmitExam = () => {

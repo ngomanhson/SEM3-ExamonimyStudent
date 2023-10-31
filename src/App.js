@@ -17,7 +17,7 @@ import { useJwt } from "react-jwt";
 function App() {
     const ProtectedRoute = ({ element }) => {
         const token = localStorage.getItem("accessToken");
-        const { decodedToken, isExpired, isInvalid } = useJwt(token);
+        const { isExpired, isInvalid } = useJwt(token);
 
         if (!token || isExpired || isInvalid) {
             return <Navigate to="/login" />;

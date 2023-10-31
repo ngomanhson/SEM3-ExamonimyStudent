@@ -6,11 +6,29 @@ import Layout from "../../layouts/layouts";
 import Loading from "../../layouts/loading";
 import api from "../../../services/api";
 import url from "../../../services/url";
+import { useJwt } from "react-jwt";
 
 function ExamList() {
     const [loading, setLoading] = useState(true);
     const [tests, setTests] = useState([]);
+    const [studentId, setStudentId] = useState("");
+
     const currentTime = new Date();
+
+    const { isExpired, isInvalid } = useJwt();
+
+    useEffect(() => {
+        const token = localStorage.getItem("accessToken");
+
+        try {
+            const decodedToken = JSON.parse(atob(token.split(".")[1]));
+
+            // Get the id from the localStorage token
+            const studentId = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+
+            setStudentId(studentId);
+        } catch (error) {}
+    }, [isExpired, isInvalid]);
 
     const loadTests = async () => {
         try {
@@ -45,7 +63,12 @@ function ExamList() {
 
                                             return (
                                                 isTestActive && (
-                                                    <Link to={`/multiple-choice/${test.id}/1`} key={test.id} className="btn btn-base-2 d-flex justify-content-between" style={{ width: "100%" }}>
+                                                    <Link
+                                                        to={`/multiple-choice/${test.id}/${studentId}`}
+                                                        key={test.id}
+                                                        className="btn btn-base-2 d-flex justify-content-between"
+                                                        style={{ width: "100%" }}
+                                                    >
                                                         {test.name}
                                                         <p className="text-white">Due date: {format(new Date(test.endDate), "HH:mm:ss dd/MM/yyyy")} (GMT+07)</p>
                                                     </Link>
