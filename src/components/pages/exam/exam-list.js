@@ -11,6 +11,7 @@ import { useJwt } from "react-jwt";
 function ExamList() {
     const [loading, setLoading] = useState(true);
     const [tests, setTests] = useState([]);
+    const [studentId, setStudentId] = useState("");
     const [studentCode, setSudentCode] = useState("");
 
     const currentTime = new Date();
@@ -25,6 +26,9 @@ function ExamList() {
 
             // Get the id from the localStorage token
             const studentCode = decodedToken["Student-Code"];
+            const studentId = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+
+            setStudentId(studentId);
 
             setSudentCode(studentCode);
         } catch (error) {}
@@ -66,7 +70,7 @@ function ExamList() {
                                             return (
                                                 isTestActive && (
                                                     <Link
-                                                        to={`/multiple-choice/${test.id}/${studentCode}`}
+                                                        to={`/multiple-choice/${test.id}/${studentId}`}
                                                         key={test.id}
                                                         className="btn btn-base-2 d-flex justify-content-between"
                                                         style={{ width: "100%" }}
