@@ -21,6 +21,7 @@ const url = {
     TEST: {
         LIST: "/test",
         SLUG: "/test/get-by-slug",
+        STUDENT_CODE: "/test/get-by-student/",
     },
 
     TEST_QUESTION: {
