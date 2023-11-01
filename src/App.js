@@ -25,6 +25,17 @@ function App() {
 
         return element;
     };
+
+    const ProtectedLoginRoute = ({ element }) => {
+        const token = localStorage.getItem("accessToken");
+        const { isExpired, isInvalid } = useJwt(token);
+
+        if (token && !isExpired && !isInvalid) {
+            return <Navigate to="/" />;
+        }
+
+        return element;
+    };
     return (
         <div className="App">
             <Routes>
@@ -46,7 +57,7 @@ function App() {
                 <Route path="/dashboard" element={<ProtectedRoute element={<Dashboard />} />} />
 
                 <Route path="*" element={<ProtectedRoute element={<NotFound />} />} />
-                <Route path="/login" element={<Login />} />
+                <Route path="/login" element={<ProtectedLoginRoute element={<Login />} />} />
             </Routes>
         </div>
     );
