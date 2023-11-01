@@ -1,6 +1,22 @@
+import { useEffect, useState } from "react";
+import { useJwt } from "react-jwt";
 import { Link } from "react-router-dom";
 
 function Navbar() {
+    const [studentCode, setSudentCode] = useState("");
+    const { isExpired, isInvalid } = useJwt();
+
+    useEffect(() => {
+        const token = localStorage.getItem("accessToken");
+
+        try {
+            const decodedToken = JSON.parse(atob(token.split(".")[1]));
+
+            // Get the student code from token
+            const studentCode = decodedToken["Student-Code"];
+            setSudentCode(studentCode);
+        } catch (error) {}
+    }, [isExpired, isInvalid]);
     return (
         <div className="navbar-area-edupie">
             <nav className="navbar navbar-area-1 navbar-area navbar-expand-lg">
@@ -34,7 +50,7 @@ function Navbar() {
                                 <Link to="/contact">Contact Us</Link>
                             </li>
                             <li className="menu-item-has-children">
-                                <Link to="/exam-list">My Exam</Link>
+                                <Link to={`/exam-list/${studentCode}`}>My Exam</Link>
                             </li>
                             <li className="menu-item-has-children">
                                 <Link to="/dashboard" className="btn-user">

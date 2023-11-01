@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import Breadcrumb from "../../layouts/breadcrumb";
@@ -11,7 +11,7 @@ import { useJwt } from "react-jwt";
 function ExamList() {
     const [loading, setLoading] = useState(true);
     const [tests, setTests] = useState([]);
-    const [studentId, setStudentId] = useState("");
+    const [studentCode, setSudentCode] = useState("");
 
     const currentTime = new Date();
 
@@ -24,25 +24,27 @@ function ExamList() {
             const decodedToken = JSON.parse(atob(token.split(".")[1]));
 
             // Get the id from the localStorage token
-            const studentId = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+            const studentCode = decodedToken["Student-Code"];
 
-            setStudentId(studentId);
+            setSudentCode(studentCode);
         } catch (error) {}
     }, [isExpired, isInvalid]);
 
-    const loadTests = async () => {
+    const loadTests = useCallback(async () => {
         try {
-            const response = await api.get(url.TEST.LIST);
-            setTests(response.data);
+            if (studentCode) {
+                const response = await api.get(url.TEST.STUDENT_CODE + `${studentCode}`);
+                setTests(response.data);
+            }
             setLoading(false);
         } catch (error) {
             setLoading(false);
         }
-    };
+    }, [studentCode]);
 
     useEffect(() => {
         loadTests();
-    }, []);
+    }, [loadTests]);
 
     return (
         <>
@@ -64,7 +66,7 @@ function ExamList() {
                                             return (
                                                 isTestActive && (
                                                     <Link
-                                                        to={`/multiple-choice/${test.id}/${studentId}`}
+                                                        to={`/multiple-choice/${test.id}/${studentCode}`}
                                                         key={test.id}
                                                         className="btn btn-base-2 d-flex justify-content-between"
                                                         style={{ width: "100%" }}
