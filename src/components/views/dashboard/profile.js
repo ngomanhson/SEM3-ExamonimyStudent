@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 function Profile() {
     return (
         <div className="td-sidebar">
@@ -44,6 +45,11 @@ function Profile() {
                                         </tr>
                                     </tbody>
                                 </table>
+                            </div>
+                            <div className="text-end">
+                                <Link to="/change-password" style={{ color: "#798BE8" }}>
+                                    Change Password?
+                                </Link>
                             </div>
                         </div>
                     </div>

@@ -46,7 +46,7 @@ function App() {
                 <Route path="/course/detail" element={<ProtectedRoute element={<CourseDetail />} />} />
 
                 <Route path="/exam-list/:studentCode" element={<ProtectedRoute element={<ExamList />} />} />
-                <Route path="/multiple-choice/:testId/:studentId" element={<ProtectedRoute element={<MultipleChoice />} />} />
+                <Route path="/multiple-choice/test/:testId/student/:studentId" element={<ProtectedRoute element={<MultipleChoice />} />} />
                 <Route path="/exam/result" element={<ProtectedRoute element={<Result />} />} />
 
                 <Route path="/practical-exam" element={<ProtectedRoute element={<ConstructedResponse />} />} />

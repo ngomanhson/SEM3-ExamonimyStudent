@@ -62,7 +62,7 @@ function Login() {
                     },
                 };
 
-                const loginResponse = await api.post(url.STUDENT.LOGIN, formData, config);
+                const loginResponse = await api.post(url.AUTH.LOGIN, formData, config);
                 if (loginResponse.data.success) {
                     const token = loginResponse.data.data;
                     localStorage.setItem("accessToken", token);

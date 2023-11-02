@@ -12,7 +12,7 @@ function ExamList() {
     const [loading, setLoading] = useState(true);
     const [tests, setTests] = useState([]);
     const [studentId, setStudentId] = useState("");
-    const [studentCode, setSudentCode] = useState("");
+    const [studentCode, setStudentCode] = useState("");
 
     const currentTime = new Date();
 
@@ -30,7 +30,7 @@ function ExamList() {
 
             setStudentId(studentId);
 
-            setSudentCode(studentCode);
+            setStudentCode(studentCode);
         } catch (error) {}
     }, [isExpired, isInvalid]);
 
@@ -70,7 +70,7 @@ function ExamList() {
                                             return (
                                                 isTestActive && (
                                                     <Link
-                                                        to={`/multiple-choice/${test.id}/${studentId}`}
+                                                        to={`/multiple-choice/test/${test.id}/student/${studentId}`}
                                                         key={test.id}
                                                         className="btn btn-base-2 d-flex justify-content-between"
                                                         style={{ width: "100%" }}
