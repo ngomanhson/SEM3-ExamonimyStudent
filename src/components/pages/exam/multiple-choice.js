@@ -164,10 +164,13 @@ function MultipleChoice() {
             });
 
             const response = await api.post(url.ANSWER_STUDENT.SUBMIT + `?test_id=${testId}`, answersData);
+            console.log(response.data);
             if (response.status === 200) {
                 const grade = response.data;
 
                 const simplifiedGrade = {
+                    id: grade.id,
+                    testId: grade.testId,
                     testName: grade.test.name,
                     score: grade.score,
                     status: grade.status,
@@ -233,8 +236,8 @@ function MultipleChoice() {
                                                                     handleAnswerSelect={handleAnswerSelect}
                                                                     handlePreviousQuestion={handlePreviousQuestion}
                                                                     handleNextQuestion={handleNextQuestion}
-                                                                    level={questions[currentQuestionIndex].level}
-                                                                    score={questions[currentQuestionIndex].score}
+                                                                    level={questions[currentQuestionIndex]?.level}
+                                                                    score={questions[currentQuestionIndex]?.score}
                                                                 />
                                                             </div>
                                                         </div>

@@ -15,7 +15,11 @@ const url = {
 
     STUDENT: {
         LIST: "/student",
+    },
+
+    AUTH: {
         LOGIN: "/Auth/student-login",
+        CHANGE_PASSWORD: "/Auth/student/change-password",
     },
 
     TEST: {
