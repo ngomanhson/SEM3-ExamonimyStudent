@@ -5,7 +5,6 @@ import Breadcrumb from "../../layouts/breadcrumb";
 import Layout from "../../layouts/layouts";
 import Question from "../../views/exam/questions";
 import Loading from "../../layouts/loading";
-import { Base64 } from "js-base64";
 import url from "../../../services/url";
 import { toast } from "react-toastify";
 
@@ -157,32 +156,17 @@ function MultipleChoice() {
             const answersData = questions.map((question, index) => {
                 const answerData = {
                     question_id: question.id,
-                    content: selectedAnswers[question.id] || "Not done",
+                    content: selectedAnswers[question.id] || "Not done!",
                     student_id: studentId,
                 };
                 return answerData;
             });
 
             const response = await api.post(url.ANSWER_STUDENT.SUBMIT + `?test_id=${testId}`, answersData);
-            console.log(response.data);
+
             if (response.status === 200) {
-                const grade = response.data;
+                navigate(`/exam/result/${testId}/details/${studentId}`);
 
-                const simplifiedGrade = {
-                    id: grade.id,
-                    testId: grade.testId,
-                    testName: grade.test.name,
-                    score: grade.score,
-                    status: grade.status,
-                };
-
-                const jsonSimplifiedGrade = JSON.stringify(simplifiedGrade);
-
-                const encodedData = Base64.encode(jsonSimplifiedGrade);
-
-                localStorage.setItem("simplifiedGradeData", encodedData);
-
-                navigate("/exam/result");
                 toast.success("Answers submitted successfully!", {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 5000,
