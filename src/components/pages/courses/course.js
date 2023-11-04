@@ -1,47 +1,46 @@
-import { Link } from "react-router-dom";
-import Breadcrumb from "../../layouts/breadcrumb";
+import { Link, useParams } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
 import Layout from "../../layouts/layouts";
-import { useEffect, useState } from "react";
+import Breadcrumb from "../../layouts/breadcrumb";
+import { format } from "date-fns";
 import api from "../../../services/api";
 import url from "../../../services/url";
 import Loading from "../../layouts/loading";
 
 function Course() {
+    const { classId, studentCode } = useParams();
     const [courses, setCourses] = useState([]);
-    const [staffs, setStaffs] = useState([]);
-    const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const loadCourses = async () => {
+    const [searchKeyword, setSearchKeyword] = useState("");
+
+    const [searchResults, setSearchResults] = useState([]);
+
+    const shouldShowFilteredResults = searchKeyword !== "";
+
+    const loadCourses = useCallback(async () => {
         try {
-            const courseResponse = await api.get(url.COURSE.LIST);
-            const staffResponse = await api.get(url.STAFF.LIST);
-            const classResponse = await api.get(url.CLASS.LIST);
-
-            const courseData = courseResponse.data;
-            const staffData = staffResponse.data;
-            const classData = classResponse.data;
-
-            setCourses(courseData);
-            setStaffs(staffData);
-            setClasses(classData);
+            const courseResponse = await api.get(url.CLASS_COURSE.BY_CLASSID + `?id=${classId}`);
+            setCourses(courseResponse.data.data);
             setLoading(false);
-        } catch (error) {}
-    };
-
-    const getStaffInfo = (createdBy) => {
-        const staff = staffs.find((staff) => staff.id === createdBy);
-        return staff;
-    };
-
-    const getClassInfo = (classId) => {
-        const classInfo = classes.find((classInfo) => classInfo.id === classId);
-        return classInfo;
-    };
+        } catch (error) {
+            console.error(error);
+        }
+    }, [classId]);
 
     useEffect(() => {
         loadCourses();
-    }, []);
+    }, [classId, loadCourses]);
+
+    // Function search
+    const handleSearch = (e) => {
+        const keyword = e.target.value;
+        setSearchKeyword(keyword);
+
+        const filteredCourses = courses.filter((course) => course.name.toLowerCase().includes(keyword.toLowerCase()));
+
+        setSearchResults(filteredCourses);
+    };
 
     return (
         <>
@@ -53,10 +52,74 @@ function Course() {
                         <div className="row">
                             <div className="col-lg-8">
                                 <div className="row">
-                                    {courses.map((item, index) => {
-                                        const staffInfo = getStaffInfo(item.created_by);
-                                        const classInfo = getClassInfo(item.class_id);
-                                        return (
+                                    {shouldShowFilteredResults ? (
+                                        searchResults.length === 0 ? (
+                                            <div className="d-flex align-items-center justify-content-center gap-3">
+                                                <img src="./assets/img/404-02.png" alt="404" width={"250px"} />
+
+                                                <div>
+                                                    <h3>No courses found.</h3>
+                                                    <p>Please enter keywords related to the course you are looking for.</p>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            searchResults.map((item, index) => (
+                                                <div className="col-md-6" key={index}>
+                                                    <div className="single-course-inner">
+                                                        <div className="details-inner">
+                                                            <div className="details">
+                                                                <div className="course-meta">
+                                                                    <div className="row">
+                                                                        <div className="col-8">
+                                                                            <div className="course-author">
+                                                                                <span>{item.fullname}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <h5>
+                                                                    <Link to={`/course-detail/${item.name}/${studentCode}`} className="line-clamp">
+                                                                        {item.name}
+                                                                    </Link>
+                                                                </h5>
+
+                                                                <p className="d-flex align-items-center">
+                                                                    <img src="./assets/img/course/teacher.png" alt="icon" className="icon-course" /> {item.class_id}
+                                                                </p>
+
+                                                                <p className="d-flex align-items-center mt-2">
+                                                                    <img src="./assets/img/course/study.png" alt="icon" className="icon-course" /> {item.course_code}
+                                                                </p>
+
+                                                                <p className="d-flex align-items-center mt-2">
+                                                                    <img src="./assets/img/course/date.png" alt="icon" className="icon-course" />{" "}
+                                                                    {format(new Date(item.createdAt), "HH:mm:ss dd/MM/yyyy")}
+                                                                    (GMT+07)
+                                                                </p>
+                                                            </div>
+                                                            <div className="course-footer">
+                                                                <div className="row">
+                                                                    <div className="col-6">
+                                                                        <Link to={`/course-detail/${item.name}/${studentCode}`} className="d-flex align-items-center">
+                                                                            <div className="total-student">
+                                                                                <img src="assets/img/course/2.webp" alt="img" /> Go to course
+                                                                            </div>
+                                                                        </Link>
+                                                                    </div>
+                                                                    <div className="col-6 align-self-center text-end">
+                                                                        <div className="total-student">
+                                                                            <img src="assets/img/course/2.webp" alt="img" /> 37 Students
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        )
+                                    ) : courses.length > 0 ? (
+                                        courses.map((item, index) => (
                                             <div className="col-md-6" key={index}>
                                                 <div className="single-course-inner">
                                                     <div className="details-inner">
@@ -65,20 +128,19 @@ function Course() {
                                                                 <div className="row">
                                                                     <div className="col-8">
                                                                         <div className="course-author">
-                                                                            <img src={staffInfo.avatar} alt={staffInfo.fullname} />
-                                                                            <span>{staffInfo.fullname}</span>
+                                                                            <span>{item.fullname}</span>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <h5>
-                                                                <Link to="/course/detail" className="line-clamp">
+                                                                <Link to={`/course-detail/${item.name}/${studentCode}`} className="line-clamp">
                                                                     {item.name}
                                                                 </Link>
                                                             </h5>
 
                                                             <p className="d-flex align-items-center">
-                                                                <img src="./assets/img/course/teacher.png" alt="icon" className="icon-course" /> {classInfo.name}
+                                                                <img src="./assets/img/course/teacher.png" alt="icon" className="icon-course" /> {item.class_id}
                                                             </p>
 
                                                             <p className="d-flex align-items-center mt-2">
@@ -86,14 +148,17 @@ function Course() {
                                                             </p>
 
                                                             <p className="d-flex align-items-center mt-2">
-                                                                <img src="./assets/img/course/date.png" alt="icon" className="icon-course" /> {classInfo.createdAt}
+                                                                <img src="./assets/img/course/date.png" alt="icon" className="icon-course" /> {format(new Date(item.createdAt), "HH:mm:ss dd/MM/yyyy")}
+                                                                (GMT+07)
                                                             </p>
                                                         </div>
                                                         <div className="course-footer">
                                                             <div className="row">
                                                                 <div className="col-6">
-                                                                    <Link to="/course/detail" className="d-flex align-items-center">
-                                                                        Go to course <i class="fa fa-long-arrow-right" style={{ marginLeft: "5px" }}></i>
+                                                                    <Link to={`/course-detail/${item.name}/${studentCode}`} className="d-flex align-items-center">
+                                                                        <div className="total-student">
+                                                                            <img src="assets/img/course/2.webp" alt="img" /> Go to course
+                                                                        </div>
                                                                     </Link>
                                                                 </div>
                                                                 <div className="col-6 align-self-center text-end">
@@ -106,8 +171,10 @@ function Course() {
                                                     </div>
                                                 </div>
                                             </div>
-                                        );
-                                    })}
+                                        ))
+                                    ) : (
+                                        <p>No courses found.</p>
+                                    )}
                                 </div>
                             </div>
                             <div className="col-lg-4 col-12">
@@ -115,7 +182,7 @@ function Course() {
                                     <div className="widget widget_search_course">
                                         <h4 className="widget-title">Search</h4>
                                         <form className="search-form single-input-inner">
-                                            <input type="text" placeholder="Search here" required />
+                                            <input type="text" placeholder="Search here" value={searchKeyword} onChange={handleSearch} required />
                                             <button className="btn btn-base w-100 mt-3" type="submit">
                                                 <i className="fa fa-search"></i> SEARCH
                                             </button>

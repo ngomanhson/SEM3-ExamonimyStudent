@@ -74,7 +74,12 @@ function Login() {
                         password: "Invalid email or password.",
                     });
                 }
-            } catch (error) {}
+            } catch (error) {
+                setFormErrors({
+                    email: "Invalid email or password.",
+                    password: "Invalid email or password.",
+                });
+            }
         }
     };
 

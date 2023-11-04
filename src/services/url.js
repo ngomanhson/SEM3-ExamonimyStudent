@@ -1,20 +1,8 @@
 const url = {
     BASE_URL: "https://localhost:7218/api/",
 
-    CLASS: {
-        LIST: "/classes",
-    },
-
-    COURSE: {
-        LIST: "/course",
-    },
-
-    STAFF: {
-        LIST: "/STAFF",
-    },
-
-    STUDENT: {
-        LIST: "/student",
+    CLASS_COURSE: {
+        BY_CLASSID: "/ClassCourse/by-classId",
     },
 
     AUTH: {
@@ -24,7 +12,6 @@ const url = {
 
     TEST: {
         LIST: "/test",
-        SLUG: "/test/get-by-slug",
         STUDENT_CODE: "/test/get-by-student/",
     },
 
