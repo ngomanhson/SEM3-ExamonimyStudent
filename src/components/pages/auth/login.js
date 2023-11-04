@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import api from "../../../services/api";
 import { useNavigate } from "react-router-dom";
 import url from "../../../services/url";
+import { Helmet } from "react-helmet";
 
 function Login() {
     const [showPassword, setShowPassword] = useState(false);
@@ -85,6 +86,9 @@ function Login() {
 
     return (
         <>
+            <Helmet>
+                <title>Login | Examonimy</title>
+            </Helmet>
             <main className="d-flex align-items-center min-vh-100 py-3 py-md-0">
                 <div className="container">
                     <div className="login-card">

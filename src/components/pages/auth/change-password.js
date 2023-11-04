@@ -222,7 +222,7 @@ function ChangePassword() {
                                 Change Password
                             </button>
 
-                            <Link to="/" className="d-block mt-3">
+                            <Link to="/" className="d-block mt-3 text-end">
                                 Back to Home
                             </Link>
                         </form>

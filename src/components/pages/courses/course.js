@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import api from "../../../services/api";
 import url from "../../../services/url";
 import Loading from "../../layouts/loading";
+import { Helmet } from "react-helmet";
 
 function Course() {
     const { classId, studentCode } = useParams();
@@ -44,6 +45,9 @@ function Course() {
 
     return (
         <>
+            <Helmet>
+                <title>Courses | Examonimy</title>
+            </Helmet>
             {loading ? <Loading /> : ""}
             <Layout>
                 <Breadcrumb title="Courses" />
