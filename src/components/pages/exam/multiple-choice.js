@@ -8,6 +8,7 @@ import Loading from "../../layouts/loading";
 import url from "../../../services/url";
 import { toast } from "react-toastify";
 import { useJwt } from "react-jwt";
+import { Helmet } from "react-helmet";
 
 function MultipleChoice() {
     const { testId } = useParams();
@@ -184,28 +185,18 @@ function MultipleChoice() {
                 };
                 return answerData;
             });
-            console.log(answersData);
+
             const response = await api.post(url.ANSWER_STUDENT.SUBMIT + `?test_id=${testId}`, answersData);
 
             if (response.status === 200) {
                 navigate(`/exam/result/${testId}/details/${studentId}`);
-
-                toast.success("Answers submitted successfully!", {
-                    position: toast.POSITION.TOP_RIGHT,
-                    autoClose: 5000,
-                });
             } else {
                 toast.error("Failed to submit answers.", {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000,
                 });
             }
-        } catch (error) {
-            toast.error("Failed to submit answers.", {
-                position: toast.POSITION.TOP_RIGHT,
-                autoClose: 3000,
-            });
-        }
+        } catch (error) {}
     }, [questions, selectedAnswers, testId, navigate, studentId]);
 
     // Function to handle exam submission
@@ -217,8 +208,22 @@ function MultipleChoice() {
         }
     };
 
+    // Automatically submission if escape
+    let isExamFinished = false;
+
+    window.onblur = () => {
+        if (!isExamFinished) {
+            isExamFinished = true;
+            handleFinishExam();
+            submitAnswers(testId, studentId);
+        }
+    };
+
     return (
         <>
+            <Helmet>
+                <title>Multiple Choice | Examonimy</title>
+            </Helmet>
             {loading ? <Loading /> : null}
             <Layout>
                 <Breadcrumb title="My Exam" />

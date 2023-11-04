@@ -10,6 +10,7 @@ import Layout from "../layouts/layouts";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Loading from "../layouts/loading";
+import { Helmet } from "react-helmet";
 function Home() {
     const [loading, setLoading] = useState(false);
     useEffect(() => {
@@ -20,7 +21,11 @@ function Home() {
     }, []);
     return (
         <>
+            <Helmet>
+                <title>Home | Examonimy</title>
+            </Helmet>
             {loading ? <Loading /> : ""}
+
             <Layout>
                 <div
                     className="banner-area banner-area-2"
