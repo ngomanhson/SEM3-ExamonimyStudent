@@ -109,6 +109,7 @@ function Result() {
             },
         },
     };
+
     return (
         <>
             {loading ? (
@@ -188,7 +189,7 @@ function Result() {
                                                 </div>
                                                 <div className="col-3 text-center">
                                                     <p>Exam Status</p>
-                                                    {examData && <h6>{examData.status === 0 ? "not Qualified" : "Qualified"}</h6>}
+                                                    {examData && <h6>{examData.status === 0 ? "Not Qualified" : "Qualified"}</h6>}
                                                 </div>
                                             </div>
                                         </div>

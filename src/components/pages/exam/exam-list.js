@@ -31,7 +31,9 @@ function ExamList() {
             setStudentId(studentId);
 
             setStudentCode(studentCode);
-        } catch (error) {}
+        } catch (error) {
+            console.error(error);
+        }
     }, [isExpired, isInvalid]);
 
     const loadTests = useCallback(async () => {

@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import { useJwt } from "react-jwt";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Navbar() {
-    const [studentCode, setSudentCode] = useState("");
+    const [studentName, setStudentName] = useState("");
+    const [studentCode, setStudentCode] = useState("");
+    const [classId, setClassId] = useState("");
     const { isExpired, isInvalid } = useJwt();
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
@@ -12,11 +16,22 @@ function Navbar() {
         try {
             const decodedToken = JSON.parse(atob(token.split(".")[1]));
 
-            // Get the student code from token
+            // Get the info student from token
+            const studentName = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
             const studentCode = decodedToken["Student-Code"];
-            setSudentCode(studentCode);
+            const classId = decodedToken["Class-Id"];
+
+            setStudentName(studentName);
+            setStudentCode(studentCode);
+            setClassId(classId);
         } catch (error) {}
     }, [isExpired, isInvalid]);
+
+    const handleLogout = () => {
+        localStorage.removeItem("accessToken");
+        navigate("/login");
+    };
+
     return (
         <div className="navbar-area-edupie">
             <nav className="navbar navbar-area-1 navbar-area navbar-expand-lg">
@@ -40,7 +55,7 @@ function Navbar() {
                                 <Link to="/">Home</Link>
                             </li>
                             <li className="menu-item-has-children">
-                                <Link to="/courses">Courses</Link>
+                                <Link to={`/courses/${classId}/${studentCode}`}>Courses</Link>
                             </li>
 
                             <li className="menu-item-has-children">
@@ -49,13 +64,25 @@ function Navbar() {
                             <li>
                                 <Link to="/contact">Contact Us</Link>
                             </li>
-                            <li className="menu-item-has-children">
+                            {/* <li className="menu-item-has-children">
                                 <Link to={`/exam-list/${studentCode}`}>My Exam</Link>
-                            </li>
+                            </li> */}
                             <li className="menu-item-has-children">
                                 <Link to="/dashboard" className="btn-user">
-                                    <i class="fa fa-user"></i>
+                                    {studentName}
                                 </Link>
+                                <ul class="sub-menu">
+                                    <li>
+                                        <Link to="/dashboard" className="btn-user">
+                                            Profile
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <a href="#!" onClick={handleLogout}>
+                                            Logout
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </div>

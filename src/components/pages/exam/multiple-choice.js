@@ -7,9 +7,10 @@ import Question from "../../views/exam/questions";
 import Loading from "../../layouts/loading";
 import url from "../../../services/url";
 import { toast } from "react-toastify";
+import { useJwt } from "react-jwt";
 
 function MultipleChoice() {
-    const { testId, studentId } = useParams();
+    const { testId } = useParams();
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(true);
@@ -21,23 +22,46 @@ function MultipleChoice() {
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [error, setError] = useState(null);
+    const { isExpired, isInvalid } = useJwt();
+    const [studentId, setStudentId] = useState("");
     const optionsPrefix = ["A", "B", "C", "D"];
 
-    const loadQuestions = useCallback(async () => {
+    useEffect(() => {
+        const token = localStorage.getItem("accessToken");
+
         try {
-            const questionResponse = await api.get(url.TEST_QUESTION.TAKE_TEST + `/${testId}/details/${studentId}`);
-            const questionIds = questionResponse.data.map((question) => question.id);
+            const decodedToken = JSON.parse(atob(token.split(".")[1]));
+
+            // Get the info student from token
+            const studentId = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+            setStudentId(studentId);
+        } catch (error) {}
+    }, [isExpired, isInvalid]);
+
+    const loadQuestions = useCallback(async () => {
+        const userToken = localStorage.getItem("accessToken");
+        try {
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${userToken}`,
+                },
+            };
+
+            const questionResponse = await api.get(url.TEST_QUESTION.TAKE_TEST + `/${testId}/details`, config);
+
+            const questionIds = questionResponse.data.questions.map((question) => question.id);
 
             // Fetch level and score for each question
             const questionDetails = await Promise.all(
                 questionIds.map(async (questionId) => {
-                    const questionDetailResponse = await api.get(url.QUESTION.DETAIL + `?id=${questionId}`);
+                    const questionDetailResponse = await api.get(url.QUESTION.DETAIL + `?id=${questionId}`, config);
                     return questionDetailResponse.data;
                 })
             );
 
             // Merge question details with original questions
-            const questionsWithDetails = questionResponse.data.map((question, index) => ({
+            const questionsWithDetails = questionResponse.data.questions.map((question, index) => ({
                 ...question,
                 level: questionDetails[index].level,
                 score: questionDetails[index].score,
@@ -46,7 +70,7 @@ function MultipleChoice() {
             setQuestions(questionsWithDetails);
         } catch (error) {
             if (error.response && error.response.status === 400) {
-                // Handling when status code is 400 (Bad Request)
+                // Xử lý khi status code là 400 (Bad Request)
                 setTimeout(() => {
                     setError("The test has ended or has not started yet.");
 
@@ -56,7 +80,6 @@ function MultipleChoice() {
                     });
                 }, 2000);
             } else {
-                // Other error handling
                 setTimeout(() => {
                     toast.error("An error occurred", {
                         position: toast.POSITION.TOP_RIGHT,
@@ -67,14 +90,14 @@ function MultipleChoice() {
                 }, 2000);
             }
         }
-    }, [testId, studentId]);
+    }, [testId]);
 
     useEffect(() => {
         loadQuestions();
         setTimeout(() => {
             setLoading(false);
         }, 2000);
-    }, [testId, studentId, loadQuestions]);
+    }, [testId, loadQuestions]);
 
     // Function to handle finishing the exam
     const handleFinishExam = useCallback(() => {
@@ -161,7 +184,7 @@ function MultipleChoice() {
                 };
                 return answerData;
             });
-
+            console.log(answersData);
             const response = await api.post(url.ANSWER_STUDENT.SUBMIT + `?test_id=${testId}`, answersData);
 
             if (response.status === 200) {
@@ -172,12 +195,17 @@ function MultipleChoice() {
                     autoClose: 5000,
                 });
             } else {
-                toast.error("Failed to submit answers", {
+                toast.error("Failed to submit answers.", {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000,
                 });
             }
-        } catch (error) {}
+        } catch (error) {
+            toast.error("Failed to submit answers.", {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 3000,
+            });
+        }
     }, [questions, selectedAnswers, testId, navigate, studentId]);
 
     // Function to handle exam submission
@@ -204,60 +232,53 @@ function MultipleChoice() {
                                         <p className="mt-3">{error}</p>
                                     </div>
                                 ) : inExam ? (
-                                    <>
-                                        {/* <h3 className="exam__inner-heading text-center">{testName}</h3> */}
-                                        <div className="exam__inner pd-top-60 pd-bottom-70">
-                                            <div className="row">
-                                                <div className="col-lg-8 col-12 order-lg-0">
-                                                    <form>
-                                                        <div className="td-sidebar">
-                                                            <div className="widget">
-                                                                <Question
-                                                                    currentQuestionIndex={currentQuestionIndex}
-                                                                    questions={questions}
-                                                                    selectedAnswers={selectedAnswers}
-                                                                    optionsPrefix={optionsPrefix}
-                                                                    handleAnswerSelect={handleAnswerSelect}
-                                                                    handlePreviousQuestion={handlePreviousQuestion}
-                                                                    handleNextQuestion={handleNextQuestion}
-                                                                    level={questions[currentQuestionIndex]?.level}
-                                                                    score={questions[currentQuestionIndex]?.score}
-                                                                />
-                                                            </div>
+                                    <div className="exam__inner pd-top-60 pd-bottom-70">
+                                        <div className="row">
+                                            <div className="col-lg-8 col-12 order-lg-0">
+                                                <form>
+                                                    <div className="td-sidebar">
+                                                        <div className="widget">
+                                                            <Question
+                                                                currentQuestionIndex={currentQuestionIndex}
+                                                                questions={questions}
+                                                                selectedAnswers={selectedAnswers}
+                                                                optionsPrefix={optionsPrefix}
+                                                                handleAnswerSelect={handleAnswerSelect}
+                                                                handlePreviousQuestion={handlePreviousQuestion}
+                                                                handleNextQuestion={handleNextQuestion}
+                                                                level={questions[currentQuestionIndex]?.level}
+                                                                score={questions[currentQuestionIndex]?.score}
+                                                            />
                                                         </div>
-                                                    </form>
-                                                </div>
+                                                    </div>
+                                                </form>
+                                            </div>
 
-                                                <div className="col-lg-4 col-12">
-                                                    <div className="answers__inner">
-                                                        <div className="td-sidebar">
-                                                            <div className="widget">
-                                                                <h5 className="text-center">Time remaining: {formatTime(timeRemaining)}</h5>
-                                                                <div className="answers_number">
-                                                                    {questions.map((question, index) => (
-                                                                        <button
-                                                                            type="button"
-                                                                            className={`btn answers-btn ${selectedAnswers[question.id] ? "answers-btn-active" : ""}`}
-                                                                            key={question.id}
-                                                                        >
-                                                                            {String(index + 1).padStart(2, "0")}
-                                                                        </button>
-                                                                    ))}
-                                                                </div>
-                                                                {inExam && (
-                                                                    <div className="d-flex justify-content-end">
-                                                                        <button type="button" className="btn btn-base-2 d-block mt-3" onClick={handleSubmitExam} style={{ width: "100%" }}>
-                                                                            <i className="fa fa-stop-circle"></i> Finish Exam
-                                                                        </button>
-                                                                    </div>
-                                                                )}
+                                            <div className="col-lg-4 col-12">
+                                                <div className="answers__inner">
+                                                    <div className="td-sidebar">
+                                                        <div className="widget">
+                                                            <h5 className="text-center">Time remaining: {formatTime(timeRemaining)}</h5>
+                                                            <div className="answers_number">
+                                                                {questions.map((question, index) => (
+                                                                    <button type="button" className={`btn answers-btn ${selectedAnswers[question.id] ? "answers-btn-active" : ""}`} key={question.id}>
+                                                                        {String(index + 1).padStart(2, "0")}
+                                                                    </button>
+                                                                ))}
                                                             </div>
+                                                            {inExam && (
+                                                                <div className="d-flex justify-content-end">
+                                                                    <button type="button" className="btn btn-base-2 d-block mt-3" onClick={handleSubmitExam} style={{ width: "100%" }}>
+                                                                        <i className="fa fa-stop-circle"></i> Finish Exam
+                                                                    </button>
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </>
+                                    </div>
                                 ) : (
                                     <div className="terms__content text-center pt-5 pb-5">
                                         <h3 className="terms__content-heading">Some notes before taking the exam</h3>
