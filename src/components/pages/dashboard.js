@@ -5,6 +5,7 @@ import MyCourses from "../views/dashboard/my-courses";
 import Profile from "../views/dashboard/profile";
 import { useEffect, useState } from "react";
 import Loading from "../layouts/loading";
+import RegisterExam from "../views/dashboard/register-exam";
 
 function Dashboard() {
     const [loading, setLoading] = useState(false);
@@ -45,7 +46,6 @@ function Dashboard() {
                                                 aria-controls="v-pills-home"
                                                 aria-selected="true"
                                             >
-                                                {" "}
                                                 <i className="fa fa-user"></i>Profile
                                             </button>
                                             <button
@@ -70,7 +70,7 @@ function Dashboard() {
                                                 aria-controls="v-pills-settings"
                                                 aria-selected="false"
                                             >
-                                                <i className="fa fa-book"></i>My Exam
+                                                <i className="fa fa-book"></i> Register for the exam again
                                             </button>
                                             <button
                                                 className="nav-link btn btn-link mb-3"
@@ -113,7 +113,7 @@ function Dashboard() {
                                         <MyCourses />
                                     </div>
                                     <div className="tab-pane fade" id="exam" role="tabpanel" aria-labelledby="v-pills-messages-tab">
-                                        My Exam
+                                        <RegisterExam />
                                     </div>
                                     <div className="tab-pane fade" id="grade" role="tabpanel" aria-labelledby="v-pills-settings-tab">
                                         My Grade

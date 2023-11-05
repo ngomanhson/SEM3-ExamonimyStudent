@@ -13,6 +13,7 @@ const url = {
     TEST: {
         LIST: "/test",
         STUDENT_CODE: "/test/get-by-student/",
+        BY_SLUG: "/test/get-by-exam",
     },
 
     TEST_QUESTION: {
@@ -23,6 +24,7 @@ const url = {
 
     EXAM: {
         SLUG: "/exam/get-by-slug",
+        COURSE_ID: "/exam/get-by-courseId",
     },
 
     QUESTION: {

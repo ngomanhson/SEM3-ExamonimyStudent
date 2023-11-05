@@ -144,10 +144,22 @@ function MultipleChoice() {
     // Function to start the exam
     const handleStartExam = () => {
         setLoading(true);
+        setInExam(true);
+
         setTimeout(() => {
             setLoading(false);
-            setInExam(true);
-        }, 2000);
+        }, 3000);
+
+        // Automatically submission if escape
+        let isExamFinished = false;
+
+        window.onblur = () => {
+            if (!isExamFinished) {
+                isExamFinished = true;
+                handleFinishExam();
+                submitAnswers(testId, studentId);
+            }
+        };
     };
 
     // Function to handle selecting an answer for a question
@@ -203,17 +215,6 @@ function MultipleChoice() {
     const handleSubmitExam = () => {
         const isConfirmed = window.confirm("Are you sure you want to submit your exam?");
         if (isConfirmed) {
-            handleFinishExam();
-            submitAnswers(testId, studentId);
-        }
-    };
-
-    // Automatically submission if escape
-    let isExamFinished = false;
-
-    window.onblur = () => {
-        if (!isExamFinished) {
-            isExamFinished = true;
             handleFinishExam();
             submitAnswers(testId, studentId);
         }
@@ -286,9 +287,12 @@ function MultipleChoice() {
                                     </div>
                                 ) : (
                                     <div className="terms__content text-center pt-5 pb-5">
-                                        <h3 className="terms__content-heading">Some notes before taking the exam</h3>
-                                        <p className="terms__content-desc mx-auto" style={{ maxWidth: "450px" }}>
+                                        <h3 className="terms__content-heading">Some notes before taking the test</h3>
+                                        <p className="terms__content-desc mx-auto" style={{ maxWidth: "460px" }}>
                                             Note: The test has {questions.length} questions. The test takes 30 minutes to complete and can only be taken once.
+                                        </p>
+                                        <p className="text-danger">
+                                            <i class="fa fa-exclamation-triangle"></i> Absolutely do not escape while taking the test.
                                         </p>
                                         <button onClick={handleStartExam} className={`btn btn-base-2 mt-3 d-flex align-items-center mx-auto ${loading ? "disabled" : ""}`}>
                                             {loading ? (
