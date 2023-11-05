@@ -7,7 +7,7 @@ import Blog from "./components/pages/blog/blog";
 import BlogDetail from "./components/pages/blog/blog-details";
 import Login from "./components/pages/auth/login";
 import MultipleChoice from "./components/pages/exam/multiple-choice";
-import ExamList from "./components/pages/exam/exam-list";
+import ExamList from "./components/pages/exam/test-list";
 import ConstructedResponse from "./components/pages/exam/practical-exam";
 import Dashboard from "./components/pages/dashboard";
 import NotFound from "./components/pages/404";
@@ -43,9 +43,9 @@ function App() {
             <Routes>
                 <Route path="/" element={<ProtectedRoute element={<Home />} />} />
                 <Route path="/courses/:classId/:studentCode" element={<ProtectedRoute element={<Course />} />} />
-                <Route path="/course-detail/:courseName/:studentCode" element={<ProtectedRoute element={<CourseDetail />} />} />
+                <Route path="/course-detail/:courseId/:courseName/:studentCode" element={<ProtectedRoute element={<CourseDetail />} />} />
 
-                <Route path="/exam-list/:studentCode" element={<ProtectedRoute element={<ExamList />} />} />
+                <Route path="/test-list/:slug" element={<ProtectedRoute element={<ExamList />} />} />
                 <Route path="/multiple-choice/test/:testId/" element={<ProtectedRoute element={<MultipleChoice />} />} />
                 <Route path="/exam/result/:testId/details/:studentId" element={<ProtectedRoute element={<Result />} />} />
 

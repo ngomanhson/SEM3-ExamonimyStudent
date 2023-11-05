@@ -81,8 +81,9 @@ function Course() {
                                                                         </div>
                                                                     </div>
                                                                 </div>
+
                                                                 <h5>
-                                                                    <Link to={`/course-detail/${item.name}/${studentCode}`} className="line-clamp">
+                                                                    <Link to={`/course-detail/${item.id}/${item.name}/${studentCode}`} className="line-clamp">
                                                                         {item.name}
                                                                     </Link>
                                                                 </h5>
@@ -96,7 +97,7 @@ function Course() {
                                                                 </p>
 
                                                                 <p className="d-flex align-items-center mt-2">
-                                                                    <img src="./assets/img/course/date.png" alt="icon" className="icon-course" />{" "}
+                                                                    <img src="./assets/img/course/date.png" alt="icon" className="icon-course" />
                                                                     {format(new Date(item.createdAt), "HH:mm:ss dd/MM/yyyy")}
                                                                     (GMT+07)
                                                                 </p>
@@ -104,7 +105,7 @@ function Course() {
                                                             <div className="course-footer">
                                                                 <div className="row">
                                                                     <div className="col-6">
-                                                                        <Link to={`/course-detail/${item.name}/${studentCode}`} className="d-flex align-items-center">
+                                                                        <Link to={`/course-detail/${item.id}/${item.name}/${studentCode}`} className="d-flex align-items-center">
                                                                             <div className="total-student">
                                                                                 <img src="assets/img/course/2.webp" alt="img" /> Go to course
                                                                             </div>
@@ -124,57 +125,60 @@ function Course() {
                                         )
                                     ) : courses.length > 0 ? (
                                         courses.map((item, index) => (
-                                            <div className="col-md-6" key={index}>
-                                                <div className="single-course-inner">
-                                                    <div className="details-inner">
-                                                        <div className="details">
-                                                            <div className="course-meta">
-                                                                <div className="row">
-                                                                    <div className="col-8">
-                                                                        <div className="course-author">
-                                                                            <span>{item.fullname}</span>
+                                            <>
+                                                <div className="col-md-6" key={index}>
+                                                    <div className="single-course-inner">
+                                                        <div className="details-inner">
+                                                            <div className="details">
+                                                                <div className="course-meta">
+                                                                    <div className="row">
+                                                                        <div className="col-8">
+                                                                            <div className="course-author">
+                                                                                <span>{item.fullname}</span>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <h5>
-                                                                <Link to={`/course-detail/${item.name}/${studentCode}`} className="line-clamp">
-                                                                    {item.name}
-                                                                </Link>
-                                                            </h5>
-
-                                                            <p className="d-flex align-items-center">
-                                                                <img src="./assets/img/course/teacher.png" alt="icon" className="icon-course" /> {item.class_id}
-                                                            </p>
-
-                                                            <p className="d-flex align-items-center mt-2">
-                                                                <img src="./assets/img/course/study.png" alt="icon" className="icon-course" /> {item.course_code}
-                                                            </p>
-
-                                                            <p className="d-flex align-items-center mt-2">
-                                                                <img src="./assets/img/course/date.png" alt="icon" className="icon-course" /> {format(new Date(item.createdAt), "HH:mm:ss dd/MM/yyyy")}
-                                                                (GMT+07)
-                                                            </p>
-                                                        </div>
-                                                        <div className="course-footer">
-                                                            <div className="row">
-                                                                <div className="col-6">
-                                                                    <Link to={`/course-detail/${item.name}/${studentCode}`} className="d-flex align-items-center">
-                                                                        <div className="total-student">
-                                                                            <img src="assets/img/course/2.webp" alt="img" /> Go to course
-                                                                        </div>
+                                                                <h5>
+                                                                    <Link to={`/course-detail/${item.id}/${item.name}/${studentCode}`} className="line-clamp">
+                                                                        {item.name}
                                                                     </Link>
-                                                                </div>
-                                                                <div className="col-6 align-self-center text-end">
-                                                                    <div className="total-student">
-                                                                        <img src="assets/img/course/2.webp" alt="img" /> 37 Students
+                                                                </h5>
+
+                                                                <p className="d-flex align-items-center">
+                                                                    <img src="./assets/img/course/teacher.png" alt="icon" className="icon-course" /> {classId}
+                                                                </p>
+
+                                                                <p className="d-flex align-items-center mt-2">
+                                                                    <img src="./assets/img/course/study.png" alt="icon" className="icon-course" /> {item.course_code}
+                                                                </p>
+
+                                                                <p className="d-flex align-items-center mt-2">
+                                                                    <img src="./assets/img/course/date.png" alt="icon" className="icon-course" />{" "}
+                                                                    {format(new Date(item.createdAt), "HH:mm:ss dd/MM/yyyy")}
+                                                                    (GMT+07)
+                                                                </p>
+                                                            </div>
+                                                            <div className="course-footer">
+                                                                <div className="row">
+                                                                    <div className="col-6">
+                                                                        <Link to={`/course-detail/${item.id}/${item.name}/${studentCode}`} className="d-flex align-items-center">
+                                                                            <div className="total-student">
+                                                                                <img src="assets/img/course/2.webp" alt="img" /> Go to course
+                                                                            </div>
+                                                                        </Link>
+                                                                    </div>
+                                                                    <div className="col-6 align-self-center text-end">
+                                                                        <div className="total-student">
+                                                                            <img src="assets/img/course/2.webp" alt="img" /> 37 Students
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </>
                                         ))
                                     ) : (
                                         <p>No courses found.</p>

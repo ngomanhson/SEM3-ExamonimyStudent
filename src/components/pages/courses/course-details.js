@@ -6,31 +6,42 @@ import api from "../../../services/api";
 import url from "../../../services/url";
 import { Link, useParams } from "react-router-dom";
 import { format } from "date-fns";
+import { Helmet } from "react-helmet";
 
 function CourseDetail() {
-    const { courseName, studentCode } = useParams();
-    const [loading, setLoading] = useState(false);
+    const { courseName, courseId } = useParams();
+    const [loading, setLoading] = useState(true);
 
-    const [tests, setTests] = useState([]);
-
-    const currentTime = new Date();
+    const [exams, setExams] = useState([]);
 
     const loadTests = useCallback(async () => {
+        const userToken = localStorage.getItem("accessToken");
         try {
-            const response = await api.get(url.TEST.STUDENT_CODE + `${studentCode}`);
-            setTests(response.data);
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${userToken}`,
+                },
+            };
 
-            setLoading(false);
+            const response = await api.get(url.EXAM.COURSE_ID + `?courseId=${courseId}`, config);
+            setExams(response.data);
         } catch (error) {
             setLoading(false);
         }
-    }, [studentCode]);
+    }, [courseId]);
 
     useEffect(() => {
+        setTimeout(() => {
+            setLoading(false);
+        }, 2000);
         loadTests();
     }, [loadTests]);
     return (
         <>
+            <Helmet>
+                <title>{courseName} | Examonimy</title>
+            </Helmet>
             {loading ? <Loading /> : ""}
             <Layout>
                 <Breadcrumb title={courseName} />
@@ -183,26 +194,21 @@ function CourseDetail() {
                                         <div className="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">
                                             <h6 className="mb-4">{courseName} Exam</h6>
                                             <ul className="curriculum-list">
-                                                {tests.some((test) => currentTime >= new Date(test.startDate) && currentTime <= new Date(test.endDate)) ? (
-                                                    tests.map((test) => {
-                                                        const isTestActive = currentTime >= new Date(test.startDate) && currentTime <= new Date(test.endDate);
-                                                        return (
-                                                            isTestActive && (
-                                                                <li key={test.id}>
-                                                                    <Link to={`/multiple-choice/test/${test.id}`}>
-                                                                        <i className="fa fa-graduation-cap"></i> {test.name} <span className="title">Multiple Choice Test</span>
-                                                                    </Link>
-
-                                                                    <span className="right-wrap">Start at: {format(new Date(test.startDate), "HH:mm:ss dd/MM/yyyy")} (GMT+07)</span>
-                                                                </li>
-                                                            )
-                                                        );
-                                                    })
-                                                ) : (
+                                                {exams.length === 0 ? (
                                                     <div className="d-flex flex-column justify-content-center align-items-center">
                                                         <img src="./assets/img/no-data.svg" alt="No data" width={"40%"} />
                                                         <p>You currently have no tests.</p>
                                                     </div>
+                                                ) : (
+                                                    exams.map((item, index) => (
+                                                        <li key={index}>
+                                                            <Link to={`/test-list/${item.slug}`}>
+                                                                <i class="fa fa-graduation-cap"></i>
+                                                                {item.name}
+                                                            </Link>
+                                                            <p class="right-wrap">Start date: {format(new Date(item.start_date), "HH:mm:ss dd/MM/yyyy")} (GMT+07)</p>
+                                                        </li>
+                                                    ))
                                                 )}
                                             </ul>
                                         </div>
