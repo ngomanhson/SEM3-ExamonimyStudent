@@ -71,7 +71,6 @@ function MultipleChoice() {
             setQuestions(questionsWithDetails);
         } catch (error) {
             if (error.response && error.response.status === 400) {
-                // Xử lý khi status code là 400 (Bad Request)
                 setTimeout(() => {
                     setError("The test has ended or has not started yet.");
 
@@ -151,15 +150,15 @@ function MultipleChoice() {
         }, 3000);
 
         // Automatically submission if escape
-        let isExamFinished = false;
+        // let isExamFinished = false;
 
-        window.onblur = () => {
-            if (!isExamFinished) {
-                isExamFinished = true;
-                handleFinishExam();
-                submitAnswers(testId, studentId);
-            }
-        };
+        // window.onblur = () => {
+        //     if (!isExamFinished) {
+        //         isExamFinished = true;
+        //         handleFinishExam();
+        //         submitAnswers(testId, studentId);
+        //     }
+        // };
     };
 
     // Function to handle selecting an answer for a question
@@ -201,6 +200,10 @@ function MultipleChoice() {
             const response = await api.post(url.ANSWER_STUDENT.SUBMIT + `?test_id=${testId}`, answersData);
 
             if (response.status === 200) {
+                setLoading(true);
+                setTimeout(() => {
+                    setLoading(false);
+                }, 800);
                 navigate(`/exam/result/${testId}/details/${studentId}`);
             } else {
                 toast.error("Failed to submit answers.", {
@@ -225,7 +228,7 @@ function MultipleChoice() {
             <Helmet>
                 <title>Multiple Choice | Examonimy</title>
             </Helmet>
-            {loading ? <Loading /> : null}
+            {loading ? <Loading /> : ""}
             <Layout>
                 <Breadcrumb title="My Exam" />
                 <section className="pd-top-60 pd-bottom-70">
@@ -299,7 +302,7 @@ function MultipleChoice() {
                                                 <i className="fa fa-spinner fa-spin"></i>
                                             ) : (
                                                 <>
-                                                    Start <i className="fa fa-play-circle" style={{ marginLeft: "5px" }}></i>
+                                                    Start Test <i className="fa fa-play-circle" style={{ marginLeft: "5px" }}></i>
                                                 </>
                                             )}
                                         </button>

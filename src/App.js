@@ -49,7 +49,7 @@ function App() {
                 <Route path="/multiple-choice/test/:testId/" element={<ProtectedRoute element={<MultipleChoice />} />} />
                 <Route path="/exam/result/:testId/details/:studentId" element={<ProtectedRoute element={<Result />} />} />
 
-                <Route path="/practical-exam" element={<ProtectedRoute element={<ConstructedResponse />} />} />
+                <Route path="/practical-exam/test/:testId" element={<ProtectedRoute element={<ConstructedResponse />} />} />
 
                 <Route path="/blog" element={<ProtectedRoute element={<Blog />} />} />
                 <Route path="/blog/detail" element={<ProtectedRoute element={<BlogDetail />} />} />

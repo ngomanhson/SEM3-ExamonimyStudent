@@ -55,15 +55,16 @@ function ExamList() {
                                         <ul class="curriculum-list mt-4">
                                             {tests.map((test) => {
                                                 const isTestActive = currentTime >= new Date(test.startDate) && currentTime <= new Date(test.endDate);
+                                                const linkTo = test.type_test === 0 ? `/multiple-choice/test/${test.id}/` : `/practical-exam/test/${test.id}`;
 
                                                 return (
                                                     isTestActive && (
                                                         <li>
                                                             <i class="fa fa-file-o"></i>
-                                                            <Link to={`/multiple-choice/test/${test.id}/`} key={test.id}>
+                                                            <Link to={linkTo} key={test.id}>
                                                                 {test.name}
                                                             </Link>
-                                                            <p style={{ marginBottom: 0, marginLeft: "20px" }}>Multiple Choice</p>
+                                                            <p style={{ marginBottom: 0, marginLeft: "20px" }}>{test.type_test === 0 ? "Multiple Choice Test" : "Practical Test"}</p>
                                                             <div className="right-wrap">
                                                                 <p style={{ marginBottom: 0 }}>Due date: {format(new Date(test.endDate), "HH:mm:ss dd/MM/yyyy")} (GMT+07)</p>
                                                             </div>
@@ -79,49 +80,6 @@ function ExamList() {
                                         <p>You currently have no tests.</p>
                                     </div>
                                 )}
-
-                                {/* <section className="section-title">
-                                    <h6 className="sub-title right-line">Test List</h6>
-                                    <h2 className="title">Here is the test for you.</h2>
-                                    <ul class="curriculum-list mt-4">
-                                        <li>
-                                            <i class="fa fa-file-o"></i>Lecture 1.1 <span class="title">What is Data Science</span>
-                                            <div class="right-wrap">
-                                                30 min
-                                                <a href="https://www.youtube.com/watch?v=WwvNiN2_Jlk" class="video-play-btn mfp-iframe" tabindex="0">
-                                                    <i class="fa fa-play"></i>
-                                                </a>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-file-o"></i>Lecture 1.2 <span class="title">How to use Data Science</span>
-                                            <div class="right-wrap">
-                                                30 min
-                                                <a href="https://www.youtube.com/watch?v=WwvNiN2_Jlk" class="video-play-btn mfp-iframe" tabindex="0">
-                                                    <i class="fa fa-play"></i>
-                                                </a>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-file-o"></i>Lecture 1.3 <span class="title">Data Science Chapter 01</span>
-                                            <div class="right-wrap">
-                                                30 min
-                                                <a href="https://www.youtube.com/watch?v=WwvNiN2_Jlk" class="video-play-btn mfp-iframe" tabindex="0">
-                                                    <i class="fa fa-play"></i>
-                                                </a>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-file-o"></i>Lecture 1.4 <span class="title">Data Science Chapter 02</span>
-                                            <div class="right-wrap">
-                                                30 min
-                                                <a href="https://www.youtube.com/watch?v=WwvNiN2_Jlk" class="video-play-btn mfp-iframe" tabindex="0">
-                                                    <i class="fa fa-play"></i>
-                                                </a>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </section> */}
                             </div>
                         </div>
                     </div>
