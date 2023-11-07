@@ -5147,3 +5147,12 @@ ul {
         transform: rotate(420deg);
     }
 }
+
+/* Result */
+.red-text {
+    color: #ff1100;
+}
+
+.green-text {
+    color: #28a745;
+}
