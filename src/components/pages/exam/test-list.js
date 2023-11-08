@@ -55,7 +55,7 @@ function ExamList() {
                                         <ul class="curriculum-list mt-4">
                                             {tests.map((test) => {
                                                 const isTestActive = currentTime >= new Date(test.startDate) && currentTime <= new Date(test.endDate);
-                                                const linkTo = test.type_test === 0 ? `/multiple-choice/test/${test.id}/` : `/practical-exam/test/${test.id}`;
+                                                const linkTo = test.type_test === 0 ? `/multiple-choice/test/${test.slug}/` : `/practical-exam/test/${test.slug}`;
 
                                                 return (
                                                     isTestActive && (

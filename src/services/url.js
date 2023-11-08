@@ -8,6 +8,8 @@ const url = {
     AUTH: {
         LOGIN: "/Auth/student-login",
         CHANGE_PASSWORD: "/Auth/student/change-password",
+        PROFILE: "/Auth/student/profile",
+        UPDATE_PROFILE: "/Auth/student/update-profile",
     },
 
     TEST: {
@@ -18,7 +20,8 @@ const url = {
 
     TEST_QUESTION: {
         LIST: "/TestQuestion",
-        TAKE_TEST: "/TestQuestion/take-test",
+        MULTIPLE_CHOICE: "/TestQuestion/multiple-choice/take-test",
+        PRACTICAL: "/TestQuestion/essay/take-test",
         RESULT: "/TestQuestion/result-test/",
     },
 
@@ -40,6 +43,10 @@ const url = {
 
     ANSWER_STUDENT: {
         SUBMIT: "/answersForStudent/submit-exam",
+    },
+
+    GRADE: {
+        LIST: "/grade/get-by-test",
     },
 };
 

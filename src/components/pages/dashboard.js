@@ -1,14 +1,22 @@
 import { useNavigate } from "react-router-dom";
 import Breadcrumb from "../layouts/breadcrumb";
 import Layout from "../layouts/layouts";
-import MyCourses from "../views/dashboard/my-courses";
-import Profile from "../views/dashboard/profile";
+import MyCourses from "../views/profile/my-courses";
+import Profile from "../views/profile/profile";
 import { useEffect, useState } from "react";
 import Loading from "../layouts/loading";
-import RegisterExam from "../views/dashboard/register-exam";
+import RegisterExam from "../views/profile/my-exam";
+import { useJwt } from "react-jwt";
+import { Helmet } from "react-helmet";
+import MyGrade from "../views/profile/my-grade";
 
 function Dashboard() {
     const [loading, setLoading] = useState(false);
+    const [classId, setClassId] = useState("");
+    const { isExpired, isInvalid } = useJwt();
+
+    const navigate = useNavigate();
+
     useEffect(() => {
         setLoading(true);
         setTimeout(() => {
@@ -16,16 +24,28 @@ function Dashboard() {
         }, 2000);
     }, []);
 
-    const navigate = useNavigate();
+    // Get the info student from token
+    useEffect(() => {
+        const token = localStorage.getItem("accessToken");
+
+        try {
+            const decodedToken = JSON.parse(atob(token.split(".")[1]));
+            const classId = decodedToken["Class-Id"];
+
+            setClassId(classId);
+        } catch (error) {}
+    }, [isExpired, isInvalid]);
+
     const handleLogout = () => {
         localStorage.removeItem("accessToken");
-        localStorage.removeItem("simplifiedGradeData");
-
         navigate("/login");
     };
 
     return (
         <>
+            <Helmet>
+                <title>Dashboard | Examonimy</title>
+            </Helmet>
             {loading ? <Loading /> : ""}
             <Layout>
                 <Breadcrumb title="Dashboard" />
@@ -70,7 +90,7 @@ function Dashboard() {
                                                 aria-controls="v-pills-settings"
                                                 aria-selected="false"
                                             >
-                                                <i className="fa fa-book"></i> Register for the exam again
+                                                <i className="fa fa-book"></i> My Exam
                                             </button>
                                             <button
                                                 className="nav-link btn btn-link mb-3"
@@ -110,13 +130,13 @@ function Dashboard() {
                                         <Profile />
                                     </div>
                                     <div className="tab-pane fade" id="courses" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-                                        <MyCourses />
+                                        <MyCourses classId={classId} />
                                     </div>
                                     <div className="tab-pane fade" id="exam" role="tabpanel" aria-labelledby="v-pills-messages-tab">
                                         <RegisterExam />
                                     </div>
                                     <div className="tab-pane fade" id="grade" role="tabpanel" aria-labelledby="v-pills-settings-tab">
-                                        My Grade
+                                        <MyGrade />
                                     </div>
                                     <div className="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
                                         Settings

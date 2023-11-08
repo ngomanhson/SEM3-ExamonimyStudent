@@ -197,7 +197,7 @@ function CourseDetail() {
                                                 {exams.length === 0 ? (
                                                     <div className="d-flex flex-column justify-content-center align-items-center">
                                                         <img src="./assets/img/no-data.svg" alt="No data" width={"40%"} />
-                                                        <p>You currently have no tests.</p>
+                                                        <p>You currently have no exam.</p>
                                                     </div>
                                                 ) : (
                                                     exams.map((item, index) => (
