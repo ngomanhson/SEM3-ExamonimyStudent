@@ -64,9 +64,6 @@ function Navbar() {
                             <li>
                                 <Link to="/contact">Contact Us</Link>
                             </li>
-                            {/* <li className="menu-item-has-children">
-                                <Link to={`/exam-list/${studentCode}`}>My Exam</Link>
-                            </li> */}
                             <li className="menu-item-has-children">
                                 <Link to="/dashboard" className="btn-user">
                                     {studentName}
@@ -74,7 +71,7 @@ function Navbar() {
                                 <ul class="sub-menu">
                                     <li>
                                         <Link to="/dashboard" className="btn-user">
-                                            Profile
+                                            Dashboard
                                         </Link>
                                     </li>
                                     <li>

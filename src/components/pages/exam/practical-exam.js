@@ -6,36 +6,21 @@ import api from "../../../services/api";
 import url from "../../../services/url";
 import Loading from "../../layouts/loading";
 import { format } from "date-fns";
-import { useJwt } from "react-jwt";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet";
 
 function PracticalExam() {
-    const { testId } = useParams();
+    const { testSlug } = useParams();
 
     const [inExam, setInExam] = useState(false);
     const [test, setTest] = useState("");
     const [loading, setLoading] = useState(true);
-    const [studentId, setStudentId] = useState("");
-    const { isExpired, isInvalid } = useJwt();
     const [showModal, setShowModal] = useState(false);
     const [error, setError] = useState(null);
 
     const handleStartExam = () => {
         setInExam(true);
     };
-
-    // Get the info student from token
-    useEffect(() => {
-        const token = localStorage.getItem("accessToken");
-
-        try {
-            const decodedToken = JSON.parse(atob(token.split(".")[1]));
-            const studentId = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
-
-            setStudentId(studentId);
-        } catch (error) {}
-    }, [isExpired, isInvalid]);
 
     // Fetch API Question
     const loadTest = useCallback(async () => {
@@ -48,7 +33,7 @@ function PracticalExam() {
                 },
             };
 
-            const testResponse = await api.get(url.TEST_QUESTION.TAKE_TEST + `/${testId}/details`, config);
+            const testResponse = await api.get(url.TEST_QUESTION.PRACTICAL + `/${testSlug}/details`, config);
 
             setTest(testResponse.data);
         } catch (error) {
@@ -72,7 +57,7 @@ function PracticalExam() {
                 }, 2000);
             }
         }
-    }, [testId]);
+    }, [testSlug]);
 
     useEffect(() => {
         loadTest();
@@ -81,7 +66,7 @@ function PracticalExam() {
         setTimeout(() => {
             setLoading(false);
         }, 2000);
-    }, [testId, loadTest]);
+    }, [testSlug, loadTest]);
 
     const [formData, setFormData] = useState({
         link: "",
@@ -127,42 +112,43 @@ function PracticalExam() {
     // Submit test
     const handleSubmitTest = async (e) => {
         e.preventDefault();
+        const userToken = localStorage.getItem("accessToken");
 
         if (validateForm()) {
-            if (test && test.questions && test.questions.length > 0) {
-                const answerData = [
-                    {
-                        question_id: test.questions[0].id,
-                        content: formData.link,
-                        student_id: studentId,
-                    },
-                ];
+            const answerData = [
+                {
+                    question_id: test.questions[0].id,
+                    content: formData.link,
+                },
+            ];
 
-                try {
-                    const response = await api.post(`https://localhost:7218/api/answersForStudent/submit-exam?test_id=${testId}`, answerData);
+            try {
+                api.defaults.headers.common["Authorization"] = `Bearer ${userToken}`;
 
-                    if (response.status === 200) {
-                        handleCloseModal();
-                        setLoading(true);
-                        setTimeout(() => {
-                            setLoading(false);
-                            toast.success("Submitted successfully.", {
-                                position: toast.POSITION.TOP_RIGHT,
-                                autoClose: 3000,
-                            });
-                        }, 800);
-                    } else {
-                        toast.error("Error during submission process.", {
+                const response = await api.post(url.ANSWER_STUDENT.SUBMIT + `/${testSlug}`, answerData);
+
+                if (response.status === 200) {
+                    handleCloseModal();
+                    setLoading(true);
+
+                    setTimeout(() => {
+                        setLoading(false);
+                        toast.success("Submitted successfully.", {
                             position: toast.POSITION.TOP_RIGHT,
                             autoClose: 3000,
                         });
-                    }
-                } catch (error) {
+                    }, 800);
+                } else {
                     toast.error("Error during submission process.", {
                         position: toast.POSITION.TOP_RIGHT,
                         autoClose: 3000,
                     });
                 }
+            } catch (error) {
+                toast.error("Error during submission process.", {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 3000,
+                });
             }
         }
     };

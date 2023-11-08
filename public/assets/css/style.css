@@ -4846,12 +4846,15 @@ ul {
 }
 
 .table-bordered {
-    text-align: center;
     border: 1px solid #dee2e6;
 }
 
 .thead-background {
     background: #f1f1f1;
+}
+
+.thead-background > tr > th {
+    text-align: center;
 }
 
 .btn-user > i {
@@ -4864,10 +4867,11 @@ ul {
     margin: 0 auto;
 }
 
-.student-avatar > img {
+.student-avatar > img,
+.student-avatar > label > img {
     display: block;
-
-    width: 100%;
+    width: 200px;
+    height: 200px;
     object-fit: cover;
     border-radius: 50%;
 }
@@ -5155,4 +5159,35 @@ ul {
 
 .green-text {
     color: #28a745;
+}
+
+/* Course dashboard */
+.page-link {
+    height: 35px;
+    line-height: 24px;
+    color: #000;
+    border: none;
+}
+
+.page-item.active .page-link {
+    background: #030d47;
+    border: none;
+}
+
+.btn-link-2 {
+    border: none;
+    background: none;
+    color: #798be8;
+}
+
+.input-change {
+    width: 100%;
+    border: 1px solid #f1f1f1;
+    border-radius: 3px;
+    outline: none;
+    transition: all 0.3s linear;
+}
+
+.input-change:focus {
+    border-color: #000000;
 }

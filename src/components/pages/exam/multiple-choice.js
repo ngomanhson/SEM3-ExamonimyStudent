@@ -11,7 +11,7 @@ import { useJwt } from "react-jwt";
 import { Helmet } from "react-helmet";
 
 function MultipleChoice() {
-    const { testId } = useParams();
+    const { testSlug } = useParams();
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(true);
@@ -24,7 +24,7 @@ function MultipleChoice() {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [error, setError] = useState(null);
     const { isExpired, isInvalid } = useJwt();
-    const [studentId, setStudentId] = useState("");
+    const [studentCode, setStudentCode] = useState("");
     const optionsPrefix = ["A", "B", "C", "D"];
 
     useEffect(() => {
@@ -34,8 +34,8 @@ function MultipleChoice() {
             const decodedToken = JSON.parse(atob(token.split(".")[1]));
 
             // Get the info student from token
-            const studentId = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
-            setStudentId(studentId);
+            const studentCode = decodedToken["Student-Code"];
+            setStudentCode(studentCode);
         } catch (error) {}
     }, [isExpired, isInvalid]);
 
@@ -49,7 +49,7 @@ function MultipleChoice() {
                 },
             };
 
-            const questionResponse = await api.get(url.TEST_QUESTION.TAKE_TEST + `/${testId}/details`, config);
+            const questionResponse = await api.get(url.TEST_QUESTION.MULTIPLE_CHOICE + `/${testSlug}/details`, config);
 
             const questionIds = questionResponse.data.questions.map((question) => question.id);
 
@@ -90,14 +90,14 @@ function MultipleChoice() {
                 }, 2000);
             }
         }
-    }, [testId]);
+    }, [testSlug]);
 
     useEffect(() => {
         loadQuestions();
         setTimeout(() => {
             setLoading(false);
         }, 2000);
-    }, [testId, loadQuestions]);
+    }, [testSlug, loadQuestions]);
 
     // Function to handle finishing the exam
     const handleFinishExam = useCallback(() => {
@@ -156,7 +156,7 @@ function MultipleChoice() {
         //     if (!isExamFinished) {
         //         isExamFinished = true;
         //         handleFinishExam();
-        //         submitAnswers(testId, studentId);
+        //         submitAnswers(testSlug, studentCode);
         //     }
         // };
     };
@@ -187,39 +187,47 @@ function MultipleChoice() {
 
     // Function to submit answers to the API
     const submitAnswers = useCallback(async () => {
+        const userToken = localStorage.getItem("accessToken");
+
         try {
+            api.defaults.headers.common["Authorization"] = `Bearer ${userToken}`;
+            // const answersData = questions.map((question, index) => {
             const answersData = questions.map((question, index) => {
                 const answerData = {
                     question_id: question.id,
                     content: selectedAnswers[question.id] || "Not done!",
-                    student_id: studentId,
                 };
                 return answerData;
             });
 
-            const response = await api.post(url.ANSWER_STUDENT.SUBMIT + `?test_id=${testId}`, answersData);
+            const response = await api.post(url.ANSWER_STUDENT.SUBMIT + `/${testSlug}`, answersData);
 
             if (response.status === 200) {
                 setLoading(true);
                 setTimeout(() => {
                     setLoading(false);
                 }, 800);
-                navigate(`/exam/result/${testId}/details/${studentId}`);
+                navigate(`/exam/result/${testSlug}/details/${studentCode}`);
             } else {
                 toast.error("Failed to submit answers.", {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000,
                 });
             }
-        } catch (error) {}
-    }, [questions, selectedAnswers, testId, navigate, studentId]);
+        } catch (error) {
+            toast.error("Error during submission process. Please try again.", {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 3000,
+            });
+        }
+    }, [questions, selectedAnswers, testSlug, navigate, studentCode]);
 
     // Function to handle exam submission
     const handleSubmitExam = () => {
         const isConfirmed = window.confirm("Are you sure you want to submit your exam?");
         if (isConfirmed) {
             handleFinishExam();
-            submitAnswers(testId, studentId);
+            submitAnswers(testSlug, studentCode);
         }
     };
 
