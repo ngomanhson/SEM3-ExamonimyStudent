@@ -131,12 +131,18 @@ function Profile() {
                                     <label htmlFor="avatarInput">
                                         {isEditing ? (
                                             avatarPreview ? (
-                                                <img src={avatarPreview} alt="Avatar Preview" style={{ cursor: "pointer" }} />
+                                                <div className="avatar-inner">
+                                                    <img src={avatarPreview} alt="Avatar Preview" className="avatar-preview" />
+                                                    <img src="./assets/img/default-placeholder.png" alt="" className="img-default" />
+                                                </div>
                                             ) : (
-                                                <img src={info.avatar} alt={info.fullname} style={{ cursor: "pointer" }} />
+                                                <div className="avatar-inner">
+                                                    <img src={info.avatar} alt={info.fullname} className="avatar-preview" />
+                                                    <img src="./assets/img/default-placeholder.png" alt="" className="img-default" />
+                                                </div>
                                             )
                                         ) : (
-                                            <img src={info.avatar} alt={info.fullname} />
+                                            <img src={info.avatar} alt={info.fullname} className="avatar-preview" />
                                         )}
                                     </label>
                                     <input id="avatarInput" type="file" accept="image/*" style={{ display: "none" }} onChange={handleAvatarChange} />

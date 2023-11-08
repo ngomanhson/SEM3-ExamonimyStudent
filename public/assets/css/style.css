@@ -4867,13 +4867,30 @@ ul {
     margin: 0 auto;
 }
 
-.student-avatar > img,
-.student-avatar > label > img {
+.student-avatar > label > .avatar-inner {
+    position: relative;
+    z-index: 1;
+}
+
+.student-avatar > label > .avatar-preview,
+.student-avatar > label > .avatar-inner > .avatar-preview,
+.img-default {
     display: block;
     width: 200px;
     height: 200px;
     object-fit: cover;
     border-radius: 50%;
+    border: 4px solid #fff;
+    box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.3) 0px 0px 8px;
+}
+
+.img-default {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    opacity: 0.8;
+    cursor: pointer;
 }
 
 .student-content {
