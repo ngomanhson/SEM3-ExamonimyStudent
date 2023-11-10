@@ -33,7 +33,7 @@ function MyCourses(props) {
                     <tr>
                         <th style={{ textAlign: "center" }}>STT</th>
                         <th scope="col">Course Name</th>
-                        <th scope="col">Course Code</th>
+                        {/* <th scope="col">Course Code</th> */}
                         <th scope="col">Start Date</th>
                     </tr>
                 </thead>
@@ -43,12 +43,9 @@ function MyCourses(props) {
                         return (
                             <tr key={index}>
                                 <td style={{ textAlign: "center" }}>{stt}</td>
-                                <td>{item.name}</td>
-                                <td>{item.course_code}</td>
-                                <td>
-                                    {format(new Date(item.createdAt), "HH:mm:ss dd/MM/yyyy")}
-                                    (GMT+07)
-                                </td>
+                                <td>{item.courseName}</td>
+                                {/* <td>{item.createByName}</td> */}
+                                <td>{format(new Date(item.startDate), "dd/MM/yyyy")}</td>
                             </tr>
                         );
                     })}

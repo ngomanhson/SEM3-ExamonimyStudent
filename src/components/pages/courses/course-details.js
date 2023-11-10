@@ -26,6 +26,7 @@ function CourseDetail() {
 
             const response = await api.get(url.EXAM.COURSE_ID + `?courseId=${courseId}`, config);
             setExams(response.data);
+            console.log(response.data);
         } catch (error) {
             setLoading(false);
         }

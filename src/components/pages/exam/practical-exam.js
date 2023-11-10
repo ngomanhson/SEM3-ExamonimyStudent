@@ -70,7 +70,7 @@ function PracticalExam() {
     };
 
     const isURLValid = (url) => {
-        const urlRegex = /^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9-]+\/[a-zA-Z0-9-]+(\/|$)/i;
+        const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
         return urlRegex.test(url);
     };
 
@@ -82,7 +82,7 @@ function PracticalExam() {
             newErrors.link = "Please enter a link in this field.";
             valid = false;
         } else if (!isURLValid(formData.link)) {
-            newErrors.link = "Please enter a GitHub link.";
+            newErrors.link = "Please enter a valid link.";
             valid = false;
         }
 
