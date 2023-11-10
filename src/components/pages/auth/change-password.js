@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import api from "../../../services/api";
 import url from "../../../services/url";
 import { toast } from "react-toastify";
@@ -96,37 +96,40 @@ function ChangePassword() {
             const userToken = localStorage.getItem("accessToken");
 
             if (userToken) {
-                try {
-                    const config = {
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${userToken}`,
-                        },
-                    };
+                const isConfirmed = window.confirm("Are you sure you want to submit your exam?");
+                if (isConfirmed) {
+                    try {
+                        const config = {
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${userToken}`,
+                            },
+                        };
 
-                    const requestData = {
-                        currentPassword: formData.currentPassword,
-                        newPassword: formData.newPassword,
-                        confirmPassword: formData.confirmPassword,
-                    };
+                        const requestData = {
+                            currentPassword: formData.currentPassword,
+                            newPassword: formData.newPassword,
+                            confirmPassword: formData.confirmPassword,
+                        };
 
-                    const passwordResponse = await api.post(url.AUTH.CHANGE_PASSWORD, requestData, config);
+                        const passwordResponse = await api.post(url.AUTH.CHANGE_PASSWORD, requestData, config);
 
-                    if (passwordResponse.data.success) {
-                        localStorage.removeItem("accessToken");
+                        if (passwordResponse.data.success) {
+                            localStorage.removeItem("accessToken");
 
-                        navigate("/login");
+                            navigate("/login");
 
-                        toast.success("Password changed successfully. Please login again!", {
+                            toast.success("Password changed successfully. Please login again!", {
+                                position: toast.POSITION.TOP_RIGHT,
+                                autoClose: 5000,
+                            });
+                        }
+                    } catch (error) {
+                        toast.error("An error occurred while changing the password.", {
                             position: toast.POSITION.TOP_RIGHT,
                             autoClose: 5000,
                         });
                     }
-                } catch (error) {
-                    toast.error("An error occurred while changing the password.", {
-                        position: toast.POSITION.TOP_RIGHT,
-                        autoClose: 5000,
-                    });
                 }
             } else {
                 // Handle the case where the user is not authenticated
@@ -141,8 +144,8 @@ function ChangePassword() {
     return (
         <>
             {loading ? <Loading /> : null}
-            <section className="d-flex align-items-center justify-content-center mx-auto" style={{ maxWidth: "420px", height: "100vh" }}>
-                <div className="td-sidebar" style={{ width: "100%" }}>
+            <section className="d-flex align-items-center justify-content-center mx-auto">
+                <div className="td-sidebar" style={{ width: "50%" }}>
                     <div className="widget">
                         <div className="text-center">
                             <img src="./assets/img/logo-2.png" alt="Examonimy" />
@@ -221,10 +224,6 @@ function ChangePassword() {
                             <button type="submit" className="btn btn-base mt-4" style={{ width: "100%" }}>
                                 Change Password
                             </button>
-
-                            <Link to="/" className="d-block mt-3 text-end">
-                                Back to Home
-                            </Link>
                         </form>
                         <nav className="login-card-footer-nav mt-3">
                             <a href="#!">Terms of use</a>

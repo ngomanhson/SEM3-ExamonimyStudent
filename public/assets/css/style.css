@@ -4850,11 +4850,8 @@ ul {
 }
 
 .thead-background {
-    background: #f1f1f1;
-}
-
-.thead-background > tr > th {
-    text-align: center;
+    background: #030d47;
+    color: #ffff;
 }
 
 .btn-user > i {
@@ -5207,4 +5204,9 @@ ul {
 
 .input-change:focus {
     border-color: #000000;
+}
+
+th,
+td {
+    border: none;
 }

@@ -12,17 +12,12 @@ import { Helmet } from "react-helmet";
 function PracticalExam() {
     const { testSlug } = useParams();
 
-    const [inExam, setInExam] = useState(false);
     const [test, setTest] = useState("");
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [error, setError] = useState(null);
+    const [submittedAnswerData, setSubmittedAnswerData] = useState(null);
 
-    const handleStartExam = () => {
-        setInExam(true);
-    };
-
-    // Fetch API Question
     const loadTest = useCallback(async () => {
         const userToken = localStorage.getItem("accessToken");
         try {
@@ -36,36 +31,26 @@ function PracticalExam() {
             const testResponse = await api.get(url.TEST_QUESTION.PRACTICAL + `/${testSlug}/details`, config);
 
             setTest(testResponse.data);
+            setLoading(false);
         } catch (error) {
             if (error.response && error.response.status === 400) {
-                setTimeout(() => {
-                    setError("The test has ended or has not started yet.");
-
-                    toast.error("The test has ended or has not started yet.", {
-                        position: toast.POSITION.TOP_RIGHT,
-                        autoClose: 3000,
-                    });
-                }, 2000);
+                setError("The test has ended or has not started yet");
+                toast.error("The test has ended or has not started yet", {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 3000,
+                });
             } else {
-                setTimeout(() => {
-                    toast.error("An error occurred", {
-                        position: toast.POSITION.TOP_RIGHT,
-                        autoClose: 3000,
-                    });
-
-                    setError("An error occurred");
-                }, 2000);
+                setError("An error occurred");
+                toast.error("An error occurred", {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 3000,
+                });
             }
         }
     }, [testSlug]);
 
     useEffect(() => {
         loadTest();
-        setLoading(true);
-
-        setTimeout(() => {
-            setLoading(false);
-        }, 2000);
     }, [testSlug, loadTest]);
 
     const [formData, setFormData] = useState({
@@ -80,16 +65,12 @@ function PracticalExam() {
         setShowModal(true);
     };
 
-    // Reset form data and errors when modal is closed
     const handleCloseModal = () => {
         setShowModal(false);
-        setFormData({ link: "" });
-        setFormErrors({ link: "" });
     };
 
-    // Check for valid url.
     const isURLValid = (url) => {
-        const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
+        const urlRegex = /^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9-]+\/[a-zA-Z0-9-]+(\/|$)/i;
         return urlRegex.test(url);
     };
 
@@ -101,7 +82,7 @@ function PracticalExam() {
             newErrors.link = "Please enter a link in this field.";
             valid = false;
         } else if (!isURLValid(formData.link)) {
-            newErrors.link = "Please enter a valid link.";
+            newErrors.link = "Please enter a GitHub link.";
             valid = false;
         }
 
@@ -109,7 +90,17 @@ function PracticalExam() {
         return valid;
     };
 
-    // Submit test
+    const fetchSubmittedAnswerData = useCallback(async () => {
+        try {
+            const answerResponse = await api.get(url.ANSWER_STUDENT.GET_BY_QUESTIONID + `?questionId=${test.questions[0].id}`);
+
+            if (answerResponse.data && Array.isArray(answerResponse.data.data) && answerResponse.data.data.length > 0) {
+                const firstItem = answerResponse.data.data[0];
+                setSubmittedAnswerData(firstItem);
+            }
+        } catch (error) {}
+    }, [test]);
+
     const handleSubmitTest = async (e) => {
         e.preventDefault();
         const userToken = localStorage.getItem("accessToken");
@@ -129,23 +120,20 @@ function PracticalExam() {
 
                 if (response.status === 200) {
                     handleCloseModal();
-                    setLoading(true);
+                    toast.success("Submitted successfully", {
+                        position: toast.POSITION.TOP_RIGHT,
+                        autoClose: 3000,
+                    });
 
-                    setTimeout(() => {
-                        setLoading(false);
-                        toast.success("Submitted successfully.", {
-                            position: toast.POSITION.TOP_RIGHT,
-                            autoClose: 3000,
-                        });
-                    }, 800);
+                    fetchSubmittedAnswerData();
                 } else {
-                    toast.error("Error during submission process.", {
+                    toast.error("Error during submission process", {
                         position: toast.POSITION.TOP_RIGHT,
                         autoClose: 3000,
                     });
                 }
             } catch (error) {
-                toast.error("Error during submission process.", {
+                toast.error("Error during submission process", {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000,
                 });
@@ -166,6 +154,10 @@ function PracticalExam() {
         e.returnValue = "";
     };
 
+    useEffect(() => {
+        fetchSubmittedAnswerData();
+    }, [fetchSubmittedAnswerData]);
+
     return (
         <>
             <Helmet>
@@ -184,7 +176,7 @@ function PracticalExam() {
                                         <img src="./assets/img/completed.svg" alt="Completed" width={"20%"} />
                                         <p className="mt-3">{error}</p>
                                     </div>
-                                ) : inExam ? (
+                                ) : (
                                     <div>
                                         <h3 className="exam__inner-heading">{test.name}</h3>
                                         <div className="exam__inner">
@@ -199,9 +191,13 @@ function PracticalExam() {
                                                             {test && test.endDate && <p className="exam-date">DUE DATE: {format(new Date(test.endDate), "HH:mm:ss dd/MM/yyyy")} (GMT+07)</p>}
 
                                                             <div className="modal-submit">
-                                                                <button type="button" className="btn btn-success" onClick={handleShowModal}>
-                                                                    Submit test
-                                                                </button>
+                                                                {!submittedAnswerData ? (
+                                                                    <button type="button" className="btn btn-success" onClick={handleShowModal}>
+                                                                        Submit test
+                                                                    </button>
+                                                                ) : (
+                                                                    <div className="text-success">You have submitted the test.</div>
+                                                                )}
                                                             </div>
 
                                                             {showModal && (
@@ -213,12 +209,13 @@ function PracticalExam() {
                                                                                 type="text"
                                                                                 name="link"
                                                                                 className={`form-control ${formErrors.link ? "is-invalid" : ""}`}
-                                                                                value={formData.link}
+                                                                                value={submittedAnswerData ? submittedAnswerData.content : formData.link}
                                                                                 onChange={(e) => {
                                                                                     const { name, value } = e.target;
                                                                                     setFormData({ ...formData, [name]: value });
                                                                                 }}
                                                                             />
+
                                                                             {formErrors.link && <div className="invalid-feedback">{formErrors.link}</div>}
 
                                                                             <p className="modal-note">Note: Submit your exam using the GitHub link.</p>
@@ -238,12 +235,13 @@ function PracticalExam() {
                                                     </div>
                                                 </div>
                                             </div>
+
                                             <div className="row">
                                                 <div className="col-lg-4 col-12">
                                                     <div className="td-sidebar">
                                                         <div className="widget border-left">
                                                             <h5>Submission Status</h5>
-                                                            <p className="text-success">On time</p>
+                                                            <p className={submittedAnswerData ? "text-success" : "text-danger"}>{submittedAnswerData ? "Submitted." : "Not submitted."}</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -251,7 +249,11 @@ function PracticalExam() {
                                                     <div className="td-sidebar">
                                                         <div className="widget border-left">
                                                             <h5>Submission Time</h5>
-                                                            <p className="text-dark">2023-10-04 16:00:00 (GMT+07)</p>
+                                                            <p className="text-dark">
+                                                                {submittedAnswerData && submittedAnswerData.createdAt
+                                                                    ? format(new Date(submittedAnswerData.createdAt), "HH:mm:ss dd/MM/yyyy")
+                                                                    : "No data."}
+                                                            </p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -259,36 +261,15 @@ function PracticalExam() {
                                                     <div className="td-sidebar">
                                                         <div className="widget border-left">
                                                             <h5>Submission Link</h5>
-                                                            <Link to="https://github.com/ngomanhson/SEM3-ExamonimyStudent" target="_blank" className="text-primary line-clamp">
-                                                                https://github.com/ngomanhson/SEM3-ExamonimyStudent
+
+                                                            <Link to={submittedAnswerData?.content || "#"} target="_blank" className="text-primary line-clamp">
+                                                                {submittedAnswerData?.content || <span style={{ color: "#000", cursor: "default" }}>No data.</span>}
                                                             </Link>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ) : (
-                                    <div className="terms__content text-center pt-5 pb-5">
-                                        <h3 className="terms__content-heading">Some notes before taking the test</h3>
-                                        {test && test.questions && (
-                                            <p className="terms__content-desc mx-auto" style={{ maxWidth: "460px" }}>
-                                                Note: The test has {test.questions.length} questions. The test starts from {format(new Date(test.startDate), "HH:mm:ss dd/MM/yyyy")} to{" "}
-                                                {format(new Date(test.endDate), "HH:mm:ss dd/MM/yyyy")}.
-                                            </p>
-                                        )}
-                                        <p className="text-danger">
-                                            <i class="fa fa-exclamation-triangle"></i> Remember to submit your test before the deadline expires.
-                                        </p>
-                                        <button onClick={handleStartExam} className={`btn btn-base-2 mt-3 d-flex align-items-center mx-auto ${loading ? "disabled" : ""}`}>
-                                            {loading ? (
-                                                <i className="fa fa-spinner fa-spin"></i>
-                                            ) : (
-                                                <>
-                                                    Start Test<i className="fa fa-play-circle" style={{ marginLeft: "5px" }}></i>
-                                                </>
-                                            )}
-                                        </button>
                                     </div>
                                 )}
                             </div>

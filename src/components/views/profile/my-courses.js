@@ -31,10 +31,10 @@ function MyCourses(props) {
             <table className="table table-bordered">
                 <thead className="thead thead-background">
                     <tr>
-                        <th>STT</th>
-                        <th scope="col">Course name</th>
-                        <th scope="col">Course code</th>
-                        <th scope="col">Start date</th>
+                        <th style={{ textAlign: "center" }}>STT</th>
+                        <th scope="col">Course Name</th>
+                        <th scope="col">Course Code</th>
+                        <th scope="col">Start Date</th>
                     </tr>
                 </thead>
                 <tbody>

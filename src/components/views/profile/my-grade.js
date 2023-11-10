@@ -35,8 +35,10 @@ function MyGrade() {
             <table className="table table-bordered">
                 <thead className="thead thead-background">
                     <tr>
-                        <th>STT</th>
-                        <th scope="col">Test name</th>
+                        <th style={{ textAlign: "center" }}>STT</th>
+                        <th scope="col" style={{ textAlign: "start" }}>
+                            Test Name
+                        </th>
                         <th scope="col">Score</th>
                         <th scope="col">Status</th>
                     </tr>
@@ -48,8 +50,8 @@ function MyGrade() {
                             <tr key={index}>
                                 <td style={{ textAlign: "center" }}>{stt}</td>
                                 <td>{item.testName}</td>
-                                <td style={{ textAlign: "center" }}>{item.score}</td>
-                                <td style={{ textAlign: "center" }}>{item.isPass === false ? "Not Qualified" : item.isPass === true ? "Qualified" : null}</td>
+                                <td> {item.score !== null ? item.score : "Updating..."}</td>
+                                <td>{item.isPass === false ? "Not Qualified" : item.isPass === true ? "Qualified" : item.isPass === null ? "Updating..." : ""}</td>
                             </tr>
                         );
                     })}
