@@ -48,19 +48,28 @@ function ExamList() {
                     <div className="container">
                         <div className="row">
                             <div className="col-8 mx-auto">
-                                {tests.some((test) => currentTime >= new Date(test.startDate) && currentTime <= new Date(test.endDate)) ? (
+                                {/* Trong khoang thoi gian start date va end date */}
+                                {/* {tests.some((test) => currentTime >= new Date(test.startDate) && currentTime <= new Date(test.endDate)) ? ( <section className="section-title"> <h6 className="sub-title right-line">Exam List</h6> <h2 className="title">Here is the test for you.</h2> <ul class="curriculum-list mt-4"> {tests.map((test) => { const isTestActive = currentTime >= new Date(test.startDate) && currentTime <= new Date(test.endDate); const linkTo = test.type_test === 0 ? `/multiple-choice/test/${test.slug}/` : `/practical-exam/test/${test.slug}`; return ( isTestActive && ( <li> <i class="fa fa-file-o"></i> <Link to={linkTo} key={test.id}> {test.name} </Link> <p style={{ marginBottom: 0, marginLeft: "20px" }}>{test.type_test === 0 ? "Multiple Choice Test" : "Practical Test"}</p> <div className="right-wrap"> <p style={{ marginBottom: 0 }}>Due date: {format(new Date(test.endDate), "HH:mm:ss dd/MM/yyyy")} (GMT+07)</p> </div> </li> ) ); })} </ul> </section> ) : ( <div className="d-flex flex-column justify-content-center align-items-center"> <img src="./assets/img/no-data.svg" alt="No data" width={"40%"} /> <p>You currently have no tests.</p> </div> )} */}
+                                {tests.some((test) => {
+                                    if (test.type_test === 0) {
+                                        // Kiểm tra cho bài thi multiple choice
+                                        return currentTime >= new Date(test.startDate) && currentTime <= new Date(test.endDate);
+                                    } else {
+                                        // Hiển thị bài thi practical ngay từ thời gian bắt đầu
+                                        return currentTime >= new Date(test.startDate);
+                                    }
+                                }) ? (
                                     <section className="section-title">
-                                        <h6 className="sub-title right-line">Exam List</h6>
-                                        <h2 className="title">Here is the test for you.</h2>
-                                        <ul class="curriculum-list mt-4">
+                                        <h6 className="sub-title right-line">Exam List</h6> <h2 className="title">Here is the test for you.</h2>
+                                        <ul className="curriculum-list mt-4">
                                             {tests.map((test) => {
-                                                const isTestActive = currentTime >= new Date(test.startDate) && currentTime <= new Date(test.endDate);
+                                                const isTestActive =
+                                                    test.type_test === 0 ? currentTime >= new Date(test.startDate) && currentTime <= new Date(test.endDate) : currentTime >= new Date(test.startDate);
                                                 const linkTo = test.type_test === 0 ? `/multiple-choice/test/${test.slug}/` : `/practical-exam/test/${test.slug}`;
-
                                                 return (
                                                     isTestActive && (
                                                         <li>
-                                                            <i class="fa fa-file-o"></i>
+                                                            <i className="fa fa-file-o"></i>
                                                             <Link to={linkTo} key={test.id}>
                                                                 {test.name}
                                                             </Link>
@@ -76,8 +85,7 @@ function ExamList() {
                                     </section>
                                 ) : (
                                     <div className="d-flex flex-column justify-content-center align-items-center">
-                                        <img src="./assets/img/no-data.svg" alt="No data" width={"40%"} />
-                                        <p>You currently have no tests.</p>
+                                        <img src="./assets/img/no-data.svg" alt="No data" width={"40%"} /> <p>You currently have no tests.</p>
                                     </div>
                                 )}
                             </div>

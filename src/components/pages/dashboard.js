@@ -5,10 +5,11 @@ import MyCourses from "../views/profile/my-courses";
 import Profile from "../views/profile/profile";
 import { useEffect, useState } from "react";
 import Loading from "../layouts/loading";
-import RegisterExam from "../views/profile/my-exam";
 import { useJwt } from "react-jwt";
 import { Helmet } from "react-helmet";
 import MyGrade from "../views/profile/my-grade";
+import ChangePassword from "./auth/change-password";
+import MyExam from "../views/profile/my-exam";
 
 function Dashboard() {
     const [loading, setLoading] = useState(false);
@@ -80,6 +81,7 @@ function Dashboard() {
                                             >
                                                 <i className="fa fa-list-ul"></i>My Courses
                                             </button>
+
                                             <button
                                                 className="nav-link btn btn-link mb-3"
                                                 id="v-pills-settings-tab"
@@ -90,8 +92,9 @@ function Dashboard() {
                                                 aria-controls="v-pills-settings"
                                                 aria-selected="false"
                                             >
-                                                <i className="fa fa-book"></i> My Exam
+                                                <i className="fa fa-cog"></i>My Exam
                                             </button>
+
                                             <button
                                                 className="nav-link btn btn-link mb-3"
                                                 id="v-pills-messages-tab"
@@ -109,14 +112,15 @@ function Dashboard() {
                                                 className="nav-link btn btn-link mb-3"
                                                 id="v-pills-settings-tab"
                                                 data-bs-toggle="pill"
-                                                data-bs-target="#settings"
+                                                data-bs-target="#changePassword"
                                                 type="button"
                                                 role="tab"
                                                 aria-controls="v-pills-settings"
                                                 aria-selected="false"
                                             >
-                                                <i className="fa fa-cog"></i>Settings
+                                                <i class="fa fa-lock"></i> Change Password
                                             </button>
+
                                             <button className="nav-link btn btn-link" type="button" onClick={handleLogout}>
                                                 <i className="fa fa-sign-out"></i>Logout
                                             </button>
@@ -129,17 +133,21 @@ function Dashboard() {
                                     <div className="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="v-pills-home-tab">
                                         <Profile />
                                     </div>
+
                                     <div className="tab-pane fade" id="courses" role="tabpanel" aria-labelledby="v-pills-profile-tab">
                                         <MyCourses classId={classId} />
                                     </div>
-                                    <div className="tab-pane fade" id="exam" role="tabpanel" aria-labelledby="v-pills-messages-tab">
-                                        <RegisterExam />
+
+                                    <div className="tab-pane fade" id="exam" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                                        <MyExam />
                                     </div>
+
                                     <div className="tab-pane fade" id="grade" role="tabpanel" aria-labelledby="v-pills-settings-tab">
                                         <MyGrade />
                                     </div>
-                                    <div className="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
-                                        Settings
+
+                                    <div className="tab-pane fade" id="changePassword" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                                        <ChangePassword />
                                     </div>
                                 </div>
                             </div>

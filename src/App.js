@@ -13,7 +13,6 @@ import Dashboard from "./components/pages/dashboard";
 import NotFound from "./components/pages/404";
 import Result from "./components/views/exam/result";
 import { useJwt } from "react-jwt";
-import ChangePassword from "./components/pages/auth/change-password";
 
 function App() {
     const ProtectedRoute = ({ element }) => {
@@ -59,7 +58,6 @@ function App() {
                 <Route path="/dashboard" element={<ProtectedRoute element={<Dashboard />} />} />
 
                 <Route path="*" element={<ProtectedRoute element={<NotFound />} />} />
-                <Route path="/change-password" element={<ProtectedRoute element={<ChangePassword />} />} />
                 <Route path="/login" element={<ProtectedLoginRoute element={<Login />} />} />
             </Routes>
         </div>

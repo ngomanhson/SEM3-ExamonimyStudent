@@ -43,6 +43,7 @@ const url = {
 
     ANSWER_STUDENT: {
         SUBMIT: "/answersForStudent/submit-exam",
+        GET_BY_QUESTIONID: "/answersForStudent/get-by-questionId",
     },
 
     GRADE: {

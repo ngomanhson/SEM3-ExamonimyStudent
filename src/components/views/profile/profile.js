@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import api from "../../../services/api";
 import url from "../../../services/url";
 import { toast } from "react-toastify";
@@ -166,6 +165,10 @@ function Profile() {
                                                 <td>{info.fullname}</td>
                                             </tr>
                                             <tr>
+                                                <th>Email</th>
+                                                <td>{info.email}</td>
+                                            </tr>
+                                            <tr>
                                                 <th>Birthday</th>
                                                 <td>
                                                     {isEditing ? (
@@ -226,10 +229,7 @@ function Profile() {
                                         </tbody>
                                     </table>
                                 </div>
-                                <div className="d-flex align-items-center justify-content-between">
-                                    <Link to="/change-password" style={{ color: "#798BE8" }}>
-                                        Change Password?
-                                    </Link>
+                                <div className="text-end">
                                     {isEditing ? (
                                         <div>
                                             <button className="btn-link-2 text-danger" onClick={handleCancelClick}>
