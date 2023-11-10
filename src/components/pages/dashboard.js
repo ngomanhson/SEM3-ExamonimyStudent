@@ -32,7 +32,6 @@ function Dashboard() {
         try {
             const decodedToken = JSON.parse(atob(token.split(".")[1]));
             const classId = decodedToken["Class-Id"];
-
             setClassId(classId);
         } catch (error) {}
     }, [isExpired, isInvalid]);
@@ -92,7 +91,7 @@ function Dashboard() {
                                                 aria-controls="v-pills-settings"
                                                 aria-selected="false"
                                             >
-                                                <i className="fa fa-cog"></i>My Exam
+                                                <i class="fa fa-book"></i>My Exam
                                             </button>
 
                                             <button
