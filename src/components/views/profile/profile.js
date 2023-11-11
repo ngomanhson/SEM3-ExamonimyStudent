@@ -3,6 +3,7 @@ import api from "../../../services/api";
 import url from "../../../services/url";
 import { toast } from "react-toastify";
 import { format } from "date-fns";
+import Swal from "sweetalert2";
 
 function Profile() {
     const [info, setInfo] = useState({});
@@ -63,8 +64,17 @@ function Profile() {
             }
 
             // Send the request
-            const isConfirmed = window.confirm("Are you sure you want to submit your exam?");
-            if (isConfirmed) {
+            const isConfirmed = await Swal.fire({
+                title: "Are you sure?",
+                text: "You want to update your information?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "I'm sure",
+            });
+
+            if (isConfirmed.isConfirmed) {
                 const updateResponse = await api.put(url.AUTH.UPDATE_PROFILE, formData, config);
 
                 if (updateResponse.status === 204) {
@@ -161,7 +171,7 @@ function Profile() {
                                     <table className="table">
                                         <tbody>
                                             <tr>
-                                                <th>Full Name</th>
+                                                <th className="text-nowrap">Full Name</th>
                                                 <td>{info.fullname}</td>
                                             </tr>
                                             <tr>

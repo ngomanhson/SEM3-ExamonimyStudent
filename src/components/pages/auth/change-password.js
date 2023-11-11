@@ -4,6 +4,7 @@ import api from "../../../services/api";
 import url from "../../../services/url";
 import { toast } from "react-toastify";
 import Loading from "../../layouts/loading";
+import Swal from "sweetalert2";
 
 function ChangePassword() {
     const [loading, setLoading] = useState(true);
@@ -96,8 +97,16 @@ function ChangePassword() {
             const userToken = localStorage.getItem("accessToken");
 
             if (userToken) {
-                const isConfirmed = window.confirm("Are you sure you want to submit your exam?");
-                if (isConfirmed) {
+                const isConfirmed = await Swal.fire({
+                    title: "Are you sure?",
+                    text: "you want to change your password?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "I'm sure",
+                });
+                if (isConfirmed.isConfirmed) {
                     try {
                         const config = {
                             headers: {
