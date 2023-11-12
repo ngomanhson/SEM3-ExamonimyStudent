@@ -10,8 +10,15 @@ function MyCourses(props) {
     const [coursesPerPage] = useState(8);
 
     const loadCourses = useCallback(async () => {
+        const userToken = localStorage.getItem("accessToken");
         try {
-            const courseResponse = await api.get(url.CLASS_COURSE.BY_CLASSID + `?id=${classId}`);
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${userToken}`,
+                },
+            };
+            const courseResponse = await api.get(url.CLASS_COURSE.BY_CLASSID + `?id=${classId}`, config);
             setCourses(courseResponse.data.data);
         } catch (error) {}
     }, [classId]);
