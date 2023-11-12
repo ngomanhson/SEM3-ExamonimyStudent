@@ -16,7 +16,6 @@ function PracticalExam() {
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [error, setError] = useState(null);
-    const [submittedAnswerData, setSubmittedAnswerData] = useState(null);
 
     const loadTest = useCallback(async () => {
         const userToken = localStorage.getItem("accessToken");
@@ -29,6 +28,7 @@ function PracticalExam() {
             };
 
             const testResponse = await api.get(url.TEST_QUESTION.PRACTICAL + `/${testSlug}/details`, config);
+            console.log(testResponse.data);
 
             setTest(testResponse.data);
             setLoading(false);
@@ -90,17 +90,6 @@ function PracticalExam() {
         return valid;
     };
 
-    const fetchSubmittedAnswerData = useCallback(async () => {
-        try {
-            const answerResponse = await api.get(url.ANSWER_STUDENT.GET_BY_QUESTIONID + `?questionId=${test.questions[0].id}`);
-
-            if (answerResponse.data && Array.isArray(answerResponse.data.data) && answerResponse.data.data.length > 0) {
-                const firstItem = answerResponse.data.data[0];
-                setSubmittedAnswerData(firstItem);
-            }
-        } catch (error) {}
-    }, [test]);
-
     const handleSubmitTest = async (e) => {
         e.preventDefault();
         const userToken = localStorage.getItem("accessToken");
@@ -119,13 +108,12 @@ function PracticalExam() {
                 const response = await api.post(url.ANSWER_STUDENT.SUBMIT + `/${testSlug}`, answerData);
 
                 if (response.status === 200) {
+                    await loadTest();
                     handleCloseModal();
                     toast.success("Submitted successfully", {
                         position: toast.POSITION.TOP_RIGHT,
                         autoClose: 3000,
                     });
-
-                    fetchSubmittedAnswerData();
                 } else {
                     toast.error("Error during submission process", {
                         position: toast.POSITION.TOP_RIGHT,
@@ -153,10 +141,6 @@ function PracticalExam() {
         e.preventDefault();
         e.returnValue = "";
     };
-
-    useEffect(() => {
-        fetchSubmittedAnswerData();
-    }, [fetchSubmittedAnswerData]);
 
     return (
         <>
@@ -191,12 +175,12 @@ function PracticalExam() {
                                                             {test && test.endDate && <p className="exam-date">DUE DATE: {format(new Date(test.endDate), "HH:mm:ss dd/MM/yyyy")} (GMT+07)</p>}
 
                                                             <div className="modal-submit">
-                                                                {!submittedAnswerData ? (
+                                                                {test && test.questions && test.questions[0]?.answerForStudent ? (
+                                                                    <div className="text-success">You have submitted the test.</div>
+                                                                ) : (
                                                                     <button type="button" className="btn btn-success" onClick={handleShowModal}>
                                                                         Submit test
                                                                     </button>
-                                                                ) : (
-                                                                    <div className="text-success">You have submitted the test.</div>
                                                                 )}
                                                             </div>
 
@@ -209,7 +193,7 @@ function PracticalExam() {
                                                                                 type="text"
                                                                                 name="link"
                                                                                 className={`form-control ${formErrors.link ? "is-invalid" : ""}`}
-                                                                                value={submittedAnswerData ? submittedAnswerData.content : formData.link}
+                                                                                value={formData.link}
                                                                                 onChange={(e) => {
                                                                                     const { name, value } = e.target;
                                                                                     setFormData({ ...formData, [name]: value });
@@ -236,39 +220,50 @@ function PracticalExam() {
                                                 </div>
                                             </div>
 
-                                            <div className="row">
-                                                <div className="col-lg-4 col-12">
-                                                    <div className="td-sidebar">
-                                                        <div className="widget border-left">
-                                                            <h5>Submission Status</h5>
-                                                            <p className={submittedAnswerData ? "text-success" : "text-danger"}>{submittedAnswerData ? "Submitted." : "Not submitted."}</p>
+                                            {test?.questions && test.questions.length > 0 && (
+                                                <div>
+                                                    <div className="row">
+                                                        <div className="col-lg-4 col-12">
+                                                            <div className="td-sidebar">
+                                                                <div className="widget border-left">
+                                                                    <h5>Submission Status</h5>
+                                                                    {test && test.questions && test.questions[0]?.answerForStudent ? (
+                                                                        <p className="text-success">Submitted.</p>
+                                                                    ) : (
+                                                                        <p className="text-danger"> Not submitted.</p>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-lg-4 col-12">
+                                                            <div className="td-sidebar">
+                                                                <div className="widget border-left">
+                                                                    <h5>Submission Time</h5>
+                                                                    {test && test.questions && test.questions[0]?.answerForStudent ? (
+                                                                        <p>{format(new Date(test.finished_at), "HH:mm:ss dd/MM/yyyy")}</p>
+                                                                    ) : (
+                                                                        <p>No data.</p>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-lg-4 col-12">
+                                                            <div className="td-sidebar">
+                                                                <div className="widget border-left">
+                                                                    <h5>Submission Link</h5>
+                                                                    {test && test.questions && test.questions[0]?.answerForStudent ? (
+                                                                        <Link to={test.questions[0].answerForStudent} target="_blank" className="text-primary line-clamp">
+                                                                            {test.questions[0].answerForStudent}
+                                                                        </Link>
+                                                                    ) : (
+                                                                        <p>No data.</p>
+                                                                    )}
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="col-lg-4 col-12">
-                                                    <div className="td-sidebar">
-                                                        <div className="widget border-left">
-                                                            <h5>Submission Time</h5>
-                                                            <p className="text-dark">
-                                                                {submittedAnswerData && submittedAnswerData.createdAt
-                                                                    ? format(new Date(submittedAnswerData.createdAt), "HH:mm:ss dd/MM/yyyy")
-                                                                    : "No data."}
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="col-lg-4 col-12">
-                                                    <div className="td-sidebar">
-                                                        <div className="widget border-left">
-                                                            <h5>Submission Link</h5>
-
-                                                            <Link to={submittedAnswerData?.content || "#"} target="_blank" className="text-primary line-clamp">
-                                                                {submittedAnswerData?.content || <span style={{ color: "#000", cursor: "default" }}>No data.</span>}
-                                                            </Link>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            )}
                                         </div>
                                     </div>
                                 )}
