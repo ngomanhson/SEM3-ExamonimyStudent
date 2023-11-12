@@ -24,15 +24,22 @@ function Course() {
     const [availableYears, setAvailableYears] = useState([]);
 
     const loadCourses = useCallback(async () => {
+        const userToken = localStorage.getItem("accessToken");
         try {
-            const courseResponse = await api.get(url.CLASS_COURSE.BY_CLASSID + `?id=${classId}`);
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${userToken}`,
+                },
+            };
+            const courseResponse = await api.get(url.CLASS_COURSE.BY_CLASSID + `?id=${classId}`, config);
 
             const uniqueYears = [...new Set(courseResponse.data.data.map((course) => new Date(course.startDate).getFullYear().toString()))];
 
-            // Lọc theo năm
+            // Filter by year
             const filteredCoursesByYear = selectedYear ? courseResponse.data.data.filter((course) => new Date(course.startDate).getFullYear().toString() === selectedYear) : courseResponse.data.data;
 
-            // Lọc theo từ khóa tìm kiếm
+            // Search the courses
             const filteredCourses = filteredCoursesByYear.filter((course) => {
                 return course && course.courseName && course.courseName.toLowerCase().includes(searchKeyword.toLowerCase());
             });

@@ -208,7 +208,7 @@ function MultipleChoice() {
                 setTimeout(() => {
                     setLoading(false);
                 }, 800);
-                navigate(`/exam/result/${testSlug}/details/${studentCode}`);
+                navigate(`/exam/result/${testSlug}`);
             } else {
                 toast.error("Failed to submit answers.", {
                     position: toast.POSITION.TOP_RIGHT,
@@ -221,7 +221,7 @@ function MultipleChoice() {
                 autoClose: 3000,
             });
         }
-    }, [questions, selectedAnswers, testSlug, navigate, studentCode]);
+    }, [questions, selectedAnswers, testSlug, navigate]);
 
     // Function to handle exam submission
     const handleSubmitExam = async () => {

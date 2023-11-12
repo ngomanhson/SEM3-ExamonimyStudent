@@ -9,7 +9,7 @@ import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 
 function Result() {
-    const { testId, studentId } = useParams();
+    const { testId } = useParams();
     const [loading, setLoading] = useState(true);
 
     const [examData, setExamData] = useState(null);
@@ -19,8 +19,16 @@ function Result() {
     const [error, setError] = useState(null);
 
     const loadResultTest = useCallback(async () => {
+        const userToken = localStorage.getItem("accessToken");
         try {
-            const resultResponse = await api.get(url.TEST_QUESTION.RESULT + `${testId}/details/${studentId}`);
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${userToken}`,
+                },
+            };
+
+            const resultResponse = await api.get(url.TEST_QUESTION.RESULT + `${testId}/details`, config);
             setExamData(resultResponse.data);
         } catch (error) {
             setError("Error! An error occurred. Please try again later.");
@@ -30,7 +38,7 @@ function Result() {
                 autoClose: 3000,
             });
         }
-    }, [testId, studentId]);
+    }, [testId]);
 
     useEffect(() => {
         setLoading(true);
@@ -38,7 +46,7 @@ function Result() {
         setTimeout(() => {
             setLoading(false);
         }, 2000);
-    }, [testId, studentId, loadResultTest]);
+    }, [testId, loadResultTest]);
 
     useEffect(() => {
         // Calculate the total number of correct and incorrect sentences
