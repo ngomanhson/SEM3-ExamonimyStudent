@@ -50,7 +50,7 @@ function MyGrade() {
                             <tr key={index}>
                                 <td style={{ textAlign: "center" }}>{stt}</td>
                                 <td>{item.testName}</td>
-                                <td>{item.score !== null ? parseFloat(item.score).toFixed(3) : "Updating..."}</td>
+                                <td>{item.score !== null ? (parseFloat(item.score) === 0 ? 0 : parseFloat(item.score).toFixed(3)) : "Updating..."}</td>
                                 <td>{item.isPass === false ? "Not Qualified" : item.isPass === true ? "Qualified" : item.isPass === null ? "Updating..." : ""}</td>
                             </tr>
                         );

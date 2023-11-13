@@ -154,7 +154,7 @@ function Profile() {
                                             <img src={info.avatar} alt={info.fullname} className="avatar-preview" />
                                         )}
                                     </label>
-                                    <input id="avatarInput" type="file" accept="image/*" style={{ display: "none" }} onChange={handleAvatarChange} />
+                                    {isEditing && <input id="avatarInput" type="file" accept="image/*" style={{ display: "none" }} onChange={handleAvatarChange} />}
                                 </div>
 
                                 <div className="student-content">
