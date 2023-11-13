@@ -49,6 +49,10 @@ const url = {
     GRADE: {
         LIST: "/grade/get-by-test",
     },
+
+    REGISTER_EXAM: {
+        REGISTER: "/RegisterExam/register-exam",
+    },
 };
 
 export default url;

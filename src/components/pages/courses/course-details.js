@@ -5,8 +5,9 @@ import Loading from "../../layouts/loading";
 import api from "../../../services/api";
 import url from "../../../services/url";
 import { Link, useParams } from "react-router-dom";
-import { format } from "date-fns";
 import { Helmet } from "react-helmet";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 function CourseDetail() {
     const { courseName, courseId } = useParams();
@@ -37,6 +38,61 @@ function CourseDetail() {
         }, 2000);
         loadTests();
     }, [loadTests]);
+
+    const registerExamAgain = async (examId) => {
+        const userToken = localStorage.getItem("accessToken");
+        try {
+            const isConfirmed = await Swal.fire({
+                title: "Are you sure?",
+                text: "You want to register for the exam again?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "I'm sure",
+            });
+
+            if (isConfirmed.isConfirmed) {
+                api.defaults.headers.common["Authorization"] = `Bearer ${userToken}`;
+
+                const examData = {
+                    exam_id: examId,
+                };
+
+                console.log(examData);
+
+                const examAgainResponse = await api.post(url.REGISTER_EXAM.REGISTER, examData);
+
+                if (examAgainResponse.status === 201) {
+                    setLoading(true);
+                    setTimeout(() => {
+                        setLoading(false);
+                        toast.success("Successfully registered for the retake exam.", {
+                            position: toast.POSITION.TOP_RIGHT,
+                            autoClose: 3000,
+                        });
+                    }, 800);
+                } else {
+                    toast.error("Error during submission process. Please try again.", {
+                        position: toast.POSITION.TOP_RIGHT,
+                        autoClose: 3000,
+                    });
+                }
+            }
+        } catch (error) {
+            if (error.response && error.response.status === 400) {
+                toast.warning("You have successfully registered, you cannot register again.", {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 3000,
+                });
+            } else {
+                toast.error("Error during submission process. Please try again.", {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 3000,
+                });
+            }
+        }
+    };
     return (
         <>
             <Helmet>
@@ -206,7 +262,15 @@ function CourseDetail() {
                                                                 <i class="fa fa-graduation-cap"></i>
                                                                 {item.name}
                                                             </Link>
-                                                            <p class="right-wrap">Start date: {format(new Date(item.start_date), "HH:mm:ss dd/MM/yyyy")} (GMT+07)</p>
+
+                                                            <button
+                                                                className="btn btn-base right-wrap btn-base-3"
+                                                                onClick={() => {
+                                                                    registerExamAgain(item.id);
+                                                                }}
+                                                            >
+                                                                Register Again
+                                                            </button>
                                                         </li>
                                                     ))
                                                 )}

@@ -4835,6 +4835,8 @@ ul {
     text-align: left;
     background: #f1f1f1;
     color: #030d47;
+    border: none;
+    outline: none;
 }
 
 .btn-link > i {
@@ -4843,6 +4845,12 @@ ul {
 
 .btn-link:hover {
     color: #fff;
+}
+
+.btn-base-3 {
+    height: 38px;
+    line-height: 38px;
+    padding: 0 10px;
 }
 
 .table-bordered {
