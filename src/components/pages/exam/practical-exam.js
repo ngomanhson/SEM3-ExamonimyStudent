@@ -168,9 +168,7 @@ function PracticalExam() {
                                                 <div className="col">
                                                     <div className="td-sidebar">
                                                         <div className="widget border-left">
-                                                            <h4>Content</h4>
-
-                                                            {test && test.questions && test.questions[0] && <h5>Title: {test.questions[0].title} </h5>}
+                                                            {test && test.questions && test.questions[0] && <h5 dangerouslySetInnerHTML={{ __html: ` ${test.questions[0].title}` }} />}
 
                                                             {test && test.endDate && <p className="exam-date">DUE DATE: {format(new Date(test.endDate), "HH:mm:ss dd/MM/yyyy")} (GMT+07)</p>}
 
