@@ -85,6 +85,11 @@ function CourseDetail() {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000,
                 });
+            } else if (error.response && error.response.status === 404) {
+                toast.warning("Please complete the test.", {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 3000,
+                });
             } else {
                 toast.error("Error during submission process. Please try again.", {
                     position: toast.POSITION.TOP_RIGHT,

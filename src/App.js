@@ -13,6 +13,8 @@ import Dashboard from "./components/pages/dashboard";
 import NotFound from "./components/pages/404";
 import Result from "./components/views/exam/result";
 import { useJwt } from "react-jwt";
+import ForgotPassword from "./components/pages/auth/forgot-password";
+import ResetPassword from "./components/pages/auth/reset-password";
 
 function App() {
     const ProtectedRoute = ({ element }) => {
@@ -57,8 +59,11 @@ function App() {
 
                 <Route path="/dashboard" element={<ProtectedRoute element={<Dashboard />} />} />
 
-                <Route path="*" element={<ProtectedRoute element={<NotFound />} />} />
                 <Route path="/login" element={<ProtectedLoginRoute element={<Login />} />} />
+                <Route path="/forgot-password" element={<ProtectedLoginRoute element={<ForgotPassword />} />} />
+                <Route path="/reset-password/:resetToken" element={<ProtectedLoginRoute element={<ResetPassword />} />} />
+
+                <Route path="*" element={<ProtectedRoute element={<NotFound />} />} />
             </Routes>
         </div>
     );
