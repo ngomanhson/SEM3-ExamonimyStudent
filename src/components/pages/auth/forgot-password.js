@@ -71,7 +71,7 @@ function ForgotPassword() {
                         autoClose: 5000,
                     });
                 } else {
-                    toast.error("Error! An error occurred. Please try again later", {
+                    toast.error("Error! An error occurred. Please try again later.", {
                         position: toast.POSITION.TOP_RIGHT,
                         autoClose: 5000,
                     });
