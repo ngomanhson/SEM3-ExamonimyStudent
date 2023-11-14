@@ -10,6 +10,8 @@ const url = {
         CHANGE_PASSWORD: "/Auth/student/change-password",
         PROFILE: "/Auth/student/profile",
         UPDATE_PROFILE: "/Auth/student/update-profile",
+        FORGOT_PASSWORD: "/Auth/student/forgot-password",
+        RESET_PASSWORD: "/Auth/student/reset-password",
     },
 
     TEST: {

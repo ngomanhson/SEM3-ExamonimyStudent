@@ -163,7 +163,7 @@ function ChangePassword() {
                             <label htmlFor="currentPassword" className="mt-3 mb-1">
                                 Current password <span className="text-danger">*</span>
                             </label>
-                            <div className={`form-group form-group-2${formErrors.currentPassword ? "is-invalid" : ""}`}>
+                            <div className={`form-group form-group-2 ${formErrors.currentPassword ? "is-invalid" : ""}`}>
                                 <input
                                     type={showCurrentPassword ? "text" : "password"}
                                     name="currentPassword"

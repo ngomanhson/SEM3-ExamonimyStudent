@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import api from "../../../services/api";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import url from "../../../services/url";
 import { Helmet } from "react-helmet";
 
@@ -115,7 +115,7 @@ function Login() {
                                             />
                                             {formErrors.email && <div className="invalid-feedback">{formErrors.email}</div>}
                                         </div>
-                                        <div className={`form-group form-group-2${formErrors.password ? "is-invalid" : ""}`}>
+                                        <div className={`form-group form-group-2 ${formErrors.password ? "is-invalid" : ""}`}>
                                             <input
                                                 type={showPassword ? "text" : "password"}
                                                 name="password"
@@ -135,9 +135,9 @@ function Login() {
                                             )}
                                         </div>
 
-                                        <a href="#!" className="forgot-password-link d-block mt-3">
+                                        <Link to="/forgot-password" className="forgot-password-link d-block mt-3">
                                             Forgot password?
-                                        </a>
+                                        </Link>
                                         <button type="submit" className="btn login-btn btn-base mt-3 mb-3">
                                             Sign In
                                         </button>
