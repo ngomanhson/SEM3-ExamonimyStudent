@@ -10,7 +10,6 @@ function ResetPassword() {
     const { resetToken } = useParams();
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const [formSubmitted, setFormSubmitted] = useState(false);
 
     const navigate = useNavigate();
 
@@ -85,7 +84,6 @@ function ResetPassword() {
                 const restPasswordResponse = await api.post(url.AUTH.RESET_PASSWORD + `/${resetToken}`, { email, newPassword });
 
                 if (restPasswordResponse.status === 200) {
-                    setFormSubmitted(true);
                     toast.success("Password reset successful. Please log in again.", {
                         position: toast.POSITION.TOP_RIGHT,
                         autoClose: 5000,
@@ -93,13 +91,13 @@ function ResetPassword() {
 
                     navigate("/login");
                 } else {
-                    toast.error("Error! An error occurred. Please try again later", {
+                    toast.error("Error! An error occurred. Please try again later.", {
                         position: toast.POSITION.TOP_RIGHT,
                         autoClose: 5000,
                     });
                 }
             } catch (error) {
-                toast.error("Error! An error occurred. Please try again later", {
+                toast.error("Error! An error occurred. Please try again later.", {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 5000,
                 });
@@ -158,15 +156,10 @@ function ResetPassword() {
                                     </div>
                                 )}
                             </div>
-                            {formSubmitted ? (
-                                <div className="text-start mt-2">
-                                    <p className="text-success">Your password reset email has been sent.</p>
-                                </div>
-                            ) : (
-                                <button type="submit" className="btn btn-base mt-4" style={{ width: "100%" }}>
-                                    Reset Password
-                                </button>
-                            )}
+
+                            <button type="submit" className="btn btn-base mt-4" style={{ width: "100%" }}>
+                                Reset Password
+                            </button>
                         </form>
                         <nav className="login-card-footer-nav mt-4">
                             <Link to="/login">
