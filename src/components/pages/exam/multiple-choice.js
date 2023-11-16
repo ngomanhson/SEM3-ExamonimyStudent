@@ -27,6 +27,8 @@ function MultipleChoice() {
     const { isExpired, isInvalid } = useJwt();
     const [studentCode, setStudentCode] = useState("");
     const optionsPrefix = ["A", "B", "C", "D"];
+    const [startTime, setStartTime] = useState("");
+    const [endTime, setEndTime] = useState("");
 
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
@@ -70,6 +72,10 @@ function MultipleChoice() {
             }));
 
             setQuestions(questionsWithDetails);
+
+            // Set start time and end time
+            setStartTime(questionResponse.data.startDate);
+            setEndTime(questionResponse.data.endDate);
         } catch (error) {
             if (error.response && error.response.status === 400) {
                 setTimeout(() => {
@@ -100,7 +106,6 @@ function MultipleChoice() {
         }, 2000);
     }, [testSlug, loadQuestions]);
 
-    // Function to handle finishing the exam
     const handleFinishExam = useCallback(() => {
         setInExam(false);
         setCountdownActive(false);
@@ -132,37 +137,36 @@ function MultipleChoice() {
         // eslint-disable-next-line
     }, [inExam, timeRemaining, countdownActive, handleFinishExam]);
 
+    const handleStartExam = () => {
+        const now = new Date();
+
+        if (now >= new Date(startTime) && now <= new Date(endTime)) {
+            setLoading(true);
+            setInExam(true);
+
+            const remainingTime = Math.max(0, (new Date(endTime) - now) / 1000);
+            setTimeRemaining(Math.min(remainingTime, 30 * 60));
+
+            setTimeout(() => {
+                setLoading(false);
+            }, 3000);
+        } else {
+            toast.error("The exam has not started or has ended.", {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 3000,
+            });
+        }
+    };
+
     // Function to format time as a string
     const formatTime = (seconds) => {
         const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = seconds % 60;
+        const remainingSeconds = Math.floor(seconds % 60);
         const formattedMinutes = minutes.toString().padStart(2, "0");
         const formattedSeconds = remainingSeconds.toString().padStart(2, "0");
         return `${formattedMinutes}:${formattedSeconds}`;
     };
 
-    // Function to start the exam
-    const handleStartExam = () => {
-        setLoading(true);
-        setInExam(true);
-
-        setTimeout(() => {
-            setLoading(false);
-        }, 3000);
-
-        // Automatically submission if escape
-        // let isExamFinished = false;
-
-        // window.onblur = () => {
-        //     if (!isExamFinished) {
-        //         isExamFinished = true;
-        //         handleFinishExam();
-        //         submitAnswers(testSlug, studentCode);
-        //     }
-        // };
-    };
-
-    // Function to handle selecting an answer for a question
     const handleAnswerSelect = (questionNumber, selectedAnswer) => {
         if (!hasSubmitted) {
             setSelectedAnswers({
@@ -172,27 +176,24 @@ function MultipleChoice() {
         }
     };
 
-    // Function to move to the next question
     const handleNextQuestion = () => {
         if (currentQuestionIndex < questions.length - 1) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
         }
     };
 
-    // Function to move to the previous question
     const handlePreviousQuestion = () => {
         if (currentQuestionIndex > 0) {
             setCurrentQuestionIndex(currentQuestionIndex - 1);
         }
     };
 
-    // Function to submit answers to the API
     const submitAnswers = useCallback(async () => {
         const userToken = localStorage.getItem("accessToken");
 
         try {
             api.defaults.headers.common["Authorization"] = `Bearer ${userToken}`;
-            // const answersData = questions.map((question, index) => {
+
             const answersData = questions.map((question, index) => {
                 const answerData = {
                     question_id: question.id,
@@ -223,7 +224,6 @@ function MultipleChoice() {
         }
     }, [questions, selectedAnswers, testSlug, navigate]);
 
-    // Function to handle exam submission
     const handleSubmitExam = async () => {
         const isConfirmed = await Swal.fire({
             title: "Are you sure?",
