@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import Breadcrumb from "../layouts/breadcrumb";
-import Layout from "../layouts/layouts";
-import Loading from "../layouts/loading";
+import Breadcrumb from "../../layouts/breadcrumb";
+import Layout from "../../layouts/layouts";
+import Loading from "../../layouts/loading";
 
 function Contact() {
     const [loading, setLoading] = useState(false);

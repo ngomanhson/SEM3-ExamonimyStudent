@@ -112,8 +112,37 @@ function MultipleChoice() {
         setHasSubmitted(true);
     }, []);
 
+    const handleStartExam = () => {
+        const now = new Date();
+
+        if (now >= new Date(startTime) && now <= new Date(endTime)) {
+            setLoading(true);
+            setInExam(true);
+
+            const remainingTime = Math.max(0, (new Date(endTime) - now) / 1000);
+            setTimeRemaining(Math.min(remainingTime, 30 * 60));
+
+            setTimeout(() => {
+                setLoading(false);
+            }, 3000);
+        }
+    };
+
+    // Function to format time as a string
+    const formatTime = (seconds) => {
+        if (seconds < 0) {
+            return "00:00";
+        }
+
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = Math.floor(seconds % 60);
+        const formattedMinutes = minutes.toString().padStart(2, "0");
+        const formattedSeconds = remainingSeconds.toString().padStart(2, "0");
+        return `${formattedMinutes}:${formattedSeconds}`;
+    };
+
     useEffect(() => {
-        if (timeRemaining === 0) {
+        if (timeRemaining <= 0) {
             // Automatically submit the exam when the time is over
             toast.info("Exam time is over. Your exam has been submitted.", {
                 position: toast.POSITION.TOP_RIGHT,
@@ -136,36 +165,6 @@ function MultipleChoice() {
         };
         // eslint-disable-next-line
     }, [inExam, timeRemaining, countdownActive, handleFinishExam]);
-
-    const handleStartExam = () => {
-        const now = new Date();
-
-        if (now >= new Date(startTime) && now <= new Date(endTime)) {
-            setLoading(true);
-            setInExam(true);
-
-            const remainingTime = Math.max(0, (new Date(endTime) - now) / 1000);
-            setTimeRemaining(Math.min(remainingTime, 30 * 60));
-
-            setTimeout(() => {
-                setLoading(false);
-            }, 3000);
-        } else {
-            toast.error("The exam has not started or has ended.", {
-                position: toast.POSITION.TOP_RIGHT,
-                autoClose: 3000,
-            });
-        }
-    };
-
-    // Function to format time as a string
-    const formatTime = (seconds) => {
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = Math.floor(seconds % 60);
-        const formattedMinutes = minutes.toString().padStart(2, "0");
-        const formattedSeconds = remainingSeconds.toString().padStart(2, "0");
-        return `${formattedMinutes}:${formattedSeconds}`;
-    };
 
     const handleAnswerSelect = (questionNumber, selectedAnswer) => {
         if (!hasSubmitted) {
