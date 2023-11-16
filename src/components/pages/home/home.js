@@ -1,15 +1,15 @@
-import About from "../views/home/about";
-import Blog from "../views/home/blog";
-import Course from "../views/home/course";
-import Event from "../views/home/event";
-import FAQ from "../views/home/faq";
-import Subscribe from "../views/home/subscribe";
-import Team from "../views/home/team";
-import Testimonial from "../views/home/testimonial";
-import Layout from "../layouts/layouts";
+import About from "../../views/home/about";
+import Blog from "../../views/home/blog";
+import Course from "../../views/home/course";
+import Event from "../../views/home/event";
+import FAQ from "../../views/home/faq";
+import Subscribe from "../../views/home/subscribe";
+import Team from "../../views/home/team";
+import Testimonial from "../../views/home/testimonial";
+import Layout from "../../layouts/layouts";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Loading from "../layouts/loading";
+import Loading from "../../layouts/loading";
 import { Helmet } from "react-helmet";
 function Home() {
     const [loading, setLoading] = useState(false);
