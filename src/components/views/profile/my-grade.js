@@ -16,8 +16,10 @@ function MyGrade() {
                     Authorization: `Bearer ${userToken}`,
                 },
             };
+
             const gradeResponse = await api.get(url.GRADE.LIST, config);
             setGrade(gradeResponse.data);
+            console.log(gradeResponse.data);
         } catch (error) {}
     }, [userToken]);
 
@@ -51,7 +53,7 @@ function MyGrade() {
                                 <td style={{ textAlign: "center" }}>{stt}</td>
                                 <td>{item.testName}</td>
                                 <td>{item.score !== null ? (parseFloat(item.score) === 0 ? 0 : parseFloat(item.score).toFixed(3)) : "Updating..."}</td>
-                                <td>{item.isPass === false ? "Not Qualified" : item.isPass === true ? "Qualified" : item.isPass === null ? "Updating..." : ""}</td>
+                                <td>{item.finishAt ? (item.isPass === false ? "Not Qualified" : item.isPass === true ? "Qualified" : "") : "Updating..."}</td>
                             </tr>
                         );
                     })}
