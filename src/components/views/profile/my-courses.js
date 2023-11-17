@@ -38,7 +38,7 @@ function MyCourses(props) {
             <table className="table table-bordered">
                 <thead className="thead thead-background">
                     <tr>
-                        <th style={{ textAlign: "center" }}>STT</th>
+                        <th style={{ textAlign: "center" }}>No.</th>
                         <th scope="col">Course Name</th>
                         {/* <th scope="col">Course Code</th> */}
                         <th scope="col">Start Date</th>

@@ -43,8 +43,10 @@ function App() {
         <div className="App">
             <Routes>
                 <Route path="/" element={<ProtectedRoute element={<Home />} />} />
-                <Route path="/courses/:classId/:studentCode" element={<ProtectedRoute element={<Course />} />} />
-                <Route path="/course-detail/:courseId/:courseName/:studentCode" element={<ProtectedRoute element={<CourseDetail />} />} />
+                {/* <Route path="/courses/:classId/:studentCode" element={<ProtectedRoute element={<Course />} />} /> */}
+                <Route path="/courses" element={<ProtectedRoute element={<Course />} />} />
+                {/* <Route path="/course-detail/:courseId/:courseName/:studentCode" element={<ProtectedRoute element={<CourseDetail />} />} /> */}
+                <Route path="/course-detail/:courseId" element={<ProtectedRoute element={<CourseDetail />} />} />
 
                 <Route path="/test-list/:slug" element={<ProtectedRoute element={<ExamList />} />} />
                 <Route path="/multiple-choice/test/:testSlug/" element={<ProtectedRoute element={<MultipleChoice />} />} />
