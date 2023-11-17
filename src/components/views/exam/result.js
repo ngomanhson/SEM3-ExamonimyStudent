@@ -7,6 +7,7 @@ import url from "../../../services/url";
 import * as XLSX from "xlsx";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
+import NotFound from "../../pages/other/404";
 
 function Result() {
     const { testId } = useParams();
@@ -139,13 +140,7 @@ function Result() {
             </Helmet>
             {loading ? <Loading /> : ""}
             {error ? (
-                <div className="d-flex flex-column justify-content-center align-items-center" style={{ height: "100vh" }}>
-                    <img src="./assets/img/404.png" alt="Completed" width={"30%"} />
-                    <p className="mt-3">{error}</p>
-                    <Link to="/" className="btn btn-base">
-                        Back to Home
-                    </Link>
-                </div>
+                <NotFound />
             ) : (
                 <section className="d-flex align-items-center mt-3">
                     <div className="container-sm">

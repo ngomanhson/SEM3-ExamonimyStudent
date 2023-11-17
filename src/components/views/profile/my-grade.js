@@ -19,7 +19,6 @@ function MyGrade() {
 
             const gradeResponse = await api.get(url.GRADE.LIST, config);
             setGrade(gradeResponse.data);
-            console.log(gradeResponse.data);
         } catch (error) {}
     }, [userToken]);
 
@@ -37,7 +36,7 @@ function MyGrade() {
             <table className="table table-bordered">
                 <thead className="thead thead-background">
                     <tr>
-                        <th style={{ textAlign: "center" }}>STT</th>
+                        <th style={{ textAlign: "center" }}>No.</th>
                         <th scope="col" style={{ textAlign: "start" }}>
                             Test Name
                         </th>

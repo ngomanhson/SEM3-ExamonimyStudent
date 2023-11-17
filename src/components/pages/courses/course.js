@@ -9,7 +9,7 @@ import Loading from "../../layouts/loading";
 import { Helmet } from "react-helmet";
 
 function Course() {
-    const { classId, studentCode } = useParams();
+    const { classId } = useParams();
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -113,7 +113,7 @@ function Course() {
                                                         <div className="details-inner">
                                                             <div className="details">
                                                                 <h5>
-                                                                    <Link to={`/course-detail/${item.classCourseId}/${item.courseName}/${studentCode}`} className="line-clamp">
+                                                                    <Link to={`/course-detail/${item.classCourseId}`} className="line-clamp">
                                                                         {item.courseName}
                                                                     </Link>
                                                                 </h5>
@@ -136,10 +136,7 @@ function Course() {
                                                                         </div>
                                                                     </div>
                                                                     <div className="col-6">
-                                                                        <Link
-                                                                            to={`/course-detail/${item.classCourseId}/${item.courseName}/${studentCode}`}
-                                                                            className="d-flex align-items-center justify-content-end"
-                                                                        >
+                                                                        <Link to={`/course-detail/${item.classCourseId}`} className="d-flex align-items-center justify-content-end">
                                                                             <div className="total-student">Go to course</div>
                                                                         </Link>
                                                                     </div>
@@ -157,7 +154,7 @@ function Course() {
                                                     <div className="details-inner">
                                                         <div className="details">
                                                             <h5>
-                                                                <Link to={`/course-detail/${item.classCourseId}/${item.courseName}/${studentCode}`} className="line-clamp">
+                                                                <Link to={`/course-detail/${item.classCourseId}`} className="line-clamp">
                                                                     {item.courseName}
                                                                 </Link>
                                                             </h5>
@@ -180,10 +177,7 @@ function Course() {
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-6">
-                                                                    <Link
-                                                                        to={`/course-detail/${item.classCourseId}/${item.courseName}/${studentCode}`}
-                                                                        className="d-flex align-items-center justify-content-end"
-                                                                    >
+                                                                    <Link to={`/course-detail/${item.classCourseId}`} className="d-flex align-items-center justify-content-end">
                                                                         <div className="total-student">Go to course</div>
                                                                     </Link>
                                                                 </div>

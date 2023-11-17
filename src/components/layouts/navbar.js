@@ -4,8 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 
 function Navbar() {
     const [studentName, setStudentName] = useState("");
-    const [studentCode, setStudentCode] = useState("");
-    const [classId, setClassId] = useState("");
+    // const [studentCode, setStudentCode] = useState("");
+    // const [classId, setClassId] = useState("");
     const { isExpired, isInvalid } = useJwt();
 
     const navigate = useNavigate();
@@ -18,12 +18,11 @@ function Navbar() {
 
             // Get the info student from token
             const studentName = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
-            const studentCode = decodedToken["Student-Code"];
-            const classId = decodedToken["Class-Id"];
+            // const classId = decodedToken["Class-Id"];
 
             setStudentName(studentName);
-            setStudentCode(studentCode);
-            setClassId(classId);
+
+            // setClassId(classId);
         } catch (error) {}
     }, [isExpired, isInvalid]);
 
@@ -55,7 +54,7 @@ function Navbar() {
                                 <Link to="/">Home</Link>
                             </li>
                             <li className="menu-item-has-children">
-                                <Link to={`/courses/${classId}/${studentCode}`}>Courses</Link>
+                                <Link to={`/courses/`}>Courses</Link>
                             </li>
 
                             <li className="menu-item-has-children">
