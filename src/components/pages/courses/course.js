@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import api from "../../../services/api";
 import url from "../../../services/url";
@@ -9,7 +9,6 @@ import Loading from "../../layouts/loading";
 import { Helmet } from "react-helmet";
 
 function Course() {
-    const { classId } = useParams();
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -32,8 +31,9 @@ function Course() {
                     Authorization: `Bearer ${userToken}`,
                 },
             };
-            const courseResponse = await api.get(url.CLASS_COURSE.BY_CLASSID + `?id=${classId}`, config);
+            const courseResponse = await api.get(url.CLASS_COURSE.BY_CLASSID, config);
 
+            console.log(courseResponse.data);
             const uniqueYears = [...new Set(courseResponse.data.data.map((course) => new Date(course.startDate).getFullYear().toString()))];
 
             // Filter by year
@@ -50,11 +50,11 @@ function Course() {
         } catch (error) {
             console.error(error);
         }
-    }, [classId, selectedYear, searchKeyword]);
+    }, [selectedYear, searchKeyword]);
 
     useEffect(() => {
         loadCourses();
-    }, [classId, selectedYear, searchKeyword, loadCourses]);
+    }, [selectedYear, searchKeyword, loadCourses]);
 
     const handleSearch = (e) => {
         const keyword = e.target.value;
