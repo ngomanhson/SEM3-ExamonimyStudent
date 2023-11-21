@@ -28,7 +28,6 @@ function PracticalExam() {
             };
 
             const testResponse = await api.get(url.TEST_QUESTION.PRACTICAL + `/${testSlug}/details`, config);
-            console.log(testResponse.data);
 
             setTest(testResponse.data);
             setLoading(false);
