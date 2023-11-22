@@ -7,6 +7,7 @@ import Loading from "../../layouts/loading";
 import api from "../../../services/api";
 import url from "../../../services/url";
 import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
 function ExamList() {
     const { slug } = useParams();
     const [loading, setLoading] = useState(true);
@@ -29,6 +30,10 @@ function ExamList() {
             setLoading(false);
         } catch (error) {
             setLoading(false);
+            toast.error("Error during submission process. Please try again.", {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 3000,
+            });
         }
     }, [slug]);
 
