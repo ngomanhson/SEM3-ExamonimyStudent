@@ -3,10 +3,20 @@ import api from "../../../services/api";
 import { Link, useNavigate } from "react-router-dom";
 import url from "../../../services/url";
 import { Helmet } from "react-helmet";
+import { useEffect } from "react";
+import Loading from "../../layouts/loading";
 
 function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+        }, 1000);
+    }, []);
 
     const [formData, setFormData] = useState({
         email: "",
@@ -86,6 +96,7 @@ function Login() {
 
     return (
         <>
+            {loading ? <Loading /> : ""}
             <Helmet>
                 <title>Login | Examonimy</title>
             </Helmet>

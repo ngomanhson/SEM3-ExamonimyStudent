@@ -33,7 +33,6 @@ function Course() {
             };
             const courseResponse = await api.get(url.CLASS_COURSE.BY_CLASSID, config);
 
-            console.log(courseResponse.data);
             const uniqueYears = [...new Set(courseResponse.data.data.map((course) => new Date(course.startDate).getFullYear().toString()))];
 
             // Filter by year
@@ -240,11 +239,17 @@ const Pagination = ({ coursesPerPage, totalCourses, paginate, currentPage }) => 
         pageNumbers.push(i);
     }
 
+    const handlePageClick = (pageNumber) => {
+        paginate(pageNumber);
+        // Scroll to the top of the page
+        window.scrollTo({ top: 420, behavior: "smooth" });
+    };
+
     return (
         <ul className="pagination">
             {pageNumbers.map((number) => (
                 <li key={number} className={`page-item ${number === currentPage ? "active" : ""}`}>
-                    <button onClick={() => paginate(number)} className="page-link">
+                    <button onClick={() => handlePageClick(number)} className="page-link">
                         {number}
                     </button>
                 </li>
