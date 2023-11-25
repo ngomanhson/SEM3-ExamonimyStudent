@@ -5,11 +5,14 @@ import { useState } from "react";
 import { useEffect } from "react";
 import Loading from "../../layouts/loading";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 function ForgotPassword() {
     const [loading, setLoading] = useState(false);
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [submitting, setSubmitting] = useState(false);
+    const [countdown, setCountdown] = useState(3);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         setLoading(true);
@@ -68,12 +71,12 @@ function ForgotPassword() {
 
                     toast.success("Please check your email and follow the instructions.", {
                         position: toast.POSITION.TOP_RIGHT,
-                        autoClose: 5000,
+                        autoClose: 3000,
                     });
                 } else {
                     toast.error("Error! An error occurred. Please try again later.", {
                         position: toast.POSITION.TOP_RIGHT,
-                        autoClose: 5000,
+                        autoClose: 3000,
                     });
                 }
             } catch (error) {
@@ -85,6 +88,26 @@ function ForgotPassword() {
             }
         }
     };
+
+    useEffect(() => {
+        let countdownInterval;
+
+        if (formSubmitted && countdown > 0) {
+            countdownInterval = setInterval(() => {
+                setCountdown((prevCountdown) => prevCountdown - 1);
+            }, 1000);
+        }
+
+        return () => {
+            clearInterval(countdownInterval);
+        };
+    }, [formSubmitted, countdown]);
+
+    useEffect(() => {
+        if (formSubmitted && countdown === 0) {
+            navigate("/login");
+        }
+    }, [formSubmitted, countdown, navigate]);
 
     return (
         <>
@@ -134,7 +157,17 @@ function ForgotPassword() {
 
                             {formSubmitted && (
                                 <div className="text-start mt-2">
-                                    <p className="text-success">Your password reset email has been sent.</p>
+                                    {countdown > 0 ? (
+                                        <>
+                                            <p className="text-success">Your password reset email has been sent.</p>
+                                            <p className="text-center"> Redirecting to login in {countdown}s.</p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <p className="text-success">Your password reset email has been sent.</p>
+                                            <p className="text-center">Redirecting to login...</p>
+                                        </>
+                                    )}
                                 </div>
                             )}
                         </form>
