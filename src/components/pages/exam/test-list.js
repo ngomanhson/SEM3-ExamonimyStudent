@@ -28,7 +28,6 @@ function ExamList() {
             const response = await api.get(url.TEST.BY_SLUG + `/${slug}`, config);
             setTests(response.data);
             setLoading(false);
-            console.log(response.data);
         } catch (error) {
             setLoading(false);
             toast.error("Error during submission process. Please try again.", {
