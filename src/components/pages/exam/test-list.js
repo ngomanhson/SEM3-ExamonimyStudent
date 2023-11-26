@@ -78,7 +78,9 @@ function ExamList() {
                                                             <Link to={linkTo} key={test.id}>
                                                                 {test.name}
                                                             </Link>
-                                                            <p style={{ marginBottom: 0, marginLeft: "20px" }}>{test.type_test === 0 ? "Multiple Choice Test" : "Practical Test"}</p>
+                                                            <p style={{ marginBottom: 0, marginLeft: "20px" }}>
+                                                                {test.type_test === 0 ? "Multiple Choice Test" : "Practical Test"} ({test.retakeTestId === null ? "Main Test" : "Retake Test"})
+                                                            </p>
                                                             <div className="right-wrap">
                                                                 <p style={{ marginBottom: 0 }}>Due date: {format(new Date(test.endDate), "HH:mm:ss dd/MM/yyyy")} (GMT+07)</p>
                                                             </div>
