@@ -172,12 +172,12 @@ function PracticalExam() {
                                                             {test && test.endDate && <p className="exam-date">DUE DATE: {format(new Date(test.endDate), "HH:mm:ss dd/MM/yyyy")} (GMT+07)</p>}
 
                                                             <div className="modal-submit">
-                                                                {test && test.questions && test.questions[0]?.answerForStudent ? (
-                                                                    <div className="text-success">You have submitted the test.</div>
-                                                                ) : (
+                                                                {test && test.questions && test.questions[0]?.answerForStudent && test.finished_at === null ? (
                                                                     <button type="button" className="btn btn-success" onClick={handleShowModal}>
                                                                         Submit test
                                                                     </button>
+                                                                ) : (
+                                                                    <div className="text-success">You have submitted the test.</div>
                                                                 )}
                                                             </div>
 
